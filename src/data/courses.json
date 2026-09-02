@@ -1,0 +1,317 @@
+{
+  "id": "dsa-masterclass",
+  "title": "DSA Masterclass",
+  "slug": "dsa-masterclass",
+  "description": "Master Data Structures & Algorithms from zero to interview-ready. 6 units, 18+ topics, hands-on code examples.",
+  "longDescription": "A comprehensive, university-aligned DSA course covering everything from complexity analysis to graphs and hashing. Built for CS students, self-taught programmers, and anyone preparing for coding interviews at top tech companies.",
+  "instructor": "KERNAL Platform",
+  "duration": "12 weeks",
+  "level": "Beginner to Advanced",
+  "students": 2847,
+  "rating": 4.9,
+  "price": 99,
+  "tags": [
+    "DSA",
+    "Python",
+    "C++",
+    "Java",
+    "Interview Prep",
+    "CS Fundamentals"
+  ],
+  "chapters": [
+    {
+      "id": "ch1",
+      "title": "Foundations: Complexity & Arrays",
+      "slug": "foundations-complexity-arrays",
+      "description": "Understand time-space complexity, Big-O notation, and master array operations.",
+      "icon": "01",
+      "topics": [
+        {
+          "id": "t1-1",
+          "title": "Complexity Analysis",
+          "slug": "complexity-analysis",
+          "description": "Master Big-O, Omega, and Theta notations to analyze algorithm efficiency.",
+          "difficulty": "Beginner",
+          "practiceProblems": [
+            "Implement a function and count operations for O(1), O(n), O(n\u00b2) inputs",
+            "Analyze the time and space complexity of a nested loop that prints pairs",
+            "Write binary search and prove its O(log n) complexity"
+          ],
+          "language": "python",
+          "content": "## Complexity Analysis\n\nComplexity analysis is the backbone of algorithm design. It tells us how efficient an algorithm is in terms of time and space.\n\n### Why Complexity Matters\n\nConsider two approaches to find a number in an array of 1,000,000 elements:\n- **Linear Search**: Check every element \u2192 up to 1,000,000 operations\n- **Binary Search**: Halve the search space \u2192 at most 20 operations\n\nThat's a **50,000x** difference.\n\n### Time Complexity\n\nTime complexity measures how the number of operations grows with input size **n**.\n\n| Notation | Name | Meaning | Example |\n|----------|------|---------|----------|\n| O(1) | Constant | Same time regardless of n | Array index access |\n| O(log n) | Logarithmic | Doubles input = 1 more step | Binary search |\n| O(n) | Linear | Input doubles = time doubles | Linear search |\n| O(n log n) | Linearithmic | Optimal comparison sort | Merge sort |\n| O(n\u00b2) | Quadratic | Input doubles = 4x time | Bubble sort |\n| O(2\u207f) | Exponential | Each new input doubles time | Recursive Fibonacci |\n\n### Space Complexity\n\nSpace complexity measures additional memory used by an algorithm.\n\n```python\n# O(1) space - only one extra variable\ndef find_max(arr):\n    maximum = arr[0]\n    for num in arr:\n        if num > maximum:\n            maximum = num\n    return maximum\n\n# O(n) space - creates a new array\ndef merge_sorted(a, b):\n    result = []\n    i = j = 0\n    while i < len(a) and j < len(b):\n        if a[i] <= b[j]:\n            result.append(a[i]); i += 1\n        else:\n            result.append(b[j]); j += 1\n    result.extend(a[i:])\n    result.extend(b[j:])\n    return result\n```\n\n### Asymptotic Notations\n\n- **Big-O (O)**: Upper bound \u2014 worst case\n- **Omega (\u03a9)**: Lower bound \u2014 best case\n- **Theta (\u0398)**: Tight bound \u2014 average case\n\n### Master Rule of Thumb\n\n1. Drop constants: O(2n) \u2192 O(n)\n2. Drop lower-order terms: O(n\u00b2 + n) \u2192 O(n\u00b2)\n3. Different inputs = different loop variables: O(a + b), not O(n)",
+          "codeExample": "# Time complexity comparison\nimport time\n\ndef linear_search(arr, target):\n    for i, val in enumerate(arr):  # O(n)\n        if val == target:\n            return i\n    return -1\n\ndef binary_search(arr, target):\n    lo, hi = 0, len(arr) - 1       # O(log n)\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    return -1\n\n# Demo\ndata = list(range(1_000_000))\ntarget = 999_999\n\nstart = time.time()\nlinear_search(data, target)\nprint(f\"Linear: {time.time()-start:.6f}s\")\n\nstart = time.time()\nbinary_search(data, target)\nprint(f\"Binary: {time.time()-start:.6f}s\")"
+        },
+        {
+          "id": "t1-2",
+          "title": "Arrays: Memory & Operations",
+          "slug": "arrays-memory-operations",
+          "description": "Understand memory representation and implement traversal, insertion, and deletion in arrays.",
+          "difficulty": "Beginner",
+          "practiceProblems": [
+            "Implement insert and delete operations on a static array",
+            "Build a dynamic array (like Python list) with automatic resizing",
+            "Reverse an array in-place using two pointers"
+          ],
+          "language": "python",
+          "content": "## Arrays: Memory & Operations\n\nAn array is the most fundamental data structure - a contiguous block of memory storing elements of the same type.\n\n### Memory Representation\n\n```\nIndex:    0     1     2     3     4\nValue:  [10]  [20]  [30]  [40]  [50]\nAddr:   100   104   108   112   116  (4 bytes per int)\n```\n\n**Address formula**: addr(i) = base_addr + i \u00d7 size_of_element\n\nThis gives **O(1) random access** - the killer feature of arrays.\n\n### Array Operations\n\n| Operation | Time | Why |\n|-----------|------|-----|\n| Access by index | O(1) | Direct address calculation |\n| Search (unsorted) | O(n) | Must check each element |\n| Search (sorted) | O(log n) | Can use binary search |\n| Insert at end | O(1)* | *Amortized for dynamic arrays |\n| Insert at position | O(n) | Must shift elements right |\n| Delete at position | O(n) | Must shift elements left |\n| Traverse | O(n) | Visit every element |\n\n### Insertion at Position i\n\n```\nBefore: [10, 20, 30, 40, 50]   Insert 25 at index 2\nStep 1: Shift 50 \u2192 [10, 20, 30, 40, _, 50]\nStep 2: Shift 40 \u2192 [10, 20, 30, _, 40, 50]\nStep 3: Shift 30 \u2192 [10, 20, _, 30, 40, 50]\nStep 4: Place 25 \u2192 [10, 20, 25, 30, 40, 50]\n```\n\n### Deletion at Position i\n\n```\nBefore: [10, 20, 25, 30, 40, 50]   Delete index 2\nStep 1: Remove 25  \u2192 [10, 20, _, 30, 40, 50]\nStep 2: Shift 30   \u2192 [10, 20, 30, _, 40, 50]\nStep 3: Shift 40   \u2192 [10, 20, 30, 40, _, 50]\nStep 4: Shift 50   \u2192 [10, 20, 30, 40, 50, _]\n```\n\n### Key Insight\n\nArrays trade **fast access** (O(1) index) for **costly modifications** (O(n) insert/delete). This trade-off is why we need linked lists, stacks, and queues.",
+          "codeExample": "# Array operations in Python\nclass DynamicArray:\n    def __init__(self):\n        self.capacity = 2\n        self.size = 0\n        self.data = [None] * self.capacity\n\n    def get(self, index):\n        if index < 0 or index >= self.size:\n            raise IndexError(\"Index out of bounds\")\n        return self.data[index]\n\n    def append(self, value):\n        if self.size == self.capacity:\n            self._resize(2 * self.capacity)\n        self.data[self.size] = value\n        self.size += 1\n\n    def insert(self, index, value):\n        if self.size == self.capacity:\n            self._resize(2 * self.capacity)\n        for i in range(self.size, index, -1):\n            self.data[i] = self.data[i - 1]\n        self.data[index] = value\n        self.size += 1\n\n    def delete(self, index):\n        for i in range(index, self.size - 1):\n            self.data[i] = self.data[i + 1]\n        self.size -= 1\n\n    def _resize(self, new_cap):\n        new_data = [None] * new_cap\n        for i in range(self.size):\n            new_data[i] = self.data[i]\n        self.data = new_data\n        self.capacity = new_cap\n\n    def __str__(self):\n        return str(self.data[:self.size])\n\narr = DynamicArray()\nfor v in [10, 20, 30, 40, 50]:\n    arr.append(v)\nprint(arr)           # [10, 20, 30, 40, 50]\narr.insert(2, 25)\nprint(arr)           # [10, 20, 25, 30, 40, 50]\narr.delete(2)\nprint(arr)           # [10, 20, 30, 40, 50]"
+        },
+        {
+          "id": "t1-3",
+          "title": "Sorting Algorithms",
+          "slug": "sorting-algorithms",
+          "description": "Implement Selection Sort, Bubble Sort, and Insertion Sort with complexity analysis.",
+          "difficulty": "Beginner",
+          "practiceProblems": [
+            "Sort an array of 0s, 1s, and 2s without using a sorting algorithm (Dutch National Flag)",
+            "Find the kth largest element using selection sort logic",
+            "Sort an almost-sorted array where each element is at most k positions from its sorted position"
+          ],
+          "language": "python",
+          "content": "## Sorting Algorithms\n\nSorting is the process of arranging elements in a specific order. It is fundamental - many algorithms depend on sorted data.\n\n### Comparison of Basic Sorts\n\n| Algorithm | Best | Average | Worst | Space | Stable? |\n|-----------|------|---------|-------|-------|----------|\n| Selection Sort | O(n\u00b2) | O(n\u00b2) | O(n\u00b2) | O(1) | No |\n| Bubble Sort | O(n) | O(n\u00b2) | O(n\u00b2) | O(1) | Yes |\n| Insertion Sort | O(n) | O(n\u00b2) | O(n\u00b2) | O(1) | Yes |\n\n### Selection Sort\n\nIdea: Find the minimum, swap it to the front. Repeat.\n\n```\n[64, 25, 12, 22, 11]\n ^-- find min (11) \u2192 swap with 64\n[11, 25, 12, 22, 64]\n    ^-- find min (12) \u2192 swap with 25\n[11, 12, 25, 22, 64]\n       ^-- find min (22) \u2192 swap with 25\n[11, 12, 22, 25, 64]  \u2713 Sorted\n```\n\n**Always O(n\u00b2)** - doesn't care about existing order.\n\n### Bubble Sort\n\nIdea: Bubble larger elements to the end by repeatedly swapping adjacent pairs.\n\n```\n[5, 3, 8, 1, 2]\nPass 1: [3, 5, 1, 2, 8]  (8 bubbles to end)\nPass 2: [3, 1, 2, 5, 8]  (5 bubbles up)\nPass 3: [1, 2, 3, 5, 8]  \u2713 Sorted\n```\n\n**Best case O(n)** when already sorted (with early termination flag).\n\n### Insertion Sort\n\nIdea: Build sorted portion one element at a time. Like sorting cards in hand.\n\n```\n[5, 3, 8, 1, 2]\nPick 3: [3, 5, 8, 1, 2]   (insert 3 before 5)\nPick 8: [3, 5, 8, 1, 2]   (8 already in place)\nPick 1: [1, 3, 5, 8, 2]   (insert 1 at front)\nPick 2: [1, 2, 3, 5, 8]   \u2713 Sorted\n```\n\n**Best case O(n)** - excellent for nearly sorted data. Used in practice as the base case for Timsort (Python/Java default sort).",
+          "codeExample": "def selection_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        min_idx = i\n        for j in range(i + 1, n):\n            if arr[j] < arr[min_idx]:\n                min_idx = j\n        arr[i], arr[min_idx] = arr[min_idx], arr[i]\n    return arr\n\ndef bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        swapped = False\n        for j in range(0, n - i - 1):\n            if arr[j] > arr[j + 1]:\n                arr[j], arr[j + 1] = arr[j + 1], arr[j]\n                swapped = True\n        if not swapped:\n            break\n    return arr\n\ndef insertion_sort(arr):\n    for i in range(1, len(arr)):\n        key = arr[i]\n        j = i - 1\n        while j >= 0 and arr[j] > key:\n            arr[j + 1] = arr[j]\n            j -= 1\n        arr[j + 1] = key\n    return arr\n\ndata = [64, 25, 12, 22, 11]\nprint(\"Selection:\", selection_sort(data.copy()))\nprint(\"Bubble:   \", bubble_sort(data.copy()))\nprint(\"Insertion:\", insertion_sort(data.copy()))"
+        },
+        {
+          "id": "t1-4",
+          "title": "Searching Algorithms",
+          "slug": "searching-algorithms",
+          "description": "Master Linear Search and Binary Search with implementation and analysis.",
+          "difficulty": "Beginner",
+          "practiceProblems": [
+            "Find the first and last position of an element in a sorted array",
+            "Search in a rotated sorted array",
+            "Find the peak element in a mountain array"
+          ],
+          "language": "python",
+          "content": "## Searching Algorithms\n\n### Linear Search\n\nThe simplest search: check every element one by one.\n\n```\nArray: [4, 2, 7, 1, 9, 3]    Target: 7\nCheck:  4? No\nCheck:  2? No\nCheck:  7? YES \u2192 return index 2\n```\n\n- **Time**: O(n) worst case, O(1) best case\n- **Space**: O(1)\n- Works on **unsorted** data\n\n### Binary Search\n\nThe efficient approach: repeatedly halve the search space. **Requires sorted array.**\n\n```\nSorted: [1, 3, 5, 7, 9, 11, 13]    Target: 7\nStep 1: mid = 7 \u2192 FOUND! Return index 3\n\nSorted: [1, 3, 5, 7, 9, 11, 13]    Target: 11\nStep 1: mid = 7 \u2192 11 > 7, go right\nStep 2: [9, 11, 13], mid = 11 \u2192 FOUND!\n```\n\n**Time**: O(log n) \u2014 for 1 billion elements, at most 30 comparisons.\n\n### Binary Search Variants\n\n1. **First occurrence**: When found, keep searching left\n2. **Last occurrence**: When found, keep searching right\n3. **Floor/Ceiling**: Find closest value \u2264 or \u2265 target\n4. **Search in rotated sorted array**\n\n### When to Use What?\n\n| Scenario | Use |\n|----------|-----|\n| Unsorted data | Linear search |\n| Sorted data | Binary search |\n| Single element search | Binary search |\n| Range queries | Binary search variant |\n| Linked list | Linear search (no random access) |",
+          "codeExample": "def linear_search(arr, target):\n    for i, val in enumerate(arr):\n        if val == target:\n            return i\n    return -1\n\ndef binary_search(arr, target):\n    lo, hi = 0, len(arr) - 1\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    return -1\n\ndef binary_search_first(arr, target):\n    lo, hi, result = 0, len(arr) - 1, -1\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        if arr[mid] == target:\n            result = mid\n            hi = mid - 1\n        elif arr[mid] < target:\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    return result\n\ndata = [1, 3, 5, 7, 9, 11, 13]\nprint(f\"Linear: index {linear_search(data, 7)}\")\nprint(f\"Binary: index {binary_search(data, 7)}\")\n\ndups = [1, 2, 2, 2, 3, 4]\nprint(f\"First 2 at: index {binary_search_first(dups, 2)}\")"
+        }
+      ]
+    },
+    {
+      "id": "ch2",
+      "title": "Linked Lists",
+      "slug": "linked-lists",
+      "description": "Master singly, doubly, and circular linked lists with real-world applications.",
+      "icon": "02",
+      "topics": [
+        {
+          "id": "t2-1",
+          "title": "Singly Linked Lists",
+          "slug": "singly-linked-lists",
+          "description": "Understand node-based memory allocation and implement core linked list operations.",
+          "difficulty": "Beginner",
+          "practiceProblems": [
+            "Reverse a singly linked list iteratively and recursively",
+            "Find the middle element of a linked list in one pass",
+            "Detect if a linked list has a cycle (Floyd's algorithm)"
+          ],
+          "language": "python",
+          "content": "## Singly Linked Lists\n\nA linked list is a chain of nodes where each node points to the next.\n\n```\n[Data|Next] \u2192 [Data|Next] \u2192 [Data|Next] \u2192 NULL\n  Node 1        Node 2        Node 3\n```\n\n### Array vs Linked List\n\n| Feature | Array | Linked List |\n|---------|-------|-------------|\n| Memory | Contiguous | Scattered |\n| Access | O(1) by index | O(n) traversal |\n| Insert at head | O(n) shift | O(1) |\n| Insert at tail | O(1) amortized | O(n)* or O(1) with tail ptr |\n| Memory waste | Pre-allocated | None (per node) |\n\n### Core Operations\n\n**Traversal**: Walk from head to NULL, visiting each node.\n\n**Insertion at head**:\n```\nBefore: A \u2192 B \u2192 C \u2192 NULL\nInsert X at head:\nX \u2192 A \u2192 B \u2192 C \u2192 NULL\n```\n\n**Deletion of node with value V**:\n```\nBefore: A \u2192 B \u2192 C \u2192 D \u2192 NULL, delete B\nFind prev of B (which is A)\nA \u2192 C \u2192 D \u2192 NULL\n```\n\n### Key Insight\n\nLinked lists excel at **frequent insertions/deletions at the head** and when you **don't need random access**. They're the building block for stacks, queues, and hash table chaining.",
+          "codeExample": "class Node:\n    def __init__(self, data):\n        self.data = data\n        self.next = None\n\nclass SinglyLinkedList:\n    def __init__(self):\n        self.head = None\n\n    def push_front(self, data):\n        node = Node(data)\n        node.next = self.head\n        self.head = node\n\n    def push_back(self, data):\n        node = Node(data)\n        if not self.head:\n            self.head = node\n            return\n        curr = self.head\n        while curr.next:\n            curr = curr.next\n        curr.next = node\n\n    def delete(self, data):\n        if not self.head:\n            return\n        if self.head.data == data:\n            self.head = self.head.next\n            return\n        curr = self.head\n        while curr.next:\n            if curr.next.data == data:\n                curr.next = curr.next.next\n                return\n            curr = curr.next\n\n    def search(self, data):\n        curr = self.head\n        idx = 0\n        while curr:\n            if curr.data == data:\n                return idx\n            curr = curr.next\n            idx += 1\n        return -1\n\n    def display(self):\n        elements = []\n        curr = self.head\n        while curr:\n            elements.append(str(curr.data))\n            curr = curr.next\n        return \" \u2192 \".join(elements) + \" \u2192 NULL\"\n\nll = SinglyLinkedList()\nfor v in [10, 20, 30, 40]:\n    ll.push_back(v)\nprint(ll.display())\nll.push_front(5)\nprint(ll.display())\nll.delete(20)\nprint(ll.display())\nprint(f\"Found 30 at: {ll.search(30)}\")"
+        },
+        {
+          "id": "t2-2",
+          "title": "Doubly Linked Lists",
+          "slug": "doubly-linked-lists",
+          "description": "Extend linked lists with bidirectional traversal and O(1) deletion.",
+          "difficulty": "Intermediate",
+          "practiceProblems": [
+            "Implement a browser history system using a doubly linked list",
+            "Flatten a multilevel doubly linked list",
+            "Reverse a doubly linked list in groups of k"
+          ],
+          "language": "python",
+          "content": "## Doubly Linked Lists\n\nEach node has **two pointers**: prev and next.\n\n```\nNULL \u2190 [Prev|Data|Next] \u21c4 [Prev|Data|Next] \u21c4 [Prev|Data|Next] \u2192 NULL\n         Node 1              Node 2              Node 3\n```\n\n### Advantages over Singly Linked List\n\n1. **Bidirectional traversal** - go forward and backward\n2. **O(1) deletion** if you have the node reference (no need to find prev)\n3. **Easier deletion** of the last node\n\n### Trade-off\n\n- **Extra memory**: One pointer per node (prev)\n- Slightly more complex insertion (update 4 pointers vs 2)\n\n### When to Use\n\n- Browser **forward/back navigation**\n- **LRU Cache** implementation\n- **Music playlist** (next/previous song)\n- **Text editor undo/redo**",
+          "codeExample": "class DNode:\n    def __init__(self, data):\n        self.data = data\n        self.prev = None\n        self.next = None\n\nclass DoublyLinkedList:\n    def __init__(self):\n        self.head = None\n        self.tail = None\n\n    def push_back(self, data):\n        node = DNode(data)\n        if not self.head:\n            self.head = self.tail = node\n            return\n        node.prev = self.tail\n        self.tail.next = node\n        self.tail = node\n\n    def push_front(self, data):\n        node = DNode(data)\n        if not self.head:\n            self.head = self.tail = node\n            return\n        node.next = self.head\n        self.head.prev = node\n        self.head = node\n\n    def delete_node(self, node):\n        if node.prev:\n            node.prev.next = node.next\n        else:\n            self.head = node.next\n        if node.next:\n            node.next.prev = node.prev\n        else:\n            self.tail = node.prev\n\n    def display_forward(self):\n        elements, curr = [], self.head\n        while curr:\n            elements.append(str(curr.data))\n            curr = curr.next\n        return \"NULL \u21c4 \" + \" \u21c4 \".join(elements) + \" \u21c4 NULL\"\n\n    def display_backward(self):\n        elements, curr = [], self.tail\n        while curr:\n            elements.append(str(curr.data))\n            curr = curr.prev\n        return \"NULL \u21c4 \" + \" \u21c4 \".join(elements) + \" \u21c4 NULL\"\n\ndll = DoublyLinkedList()\nfor v in [1, 2, 3, 4, 5]:\n    dll.push_back(v)\nprint(dll.display_forward())\nprint(dll.display_backward())"
+        }
+      ]
+    },
+    {
+      "id": "ch3",
+      "title": "Stacks & Queues",
+      "slug": "stacks-queues",
+      "description": "LIFO and FIFO data structures with real-world applications.",
+      "icon": "03",
+      "topics": [
+        {
+          "id": "t3-1",
+          "title": "Stacks",
+          "slug": "stacks",
+          "description": "Master the LIFO principle with array and linked list implementations.",
+          "difficulty": "Beginner",
+          "practiceProblems": [
+            "Implement a min-stack that returns the minimum element in O(1)",
+            "Evaluate a mathematical expression given as a string",
+            "Sort a stack using only one additional stack"
+          ],
+          "language": "python",
+          "content": "## Stacks\n\nA stack follows **Last In, First Out (LIFO)** - like a pile of plates.\n\n```\nPush(10), Push(20), Push(30):\n\n    \u250c\u2500\u2500\u2500\u2500\u2500\u2510\n    \u2502  30 \u2502 \u2190 Top (peek/pop from here)\n    \u251c\u2500\u2500\u2500\u2500\u2500\u2524\n    \u2502  20 \u2502\n    \u251c\u2500\u2500\u2500\u2500\u2500\u2524\n    \u2502  10 \u2502\n    \u2514\u2500\u2500\u2500\u2500\u2500\u2518\n```\n\n### Core Operations\n\n| Operation | Description | Time |\n|-----------|-------------|------|\n| push(x) | Add x to top | O(1) |\n| pop() | Remove and return top | O(1) |\n| peek() | Return top without removing | O(1) |\n| isEmpty() | Check if stack is empty | O(1) |\n\n### Implementations\n\n**Array-based**: Use a list with append/pop from end. Simple and cache-friendly.\n\n**Linked-list-based**: Push/pop at head. No capacity limit.\n\n### Applications\n\n1. **Expression evaluation**: Convert infix to postfix, evaluate postfix\n2. **Balanced parentheses**: Push '(', pop on ')', check empty\n3. **Function call stack**: Recursion uses the system stack\n4. **Undo/redo**: Text editors, Photoshop\n5. **Backtracking**: DFS, maze solving\n6. **Browser history**: Back button\n\n### Infix to Postfix (Shunting Yard)\n\n```\nInfix:   (3 + 4) \u00d7 5 - 6\nPostfix: 3 4 + 5 \u00d7 6 -\n```\n\nRules:\n1. Output numbers directly\n2. Push '(' onto stack\n3. On ')', pop until '('\n4. On operator, pop higher-precedence operators first, then push",
+          "codeExample": "# Stack using Python list\nclass Stack:\n    def __init__(self):\n        self.items = []\n\n    def push(self, item):\n        self.items.append(item)\n\n    def pop(self):\n        if self.is_empty():\n            raise IndexError(\"Pop from empty stack\")\n        return self.items.pop()\n\n    def peek(self):\n        if self.is_empty():\n            raise IndexError(\"Peek from empty stack\")\n        return self.items[-1]\n\n    def is_empty(self):\n        return len(self.items) == 0\n\n    def size(self):\n        return len(self.items)\n\n    def __str__(self):\n        return f\"Stack(bottom\u2192top): {self.items}\"\n\n# Balance checker\ndef is_balanced(expression):\n    stack = Stack()\n    pairs = {')': '(', ']': '[', '}': '{'}\n    for char in expression:\n        if char in '([{':\n            stack.push(char)\n        elif char in ')]}':\n            if stack.is_empty() or stack.pop() != pairs[char]:\n                return False\n    return stack.is_empty()\n\nprint(is_balanced(\"({[()]})\"))  # True\nprint(is_balanced(\"({[)]}\"))    # False\n\n# Postfix evaluator\ndef eval_postfix(expr):\n    stack = Stack()\n    for token in expr.split():\n        if token.isdigit():\n            stack.push(int(token))\n        else:\n            b, a = stack.pop(), stack.pop()\n            if token == '+': stack.push(a + b)\n            elif token == '-': stack.push(a - b)\n            elif token == '*': stack.push(a * b)\n            elif token == '/': stack.push(int(a / b))\n    return stack.pop()\n\nprint(eval_postfix(\"3 4 + 5 * 6 -\"))  # 29"
+        },
+        {
+          "id": "t3-2",
+          "title": "Queues & Variants",
+          "slug": "queues-variants",
+          "description": "Master FIFO queues, priority queues, and deques.",
+          "difficulty": "Beginner",
+          "practiceProblems": [
+            "Implement a circular queue using an array",
+            "Generate binary numbers from 1 to n using a queue",
+            "Implement a stack using two queues"
+          ],
+          "language": "python",
+          "content": "## Queues & Variants\n\nA queue follows **First In, First Out (FIFO)** - like a line at a store.\n\n```\nEnqueue(10), Enqueue(20), Enqueue(30):\n\nFront \u2192 [10] [20] [30] \u2190 Rear\nDequeue from here \u2192      Enqueue here\n```\n\n### Queue Variants\n\n| Type | Description | Use Case |\n|------|-------------|----------|\n| Simple Queue | FIFO | Print queue, BFS |\n| Circular Queue | Wrap-around array | Buffer, scheduling |\n| Priority Queue | Highest priority first | Dijkstra, heap sort |\n| Deque | Double-ended queue | Palindrome check, sliding window |\n\n### Circular Queue\n\nUses modular arithmetic to reuse empty spaces at the front:\n\n```\nfront = (front + 1) % capacity\nrear = (rear + 1) % capacity\n```\n\n### Deque (Double-Ended Queue)\n\nInsert and delete from **both ends** in O(1):\n\n```\nPush_front(10)  Push_back(20)  Push_back(30)\n[10] [20] [30]\nPop_front() \u2192 returns 10\n[20] [30]\n```\n\n### Applications\n\n- **BFS traversal**: Process nodes level by level\n- **Sliding window maximum**: Use deque to maintain window\n- **Task scheduling**: OS process scheduling\n- **Web server request handling**: FIFO request processing",
+          "codeExample": "from collections import deque\n\n# Simple Queue\nclass Queue:\n    def __init__(self):\n        self.items = deque()\n\n    def enqueue(self, item):\n        self.items.append(item)\n\n    def dequeue(self):\n        if self.is_empty():\n            raise IndexError(\"Dequeue from empty queue\")\n        return self.items.popleft()\n\n    def front(self):\n        if self.is_empty():\n            raise IndexError(\"Front of empty queue\")\n        return self.items[0]\n\n    def is_empty(self):\n        return len(self.items) == 0\n\n    def size(self):\n        return len(self.items)\n\n# Sliding window maximum using deque\ndef max_sliding_window(nums, k):\n    dq = deque()\n    result = []\n    for i, num in enumerate(nums):\n        while dq and dq[0] < i - k + 1:\n            dq.popleft()\n        while dq and nums[dq[-1]] < num:\n            dq.pop()\n        dq.append(i)\n        if i >= k - 1:\n            result.append(nums[dq[0]])\n    return result\n\nprint(max_sliding_window([1, 3, -1, -3, 5, 3, 6, 7], 3))\n# Output: [3, 3, 5, 5, 6, 7]"
+        }
+      ]
+    },
+    {
+      "id": "ch4",
+      "title": "Trees & Recursion",
+      "slug": "trees-recursion",
+      "description": "Binary trees, BSTs, traversals, and recursive thinking.",
+      "icon": "04",
+      "topics": [
+        {
+          "id": "t4-1",
+          "title": "Binary Trees",
+          "slug": "binary-trees",
+          "description": "Understand tree structures and master all traversal methods.",
+          "difficulty": "Intermediate",
+          "practiceProblems": [
+            "Find the height of a binary tree recursively",
+            "Check if two binary trees are identical",
+            "Print all root-to-leaf paths in a binary tree"
+          ],
+          "language": "python",
+          "content": "## Binary Trees\n\nA binary tree is a hierarchical structure where each node has at most two children.\n\n```\n         1            \u2190 Root (level 0)\n        / \\\n       2   3          \u2190 Level 1\n      / \\ / \\\n     4  5 6  7        \u2190 Level 2 (leaves)\n```\n\n### Key Terminology\n\n- **Root**: Top node (1)\n- **Leaf**: Node with no children (4, 5, 6, 7)\n- **Height**: Longest path from root to leaf = 2\n- **Depth**: Distance from root to a node\n- **Subtree**: A tree rooted at any node\n\n### Traversals\n\n**In-order (Left, Root, Right)**: 4, 2, 5, 1, 6, 3, 7\n- BST in-order gives **sorted order**\n\n**Pre-order (Root, Left, Right)**: 1, 2, 4, 5, 3, 6, 7\n- Useful for **copying/serializing** a tree\n\n**Post-order (Left, Right, Root)**: 4, 5, 2, 6, 7, 3, 1\n- Useful for **deleting** a tree safely\n\n**Level-order (BFS)**: 1, 2, 3, 4, 5, 6, 7\n- Process level by level using a queue\n\n### Memory Representation\n\n- **Linked**: Each node has left/right pointers (most common)\n- **Sequential (Array)**: For complete binary trees\n  - Left child of node at index i: 2i + 1\n  - Right child: 2i + 2\n  - Parent: (i - 1) / 2",
+          "codeExample": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef build_sample_tree():\n    root = TreeNode(1)\n    root.left = TreeNode(2)\n    root.right = TreeNode(3)\n    root.left.left = TreeNode(4)\n    root.left.right = TreeNode(5)\n    root.right.left = TreeNode(6)\n    root.right.right = TreeNode(7)\n    return root\n\ndef inorder(root):\n    if not root:\n        return []\n    return inorder(root.left) + [root.val] + inorder(root.right)\n\ndef preorder(root):\n    if not root:\n        return []\n    return [root.val] + preorder(root.left) + preorder(root.right)\n\ndef postorder(root):\n    if not root:\n        return []\n    return postorder(root.left) + postorder(root.right) + [root.val]\n\ndef level_order(root):\n    if not root:\n        return []\n    from collections import deque\n    result, queue = [], deque([root])\n    while queue:\n        level = []\n        for _ in range(len(queue)):\n            node = queue.popleft()\n            level.append(node.val)\n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)\n        result.append(level)\n    return result\n\ntree = build_sample_tree()\nprint(\"In-order:  \", inorder(tree))\nprint(\"Pre-order: \", preorder(tree))\nprint(\"Post-order:\", postorder(tree))\nprint(\"Level-order:\", level_order(tree))"
+        },
+        {
+          "id": "t4-2",
+          "title": "Binary Search Trees",
+          "slug": "binary-search-trees",
+          "description": "Efficient searching, insertion, and deletion using BST properties.",
+          "difficulty": "Intermediate",
+          "practiceProblems": [
+            "Validate if a binary tree is a valid BST",
+            "Find the kth smallest element in a BST",
+            "Convert a sorted array to a balanced BST"
+          ],
+          "language": "python",
+          "content": "## Binary Search Trees (BST)\n\nA BST maintains the **sorted property**: left subtree < node < right subtree.\n\n```\n         8\n        / \\\n       3   10\n      / \\    \\\n     1   6    14\n        / \\  /\n       4  7 13\n```\n\n### BST Property\n\nFor every node N:\n- All nodes in N.left have values **< N.val**\n- All nodes in N.right have values **> N.val**\n\n### Operations\n\n| Operation | Average | Worst (skewed) |\n|-----------|---------|----------------|\n| Search | O(log n) | O(n) |\n| Insert | O(log n) | O(n) |\n| Delete | O(log n) | O(n) |\n\n### Deletion Cases\n\n1. **Leaf node**: Just remove it\n2. **One child**: Replace with that child\n3. **Two children**: Replace with **in-order successor** (smallest in right subtree), then delete the successor\n\n### In-order Successor\n\nThe next largest node - found by going right once, then as far left as possible.",
+          "codeExample": "class BSTNode:\n    def __init__(self, val):\n        self.val = val\n        self.left = None\n        self.right = None\n\nclass BST:\n    def __init__(self):\n        self.root = None\n\n    def insert(self, val):\n        self.root = self._insert(self.root, val)\n\n    def _insert(self, node, val):\n        if not node:\n            return BSTNode(val)\n        if val < node.val:\n            node.left = self._insert(node.left, val)\n        elif val > node.val:\n            node.right = self._insert(node.right, val)\n        return node\n\n    def search(self, val):\n        return self._search(self.root, val)\n\n    def _search(self, node, val):\n        if not node or node.val == val:\n            return node\n        if val < node.val:\n            return self._search(node.left, val)\n        return self._search(node.right, val)\n\n    def inorder(self):\n        result = []\n        self._inorder(self.root, result)\n        return result\n\n    def _inorder(self, node, result):\n        if node:\n            self._inorder(node.left, result)\n            result.append(node.val)\n            self._inorder(node.right, result)\n\n    def delete(self, val):\n        self.root = self._delete(self.root, val)\n\n    def _delete(self, node, val):\n        if not node:\n            return None\n        if val < node.val:\n            node.left = self._delete(node.left, val)\n        elif val > node.val:\n            node.right = self._delete(node.right, val)\n        else:\n            if not node.left:\n                return node.right\n            if not node.right:\n                return node.left\n            successor = node.right\n            while successor.left:\n                successor = successor.left\n            node.val = successor.val\n            node.right = self._delete(node.right, successor.val)\n        return node\n\nbst = BST()\nfor v in [8, 3, 10, 1, 6, 14, 4, 7, 13]:\n    bst.insert(v)\nprint(\"In-order:\", bst.inorder())\nbst.delete(3)\nprint(\"After deleting 3:\", bst.inorder())"
+        },
+        {
+          "id": "t4-3",
+          "title": "Recursion & Divide and Conquer",
+          "slug": "recursion-divide-conquer",
+          "description": "Master recursive thinking with Towers of Hanoi, Merge Sort, and Quick Sort.",
+          "difficulty": "Intermediate",
+          "practiceProblems": [
+            "Solve Tower of Hanoi and print the sequence of moves",
+            "Implement merge sort to sort a linked list",
+            "Use quicksort's partition logic to find the kth largest element"
+          ],
+          "language": "python",
+          "content": "## Recursion & Divide and Conquer\n\nRecursion is a function that calls itself on **smaller subproblems** until reaching a **base case**.\n\n### Anatomy of Recursion\n\n```python\ndef recurse(n):\n    if n <= 0:          # Base case - stops recursion\n        return\n    recurse(n - 1)      # Recursive call on smaller input\n```\n\n### Towers of Hanoi\n\nMove n disks from source \u2192 destination using an auxiliary peg.\n\n**Rules**: Only move one disk at a time. Never place a larger disk on a smaller one.\n\n**Solution**: Move n-1 disks to auxiliary, move largest to destination, move n-1 from auxiliary to destination.\n\n**Recurrence**: T(n) = 2T(n-1) + 1 \u2192 **O(2\u207f)**\n\n### Merge Sort (Divide and Conquer)\n\n1. **Divide**: Split array in half\n2. **Conquer**: Recursively sort each half\n3. **Combine**: Merge sorted halves\n\n**Recurrence**: T(n) = 2T(n/2) + O(n) \u2192 **O(n log n)**\n\n### Quick Sort\n\n1. **Partition**: Pick pivot, place it in correct position\n2. **Conquer**: Recursively sort left and right partitions\n\n**Average**: O(n log n) | **Worst**: O(n\u00b2) - when pivot is always min or max\n**Space**: O(log n) - in-place sort",
+          "codeExample": "def tower_of_hanoi(n, source='A', target='C', auxiliary='B'):\n    if n == 1:\n        print(f\"Move disk 1 from {source} to {target}\")\n        return\n    tower_of_hanoi(n - 1, source, auxiliary, target)\n    print(f\"Move disk {n} from {source} to {target}\")\n    tower_of_hanoi(n - 1, auxiliary, target, source)\n\nprint(\"Towers of Hanoi (3 disks):\")\ntower_of_hanoi(3)\n\ndef merge_sort(arr):\n    if len(arr) <= 1:\n        return arr\n    mid = len(arr) // 2\n    left = merge_sort(arr[:mid])\n    right = merge_sort(arr[mid:])\n    return merge(left, right)\n\ndef merge(left, right):\n    result = []\n    i = j = 0\n    while i < len(left) and j < len(right):\n        if left[i] <= right[j]:\n            result.append(left[i]); i += 1\n        else:\n            result.append(right[j]); j += 1\n    result.extend(left[i:])\n    result.extend(right[j:])\n    return result\n\ndef quick_sort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quick_sort(left) + middle + quick_sort(right)\n\ndata = [38, 27, 43, 3, 9, 82, 10]\nprint(\"Merge:\", merge_sort(data.copy()))\nprint(\"Quick:\", quick_sort(data.copy()))"
+        }
+      ]
+    },
+    {
+      "id": "ch5",
+      "title": "Advanced Trees: AVL & Heaps",
+      "slug": "advanced-trees-avl-heaps",
+      "description": "Self-balancing trees, heap operations, and HeapSort.",
+      "icon": "05",
+      "topics": [
+        {
+          "id": "t5-1",
+          "title": "AVL Trees",
+          "slug": "avl-trees",
+          "description": "Self-balancing BSTs with guaranteed O(log n) operations through rotations.",
+          "difficulty": "Advanced",
+          "practiceProblems": [
+            "Implement AVL tree deletion with all rotation cases",
+            "Check if a given binary tree is balanced",
+            "Find the diameter of a binary tree"
+          ],
+          "language": "python",
+          "content": "## AVL Trees\n\nAn AVL tree is a **self-balancing BST** where the balance factor (height difference of subtrees) of every node is -1, 0, or 1.\n\n### Why AVL?\n\nA regular BST can degrade to O(n) when sorted input is inserted:\n\n```\nInsert 1,2,3,4,5 \u2192 becomes a linked list\n    1\n     \\\n      2\n       \\\n        3    \u2190 Height = 4, effectively a linked list\n         \\\n          4\n           \\\n            5\n```\n\nAVL fixes this with **rotations** to keep height at O(log n).\n\n### Balance Factor\n\nBF(node) = height(left) - height(right)\n\nMust be {-1, 0, 1} for every node.\n\n### Four Rotation Cases\n\n| Case | Imbalance | Fix |\n|------|-----------|-----|\n| Left-Left (LL) | Left child is left-heavy | Right rotation |\n| Right-Right (RR) | Right child is right-heavy | Left rotation |\n| Left-Right (LR) | Left child is right-heavy | Left rotate child, then right rotate |\n| Right-Left (RL) | Right child is left-heavy | Right rotate child, then left rotate |\n\n### Right Rotation (LL case)\n\n```\n    y                x\n   / \\             / \\\n  x   C    \u2192      A   y\n / \\                 / \\\nA   B               B   C\n```\n\n### Insertion\n\nInsert like a normal BST, then walk back up checking balance factors. Apply the appropriate rotation when balance is violated.\n\n**All operations guaranteed O(log n).**",
+          "codeExample": "class AVLNode:\n    def __init__(self, val):\n        self.val = val\n        self.left = None\n        self.right = None\n        self.height = 1\n\nclass AVLTree:\n    def height(self, node):\n        return node.height if node else 0\n\n    def balance_factor(self, node):\n        return self.height(node.left) - self.height(node.right)\n\n    def update_height(self, node):\n        node.height = 1 + max(self.height(node.left), self.height(node.right))\n\n    def rotate_right(self, y):\n        x = y.left\n        T2 = x.right\n        x.right = y\n        y.left = T2\n        self.update_height(y)\n        self.update_height(x)\n        return x\n\n    def rotate_left(self, x):\n        y = x.right\n        T2 = y.left\n        y.left = x\n        x.right = T2\n        self.update_height(x)\n        self.update_height(y)\n        return y\n\n    def insert(self, node, val):\n        if not node:\n            return AVLNode(val)\n        if val < node.val:\n            node.left = self.insert(node.left, val)\n        elif val > node.val:\n            node.right = self.insert(node.right, val)\n        else:\n            return node\n\n        self.update_height(node)\n        bf = self.balance_factor(node)\n\n        if bf > 1 and val < node.left.val:\n            return self.rotate_right(node)\n        if bf < -1 and val > node.right.val:\n            return self.rotate_left(node)\n        if bf > 1 and val > node.left.val:\n            node.left = self.rotate_left(node.left)\n            return self.rotate_right(node)\n        if bf < -1 and val < node.right.val:\n            node.right = self.rotate_right(node.right)\n            return self.rotate_left(node)\n        return node\n\n    def inorder(self, node, result):\n        if node:\n            self.inorder(node.left, result)\n            result.append(node.val)\n            self.inorder(node.right, result)\n\navl = AVLTree()\nroot = None\nfor v in [10, 20, 30, 40, 50, 25]:\n    root = avl.insert(root, v)\nresult = []\navl.inorder(root, result)\nprint(\"AVL In-order:\", result)\nprint(f\"Tree height: {avl.height(root)} (vs 5 for unbalanced)\")"
+        },
+        {
+          "id": "t5-2",
+          "title": "Heaps & HeapSort",
+          "slug": "heaps-heapsort",
+          "description": "Min/max heaps, heap operations, and the HeapSort algorithm.",
+          "difficulty": "Advanced",
+          "practiceProblems": [
+            "Implement a max-heap from scratch using an array",
+            "Find the median of a data stream using two heaps",
+            "Merge k sorted arrays using a min-heap"
+          ],
+          "language": "python",
+          "content": "## Heaps & HeapSort\n\nA **heap** is a complete binary tree satisfying the heap property.\n\n### Min-Heap vs Max-Heap\n\n- **Min-Heap**: Parent \u2264 Children (smallest at root)\n- **Max-Heap**: Parent \u2265 Children (largest at root)\n\n```\nMin-Heap:          Max-Heap:\n      1                  50\n     / \\                / \\\n    3   2              30   40\n   / \\ /             / \\  /\n  7  4 5            10 20 35\n```\n\n### Array Representation\n\nFor node at index i (0-based):\n- Left child: 2i + 1\n- Right child: 2i + 2\n- Parent: (i - 1) // 2\n\n```\nMin-Heap array: [1, 3, 2, 7, 4, 5]\nIndex:           0  1  2  3  4  5\n```\n\n### Heap Operations\n\n| Operation | Time | Process |\n|-----------|------|---------|\n| Insert (push up) | O(log n) | Add at end, bubble up |\n| Extract min/max (push down) | O(log n) | Replace root, sift down |\n| Build heap | O(n) | Start from last non-leaf, sift down |\n| Peek min/max | O(1) | Just read root |\n\n### HeapSort\n\n1. Build a max-heap from the array\n2. Swap root (max) with last element\n3. Reduce heap size, sift down root\n4. Repeat until sorted\n\n**Time**: O(n log n) | **Space**: O(1) | **Not stable**\n\n### Priority Queue\n\nHeaps are the standard implementation of priority queues - used in Dijkstra's algorithm, task scheduling, and more.",
+          "codeExample": "import heapq\n\n# Python's heapq implements a min-heap\nheap = []\nheapq.heappush(heap, 5)\nheapq.heappush(heap, 3)\nheapq.heappush(heap, 7)\nheapq.heappush(heap, 1)\nprint(\"Min-heap:\", heap)\nprint(\"Extract min:\", heapq.heappop(heap))\nprint(\"After extract:\", heap)\n\n# Max-heap using negation\nmax_heap = []\nfor val in [5, 3, 7, 1, 9]:\n    heapq.heappush(max_heap, -val)\nprint(\"Max:\", -heapq.heappop(max_heap))\n\n# HeapSort implementation\ndef heapsort(arr):\n    n = len(arr)\n    for i in range(n // 2 - 1, -1, -1):\n        sift_down(arr, n, i)\n    for i in range(n - 1, 0, -1):\n        arr[0], arr[i] = arr[i], arr[0]\n        sift_down(arr, i, 0)\n    return arr\n\ndef sift_down(arr, n, i):\n    largest = i\n    left, right = 2 * i + 1, 2 * i + 2\n    if left < n and arr[left] > arr[largest]:\n        largest = left\n    if right < n and arr[right] > arr[largest]:\n        largest = right\n    if largest != i:\n        arr[i], arr[largest] = arr[largest], arr[i]\n        sift_down(arr, n, largest)\n\ndata = [38, 27, 43, 3, 9, 82, 10]\nprint(\"HeapSorted:\", heapsort(data.copy()))\n\n# Top-K elements\nnums = [3, 1, 5, 12, 2, 11]\nprint(\"Top 3:\", heapq.nlargest(3, nums))\nprint(\"Bottom 3:\", heapq.nsmallest(3, nums))"
+        }
+      ]
+    },
+    {
+      "id": "ch6",
+      "title": "Graphs & Hashing",
+      "slug": "graphs-hashing",
+      "description": "Graph traversals, shortest paths, and hash table internals.",
+      "icon": "06",
+      "topics": [
+        {
+          "id": "t6-1",
+          "title": "Graph Fundamentals & BFS/DFS",
+          "slug": "graph-fundamentals-bfs-dfs",
+          "description": "Representations, BFS, DFS, and their applications.",
+          "difficulty": "Intermediate",
+          "practiceProblems": [
+            "Find the number of connected components in an undirected graph",
+            "Detect a cycle in an undirected graph using DFS",
+            "Find the shortest path in an unweighted graph using BFS"
+          ],
+          "language": "python",
+          "content": "## Graph Fundamentals & BFS/DFS\n\nA graph is a set of **vertices** (nodes) connected by **edges** (links).\n\n### Graph Terminology\n\n- **Directed vs Undirected**: Edges have direction or not\n- **Weighted vs Unweighted**: Edges have costs or not\n- **Degree**: Number of edges connected to a vertex\n- **Path**: Sequence of vertices connected by edges\n- **Cycle**: A path that starts and ends at the same vertex\n- **Connected**: Every vertex can reach every other vertex\n\n### Representations\n\n**Adjacency Matrix** (O(V\u00b2) space):\n```\n   0  1  2  3\n0 [0, 1, 1, 0]\n1 [1, 0, 1, 0]\n2 [1, 1, 0, 1]\n3 [0, 0, 1, 0]\n```\n\n**Adjacency List** (O(V + E) space):\n```\n0: [1, 2]\n1: [0, 2]\n2: [0, 1, 3]\n3: [2]\n```\n\n### BFS (Breadth-First Search)\n\nExplores **level by level** using a **queue**.\n\n1. Start at source, enqueue it\n2. Dequeue a vertex, visit unvisited neighbors\n3. Enqueue unvisited neighbors\n4. Repeat until queue is empty\n\n**Time**: O(V + E) | **Space**: O(V)\n**Use**: Shortest path in unweighted graphs, level-order traversal\n\n### DFS (Depth-First Search)\n\nExplores **as deep as possible** using **recursion/stack**.\n\n1. Visit a vertex\n2. Recursively visit an unvisited neighbor\n3. Backtrack when no unvisited neighbors remain\n\n**Time**: O(V + E) | **Space**: O(V)\n**Use**: Cycle detection, topological sort, connected components",
+          "codeExample": "from collections import deque\n\nclass Graph:\n    def __init__(self, vertices):\n        self.V = vertices\n        self.adj = [[] for _ in range(vertices)]\n\n    def add_edge(self, u, v, directed=False):\n        self.adj[u].append(v)\n        if not directed:\n            self.adj[v].append(u)\n\n    def bfs(self, start):\n        visited = [False] * self.V\n        queue = deque([start])\n        visited[start] = True\n        order = []\n        while queue:\n            vertex = queue.popleft()\n            order.append(vertex)\n            for neighbor in self.adj[vertex]:\n                if not visited[neighbor]:\n                    visited[neighbor] = True\n                    queue.append(neighbor)\n        return order\n\n    def dfs(self, start, visited=None):\n        if visited is None:\n            visited = [False] * self.V\n        visited[start] = True\n        order = [start]\n        for neighbor in self.adj[start]:\n            if not visited[neighbor]:\n                order.extend(self.dfs(neighbor, visited))\n        return order\n\n    def has_cycle(self):\n        visited = [False] * self.V\n        for i in range(self.V):\n            if not visited[i]:\n                if self._dfs_cycle(i, visited, -1):\n                    return True\n        return False\n\n    def _dfs_cycle(self, node, visited, parent):\n        visited[node] = True\n        for neighbor in self.adj[node]:\n            if not visited[neighbor]:\n                if self._dfs_cycle(neighbor, visited, node):\n                    return True\n            elif neighbor != parent:\n                return True\n        return False\n\ng = Graph(6)\nedges = [(0,1), (0,2), (1,3), (1,4), (2,4), (3,5), (4,5)]\nfor u, v in edges:\n    g.add_edge(u, v)\nprint(\"BFS from 0:\", g.bfs(0))\nprint(\"DFS from 0:\", g.dfs(0))"
+        },
+        {
+          "id": "t6-2",
+          "title": "Shortest Path Algorithms",
+          "slug": "shortest-path-algorithms",
+          "description": "Floyd-Warshall algorithm and Warshall's transitive closure.",
+          "difficulty": "Advanced",
+          "practiceProblems": [
+            "Implement Floyd-Warshall and detect negative cycles",
+            "Find the cheapest flights with at most k stops",
+            "Find the shortest path in a grid with obstacles"
+          ],
+          "language": "python",
+          "content": "## Shortest Path Algorithms\n\n### Floyd-Warshall Algorithm\n\nFinds **all-pairs shortest paths** in a weighted graph. Works with negative edges (not negative cycles).\n\n**Idea**: For each intermediate node k, check if going through k gives a shorter path.\n\ndist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])\n\n**Time**: O(V\u00b3) | **Space**: O(V\u00b2)\n\n### Warshall's Algorithm\n\nFinds the **transitive closure** - which nodes are reachable from which.\n\nreach[i][j] = reach[i][j] OR (reach[i][k] AND reach[k][j])\n\n### When to Use What?\n\n| Algorithm | Use Case | Time |\n|-----------|----------|------|\n| BFS | Unweighted, single source | O(V + E) |\n| Dijkstra | Weighted (non-negative), single source | O((V+E) log V) |\n| Bellman-Ford | Weighted (with negative), single source | O(VE) |\n| Floyd-Warshall | All-pairs shortest paths | O(V\u00b3) |\n\n### Dijkstra's Algorithm\n\nUse a **priority queue** (min-heap) to always process the closest unvisited vertex.\n\n1. Initialize dist[source] = 0, all others = \u221e\n2. Push (0, source) to min-heap\n3. Pop minimum, relax all edges from that vertex\n4. Push updated distances to heap\n5. Repeat until heap is empty\n\n**Time**: O((V + E) log V) with binary heap",
+          "codeExample": "import sys\nimport heapq\n\ndef floyd_warshall(graph):\n    V = len(graph)\n    dist = [row[:] for row in graph]\n\n    for k in range(V):\n        for i in range(V):\n            for j in range(V):\n                if dist[i][k] + dist[k][j] < dist[i][j]:\n                    dist[i][j] = dist[i][k] + dist[k][j]\n    return dist\n\nINF = sys.maxsize\ngraph = [\n    [0,   5,  INF, 10],\n    [INF, 0,   3, INF],\n    [INF, INF, 0,   1],\n    [INF, INF, INF,  0]\n]\nresult = floyd_warshall(graph)\nfor row in result:\n    print([x if x != INF else \"INF\" for x in row])\n\ndef dijkstra(adj, src, V):\n    dist = [INF] * V\n    dist[src] = 0\n    pq = [(0, src)]\n\n    while pq:\n        d, u = heapq.heappop(pq)\n        if d > dist[u]:\n            continue\n        for v, w in adj[u]:\n            if dist[u] + w < dist[v]:\n                dist[v] = dist[u] + w\n                heapq.heappush(pq, (dist[v], v))\n    return dist\n\nV = 5\nadj = [[] for _ in range(V)]\nedges = [(0,1,2),(0,3,6),(1,2,3),(1,3,8),(1,4,5),(2,4,7),(3,4,9)]\nfor u, v, w in edges:\n    adj[u].append((v, w))\n    adj[v].append((u, w))\nprint(\"Dijkstra distances:\", dijkstra(adj, 0, V))"
+        },
+        {
+          "id": "t6-3",
+          "title": "Hashing",
+          "slug": "hashing",
+          "description": "Hash functions, collision resolution, and hash table operations.",
+          "difficulty": "Intermediate",
+          "practiceProblems": [
+            "Implement a hash map from scratch using separate chaining",
+            "Find the first non-repeating character in a string using hashing",
+            "Group all anagrams from a list of strings"
+          ],
+          "language": "python",
+          "content": "## Hashing\n\nHashing maps keys to indices in a table for **O(1) average** lookups.\n\n### Hash Function\n\nA function that converts a key into an array index:\n\n```\nhash(key) = key % table_size\nhash(\"hello\") = hash_code(\"hello\") % 1000\n```\n\nA good hash function distributes keys uniformly across the table.\n\n### Collision Resolution\n\nWhen two keys hash to the same index:\n\n**Open Hashing (Separate Chaining)**:\nEach bucket is a linked list. Collisions just append to the list.\n\n```\nIndex 0: \u2192 \nIndex 1: \u2192 [15] \u2192 [25] \u2192 NULL\nIndex 2: \u2192 [12] \u2192 NULL\nIndex 3: \u2192 [33] \u2192 [43] \u2192 NULL\n```\n\n**Closed Hashing (Open Addressing)**:\nFind another empty slot in the table.\n\n| Method | Formula | Behavior |\n|--------|---------|----------|\n| Linear Probing | (h + i) % size | Check h, h+1, h+2, ... |\n| Quadratic Probing | (h + i\u00b2) % size | Check h, h+1, h+4, ... |\n| Double Hashing | (h + i\u00b7h2) % size | Use second hash for step size |\n\n### Load Factor\n\n\u03b1 = n / size (number of elements / table size)\n\n- **Chaining**: \u03b1 can be > 1, but performance degrades\n- **Open addressing**: \u03b1 must be < 1, ideally < 0.7\n- **Rehashing**: When \u03b1 gets too high, create a larger table and reinsert everything\n\n### Applications\n\n- **Dictionary/HashMap**: O(1) get/set\n- **Database indexing**: Fast record lookups\n- **Caching**: LRU cache implementation\n- **Symbol tables**: Compilers use hash tables for variable names\n- **Deduplication**: Finding duplicate elements in O(n)",
+          "codeExample": "class HashTable:\n    def __init__(self, size=16):\n        self.size = size\n        self.count = 0\n        self.buckets = [[] for _ in range(size)]\n\n    def _hash(self, key):\n        return hash(key) % self.size\n\n    def _load_factor(self):\n        return self.count / self.size\n\n    def put(self, key, value):\n        if self._load_factor() > 0.75:\n            self._rehash()\n        idx = self._hash(key)\n        bucket = self.buckets[idx]\n        for i, (k, v) in enumerate(bucket):\n            if k == key:\n                bucket[i] = (key, value)\n                return\n        bucket.append((key, value))\n        self.count += 1\n\n    def get(self, key):\n        idx = self._hash(key)\n        for k, v in self.buckets[idx]:\n            if k == key:\n                return v\n        raise KeyError(key)\n\n    def delete(self, key):\n        idx = self._hash(key)\n        bucket = self.buckets[idx]\n        for i, (k, v) in enumerate(bucket):\n            if k == key:\n                bucket.pop(i)\n                self.count -= 1\n                return\n        raise KeyError(key)\n\n    def _rehash(self):\n        old_buckets = self.buckets\n        self.size *= 2\n        self.buckets = [[] for _ in range(self.size)]\n        self.count = 0\n        for bucket in old_buckets:\n            for k, v in bucket:\n                self.put(k, v)\n\n    def __str__(self):\n        items = []\n        for bucket in self.buckets:\n            for k, v in bucket:\n                items.append(f\"{k}: {v}\")\n        return \"{\" + \", \".join(items) + \"}\"\n\nht = HashTable()\nht.put(\"name\", \"Alice\")\nht.put(\"age\", 21)\nht.put(\"course\", \"DSA\")\nprint(ht)\nprint(f\"Get name: {ht.get('name')}\")\nht.delete(\"age\")\nprint(f\"After delete: {ht}\")"
+        }
+      ]
+    }
+  ]
+}
