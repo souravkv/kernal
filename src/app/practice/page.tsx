@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Editor from "@monaco-editor/react";
-import { Play, Send, RotateCcw, ChevronDown } from "lucide-react";
+import { Play, RotateCcw, ChevronDown } from "lucide-react";
 
 const languages = [
   { id: "python", label: "Python", monaco: "python", template: `# Write your code here\ndef two_sum(nums, target):\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i\n    return []\n\nprint(two_sum([2, 7, 11, 15], 9))` },
@@ -13,9 +13,9 @@ const languages = [
 ];
 
 const sampleProblems = [
-  { id: 1, title: "Two Sum", difficulty: "Easy", description: "Given an array of integers and a target, find two numbers that add up to the target. Return their indices.", testCases: "Input: nums = [2,7,11,15], target = 9\nOutput: [0,1]\n\nInput: nums = [3,2,4], target = 6\nOutput: [1,2]" },
-  { id: 2, title: "Reverse String", difficulty: "Easy", description: "Write a function that reverses a string. The input string is given as an array of characters.", testCases: "Input: [\"h\",\"e\",\"l\",\"l\",\"o\"]\nOutput: [\"o\",\"l\",\"l\",\"e\",\"h\"]\n\nInput: [\"H\",\"a\",\"n\",\"n\",\"a\",\"h\"]\nOutput: [\"h\",\"a\",\"n\",\"n\",\"a\",\"H\"]" },
-  { id: 3, title: "Fibonacci Number", difficulty: "Easy", description: "The Fibonacci numbers are defined recursively. Find the nth Fibonacci number.", testCases: "Input: n = 2\nOutput: 1\n\nInput: n = 4\nOutput: 3" },
+  { id: 1, title: "Two Sum", difficulty: "Easy", description: "Given an array of integers and a target, find two numbers that add up to the target.", testCases: "Input: nums = [2,7,11,15], target = 9\nOutput: [0,1]\n\nInput: nums = [3,2,4], target = 6\nOutput: [1,2]" },
+  { id: 2, title: "Reverse String", difficulty: "Easy", description: "Write a function that reverses a string given as an array of characters.", testCases: 'Input: ["h","e","l","l","o"]\nOutput: ["o","l","l","e","h"]' },
+  { id: 3, title: "Fibonacci Number", difficulty: "Easy", description: "Find the nth Fibonacci number using recursion or iteration.", testCases: "Input: n = 2\nOutput: 1\n\nInput: n = 4\nOutput: 3" },
 ];
 
 export default function PracticePage() {
@@ -46,74 +46,67 @@ export default function PracticePage() {
         }),
       });
       const data = await response.json();
-      if (data.run) {
-        setOutput(data.run.stdout || data.run.stderr || "No output");
-      } else {
-        setOutput("Execution error: " + JSON.stringify(data));
-      }
+      setOutput(data.run?.stdout || data.run?.stderr || "No output");
     } catch {
-      setOutput("Error: Could not connect to execution engine. Try again later.");
+      setOutput("Error: Could not connect to execution engine.");
     }
     setIsRunning(false);
   };
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-foreground">Code Practice</h1>
-        <p className="mt-1 text-sm text-muted">Write, run, and test your code directly in the browser.</p>
-      </div>
+    <div className="mx-auto max-w-[1400px] px-6 py-32 sm:px-10 sm:py-40">
+      <span className="body-xs text-[var(--muted)] mb-4 block tracking-[0.3em]">Playground</span>
+      <h1 className="heading-lg mb-2">Code</h1>
+      <p className="body-lg mb-16 max-w-lg text-[var(--muted)]">Write, run, and test your code directly in the browser.</p>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[320px_1fr]">
-        <div className="rounded-2xl border border-border bg-card p-4">
-          <h2 className="mb-3 text-sm font-bold text-foreground">Problems</h2>
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[360px_1fr]">
+        <div className="border border-[var(--border)] bg-[var(--surface)] p-6">
+          <h2 className="body-xs mb-6 text-[var(--muted)]">Problems</h2>
           <div className="space-y-2">
             {sampleProblems.map((p) => (
               <button
                 key={p.id}
                 onClick={() => setSelectedProblem(p)}
-                className={`w-full rounded-xl border p-3 text-left transition-all ${
+                className={`w-full border p-4 text-left transition-all ${
                   selectedProblem.id === p.id
-                    ? "border-primary/30 bg-primary/5"
-                    : "border-border hover:border-primary/20 hover:bg-card-hover"
+                    ? "border-[var(--fg)] bg-[var(--fg)] text-[var(--bg)]"
+                    : "border-[var(--border)] hover:border-[var(--fg)]"
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-foreground">{p.title}</span>
-                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                    p.difficulty === "Easy" ? "bg-success/10 text-success" : "bg-warning/10 text-warning"
+                  <span className="body-sm">{p.title}</span>
+                  <span className={`text-[10px] font-medium uppercase tracking-wider ${
+                    selectedProblem.id === p.id ? "opacity-60" : "text-[var(--muted)]"
                   }`}>{p.difficulty}</span>
                 </div>
               </button>
             ))}
           </div>
 
-          <div className="mt-4 rounded-xl border border-border bg-surface-elevated p-4">
-            <h3 className="text-sm font-bold text-foreground mb-2">{selectedProblem.title}</h3>
-            <p className="text-xs text-muted leading-relaxed mb-3">{selectedProblem.description}</p>
-            <div className="rounded-lg bg-code-bg p-3">
-              <pre className="text-[11px] font-mono text-muted whitespace-pre-wrap">{selectedProblem.testCases}</pre>
-            </div>
+          <div className="mt-6 border border-[var(--border)] bg-[var(--surface-alt)] p-5">
+            <h3 className="body-sm font-medium mb-2">{selectedProblem.title}</h3>
+            <p className="body-sm text-[var(--muted)] mb-4">{selectedProblem.description}</p>
+            <pre className="text-[12px] font-mono text-[var(--muted)] whitespace-pre-wrap leading-relaxed">{selectedProblem.testCases}</pre>
           </div>
         </div>
 
         <div className="flex flex-col">
-          <div className="mb-3 flex items-center justify-between">
+          <div className="mb-4 flex items-center justify-between">
             <div className="relative">
               <button
                 onClick={() => setLangDropdownOpen(!langDropdownOpen)}
-                className="flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-foreground transition-all hover:border-primary/20"
+                className="flex items-center gap-2 border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-[13px] font-light transition-all hover:border-[var(--fg)]"
               >
                 {selectedLang.label}
-                <ChevronDown className="h-4 w-4 text-muted" />
+                <ChevronDown className="h-3 w-3 text-[var(--muted)]" />
               </button>
               {langDropdownOpen && (
-                <div className="absolute top-full left-0 z-10 mt-1 w-40 rounded-xl border border-border bg-card shadow-xl">
+                <div className="absolute top-full left-0 z-10 mt-1 w-40 border border-[var(--border)] bg-[var(--surface)]">
                   {languages.map((lang) => (
                     <button
                       key={lang.id}
                       onClick={() => handleLanguageChange(lang)}
-                      className="w-full px-3 py-2 text-left text-sm transition-colors hover:bg-card-hover first:rounded-t-xl last:rounded-b-xl"
+                      className="w-full px-4 py-2.5 text-left text-[13px] font-light transition-colors hover:bg-[var(--surface-alt)]"
                     >
                       {lang.label}
                     </button>
@@ -121,53 +114,55 @@ export default function PracticePage() {
                 </div>
               )}
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <button
                 onClick={() => { setCode(selectedLang.template); setOutput(""); }}
-                className="flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-xs font-medium text-muted transition-all hover:bg-card-hover hover:text-foreground"
+                className="flex items-center gap-2 border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-[11px] font-medium uppercase tracking-wider text-[var(--muted)] transition-all hover:border-[var(--fg)] hover:text-[var(--fg)]"
               >
-                <RotateCcw className="h-3.5 w-3.5" />
+                <RotateCcw className="h-3 w-3" />
                 Reset
               </button>
               <button
                 onClick={handleRun}
                 disabled={isRunning}
-                className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-primary to-accent px-4 py-2 text-xs font-semibold text-white shadow-md shadow-primary/25 transition-all hover:shadow-lg hover:scale-[1.02] disabled:opacity-50"
+                className="flex items-center gap-2 border border-[var(--fg)] bg-[var(--fg)] px-5 py-2 text-[11px] font-medium uppercase tracking-[0.1em] text-[var(--bg)] transition-all duration-300 hover:bg-transparent hover:text-[var(--fg)] disabled:opacity-50"
               >
-                <Play className="h-3.5 w-3.5" />
-                {isRunning ? "Running..." : "Run Code"}
+                <Play className="h-3 w-3" />
+                {isRunning ? "Running..." : "Run"}
               </button>
             </div>
           </div>
 
-          <div className="flex-1 overflow-hidden rounded-2xl border border-border">
+          <div className="flex-1 overflow-hidden border border-[var(--border)]">
             <Editor
-              height="400px"
+              height="420px"
               language={selectedLang.monaco}
               value={code}
               onChange={(value) => setCode(value || "")}
               theme="vs-dark"
               options={{
-                fontSize: 14,
-                fontFamily: "var(--font-mono, monospace)",
+                fontSize: 13,
+                fontFamily: "SF Mono, Fira Code, monospace",
+                fontWeight: "300",
                 minimap: { enabled: false },
-                padding: { top: 16, bottom: 16 },
+                padding: { top: 20, bottom: 20 },
                 scrollBeyondLastLine: false,
                 smoothScrolling: true,
                 cursorBlinking: "smooth",
                 cursorSmoothCaretAnimation: "on",
-                bracketPairColorization: { enabled: true },
+                lineHeight: 1.7,
+                letterSpacing: 0.3,
               }}
             />
           </div>
 
-          <div className="mt-3 rounded-2xl border border-border bg-card p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="h-2 w-2 rounded-full bg-success" />
-              <span className="text-xs font-semibold text-foreground">Output</span>
+          <div className="mt-4 border border-[var(--border)] bg-[var(--surface)] p-5">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="h-1.5 w-1.5 rounded-full bg-[var(--fg)]" />
+              <span className="body-xs text-[var(--muted)]">Output</span>
             </div>
-            <pre className="min-h-[80px] overflow-auto rounded-xl bg-code-bg p-4 text-sm font-mono text-muted whitespace-pre-wrap">
-              {output || "Click 'Run Code' to see output..."}
+            <pre className="min-h-[60px] overflow-auto text-[13px] font-mono font-light text-[var(--muted)] whitespace-pre-wrap leading-relaxed">
+              {output || "Click Run to see output..."}
             </pre>
           </div>
         </div>

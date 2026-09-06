@@ -1,74 +1,47 @@
 import Link from "next/link";
-import { Clock, Users, Star, ArrowRight, BookOpen } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { getAllCourses } from "@/data/courses";
 
-export const metadata = {
-  title: "Courses — KERNAL",
-};
+export const metadata = { title: "Learn — Kernal" };
 
 export default function CoursesPage() {
   const courses = getAllCourses();
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          Explore <span className="text-gradient">Courses</span>
-        </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-muted">
-          Structured, hands-on courses designed to take you from fundamentals to mastery.
-        </p>
-      </div>
+    <div className="mx-auto max-w-[1400px] px-6 py-32 sm:px-10 sm:py-40">
+      <span className="body-xs text-[var(--muted)] mb-4 block tracking-[0.3em]">Courses</span>
+      <h1 className="heading-xl mb-6">Learn</h1>
+      <p className="body-lg mb-20 max-w-lg text-[var(--muted)]">
+        Structured, hands-on courses designed to take you from fundamentals to mastery.
+      </p>
 
-      <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="space-y-0">
         {courses.map((course) => (
           <Link
             key={course.id}
             href={`/courses/${course.slug}`}
-            className="group rounded-2xl border border-border bg-card p-6 transition-all hover-lift hover:border-primary/20"
+            className="group flex flex-col gap-6 border-t border-[var(--border)] py-10 transition-colors hover:bg-[var(--surface)] -mx-6 px-6 sm:-mx-10 sm:px-10 sm:flex-row sm:items-center sm:justify-between"
           >
-            <div className="flex items-center gap-2">
-              <span className="rounded-full bg-gradient-to-r from-primary to-accent px-3 py-1 text-xs font-bold text-white">
-                DSA
-              </span>
-              <div className="flex items-center gap-1 text-xs text-warning">
-                <Star className="h-3.5 w-3.5 fill-current" />
-                <span className="font-semibold">{course.rating}</span>
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-3">
+                <span className="body-xs text-[var(--muted)]">01</span>
+                <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-[var(--muted)]">DSA</span>
+                <span className="text-[10px] text-[var(--muted)]">★ {course.rating}</span>
               </div>
+              <h2 className="heading-md group-hover:translate-x-2 transition-transform duration-300">{course.title}</h2>
+              <p className="body-md mt-2 max-w-lg text-[var(--muted)]">{course.description}</p>
             </div>
 
-            <h2 className="mt-4 text-xl font-bold text-foreground">{course.title}</h2>
-            <p className="mt-2 text-sm text-muted leading-relaxed">{course.description}</p>
-
-            <div className="mt-5 flex flex-wrap gap-4 text-xs text-muted">
-              <span className="flex items-center gap-1">
-                <Clock className="h-3.5 w-3.5 text-primary" />
-                {course.duration}
-              </span>
-              <span className="flex items-center gap-1">
-                <Users className="h-3.5 w-3.5 text-accent" />
-                {course.students.toLocaleString()}
-              </span>
-              <span className="flex items-center gap-1">
-                <BookOpen className="h-3.5 w-3.5 text-success" />
-                {course.chapters.reduce((a, c) => a + c.topics.length, 0)} topics
-              </span>
-            </div>
-
-            <div className="mt-5 flex flex-wrap gap-1.5">
-              {course.tags.slice(0, 4).map((tag) => (
-                <span key={tag} className="rounded-full border border-border bg-surface-elevated px-2.5 py-0.5 text-[10px] font-medium text-muted">
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            <div className="mt-6 flex items-center justify-between">
-              <span className="text-xl font-bold text-gradient">₹{course.price}</span>
-              <span className="flex items-center gap-1 text-sm font-semibold text-primary transition-all group-hover:gap-2">
-                View Course
-                <ArrowRight className="h-4 w-4" />
-              </span>
+            <div className="flex items-center gap-8 sm:text-right">
+              <div className="space-y-1">
+                <div className="body-sm text-[var(--muted)]">{course.duration}</div>
+                <div className="body-sm text-[var(--muted)]">{course.chapters.reduce((a, c) => a + c.topics.length, 0)} topics</div>
+                <div className="body-sm text-[var(--muted)]">{course.students.toLocaleString()} students</div>
+              </div>
+              <div>
+                <div className="heading-md mb-2">₹{course.price}</div>
+                <ArrowRight className="h-5 w-5 text-[var(--muted)] transition-all group-hover:translate-x-2 group-hover:text-[var(--fg)]" />
+              </div>
             </div>
           </Link>
         ))}

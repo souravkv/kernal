@@ -18,28 +18,28 @@ export default function CodeBlock({ code, language }: CodeBlockProps) {
   };
 
   return (
-    <div className="rounded-2xl border border-border overflow-hidden">
-      <div className="flex items-center justify-between bg-surface-elevated px-4 py-2 border-b border-border">
-        <span className="text-xs font-medium text-muted uppercase">{language}</span>
+    <div className="border border-[var(--border)] overflow-hidden">
+      <div className="flex items-center justify-between border-b border-[var(--border)] bg-[var(--surface)] px-5 py-3">
+        <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-[var(--muted)]">{language}</span>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-muted transition-all hover:bg-card-hover hover:text-foreground"
+          className="flex items-center gap-1.5 text-[11px] text-[var(--muted)] transition-opacity hover:opacity-100 opacity-60"
         >
           {copied ? (
             <>
-              <Check className="h-3.5 w-3.5 text-success" />
+              <Check className="h-3 w-3" />
               Copied
             </>
           ) : (
             <>
-              <Copy className="h-3.5 w-3.5" />
+              <Copy className="h-3 w-3" />
               Copy
             </>
           )}
         </button>
       </div>
-      <pre className="overflow-x-auto bg-code-bg p-4">
-        <code className="text-sm font-mono leading-relaxed text-foreground">{code}</code>
+      <pre className="overflow-x-auto bg-[var(--surface-alt)] p-5">
+        <code className="text-[13px] font-mono font-light leading-relaxed text-[var(--fg)]">{code}</code>
       </pre>
     </div>
   );

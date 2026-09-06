@@ -24,14 +24,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     if (stored) {
       setTheme(stored);
     } else {
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      setTheme(prefersDark ? "dark" : "light");
+      setTheme("dark");
     }
   }, []);
 
   useEffect(() => {
     if (!mounted) return;
-    document.documentElement.classList.toggle("dark", theme === "dark");
+    document.documentElement.className = `${theme === "dark" ? "dark" : ""}`;
     localStorage.setItem("kernal-theme", theme);
   }, [theme, mounted]);
 

@@ -1,95 +1,77 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Code2, Brain, Zap, Shield, BarChart3, Rocket } from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 
 const features = [
   {
-    icon: Brain,
+    number: "01",
     title: "Structured Curriculum",
-    description: "University-aligned 12-module DSA course that builds concepts progressively from basics to advanced.",
-    color: "text-primary",
-    bg: "bg-primary/10",
+    description: "University-aligned 6-unit DSA course building concepts progressively from fundamentals to advanced problem solving.",
   },
   {
-    icon: Code2,
-    title: "Integrated Code Editor",
-    description: "Write and run code directly in the browser with Monaco Editor. Support for Python, C++, Java, and more.",
-    color: "text-accent",
-    bg: "bg-accent/10",
+    number: "02",
+    title: "Integrated IDE",
+    description: "Monaco code editor with Python, C++, Java, JavaScript. Write, run, and test code without leaving the browser.",
   },
   {
-    icon: Zap,
-    title: "Instant Execution",
-    description: "Sandboxed code execution engine that evaluates your solutions against multiple test cases in real time.",
-    color: "text-warning",
-    bg: "bg-warning/10",
-  },
-  {
-    icon: BarChart3,
-    title: "Progress Tracking",
-    description: "Track your learning journey with XP points, streak counters, and detailed skill analytics.",
-    color: "text-success",
-    bg: "bg-success/10",
-  },
-  {
-    icon: Shield,
+    number: "03",
     title: "Mastery Gates",
-    description: "Prove your understanding before advancing. Pass each module with 70%+ to unlock the next topic.",
-    color: "text-danger",
-    bg: "bg-danger/10",
+    description: "Prove understanding before advancing. Pass each module assessment to unlock the next chapter.",
   },
   {
-    icon: Rocket,
-    title: "Interview Ready",
-    description: "1000 curated problems across 21 categories. Practice exactly what top tech companies ask in interviews.",
-    color: "text-primary-light",
-    bg: "bg-primary/10",
+    number: "04",
+    title: "100+ Problems",
+    description: "Curated problems across 19 categories — exactly what top tech companies ask in coding interviews.",
   },
 ];
 
 export default function Features() {
-  return (
-    <section className="py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <motion.h2
-            className="text-3xl font-bold tracking-tight sm:text-4xl"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            Why <span className="text-gradient">KERNAL</span> Works
-          </motion.h2>
-          <motion.p
-            className="mx-auto mt-4 max-w-2xl text-muted"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            We combined the best of structured learning with hands-on practice to create an experience that actually works.
-          </motion.p>
-        </div>
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature, i) => (
+  return (
+    <section ref={ref} className="py-32 sm:py-40">
+      <div className="mx-auto max-w-[1400px] px-6 sm:px-10">
+        <div className="grid grid-cols-1 gap-16 lg:grid-cols-12">
+          <div className="lg:col-span-4">
             <motion.div
-              key={feature.title}
-              className="group rounded-2xl border border-border bg-card p-6 transition-all hover-lift hover:border-primary/20"
               initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.08 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className={`inline-flex h-11 w-11 items-center justify-center rounded-xl ${feature.bg} transition-transform group-hover:scale-110`}>
-                <feature.icon className={`h-5.5 w-5.5 ${feature.color}`} />
-              </div>
-              <h3 className="mt-4 text-base font-semibold text-foreground">{feature.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">{feature.description}</p>
+              <span className="body-xs text-[var(--muted)] mb-4 block tracking-[0.3em]">Why Kernal</span>
+              <h2 className="heading-lg">
+                Built different,<br />
+                <span className="italic text-[var(--muted)]">by design</span>
+              </h2>
             </motion.div>
-          ))}
+          </div>
+
+          <div className="lg:col-span-8">
+            <div className="space-y-0">
+              {features.map((feature, i) => (
+                <motion.div
+                  key={feature.number}
+                  className="group grid grid-cols-12 gap-6 border-t border-[var(--border)] py-10 transition-colors hover:bg-[var(--surface)] -mx-6 px-6 sm:-mx-10 sm:px-10"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.6, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <div className="col-span-2 sm:col-span-1">
+                    <span className="text-[11px] font-medium text-[var(--muted)]">{feature.number}</span>
+                  </div>
+                  <div className="col-span-10 sm:col-span-4">
+                    <h3 className="heading-sm transition-colors group-hover:text-[var(--fg)]">{feature.title}</h3>
+                  </div>
+                  <div className="col-span-12 sm:col-span-7">
+                    <p className="body-md text-[var(--muted)]">{feature.description}</p>
+                  </div>
+                </motion.div>
+              ))}
+              <div className="border-t border-[var(--border)]" />
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -1,109 +1,81 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { Clock, Users, Star, ArrowRight, BookOpen } from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
+import { ArrowRight } from "lucide-react";
 import { dsaCourse } from "@/data/courses";
 
 export default function CourseHighlight() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
   const course = dsaCourse;
 
   return (
-    <section className="py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section ref={ref} className="py-32 sm:py-40">
+      <div className="mx-auto max-w-[1400px] px-6 sm:px-10">
         <motion.div
-          className="text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Featured <span className="text-gradient">Course</span>
+          <span className="body-xs text-[var(--muted)] mb-4 block tracking-[0.3em]">Flagship Course</span>
+          <h2 className="heading-lg mb-16">
+            {course.title}
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-muted">
-            Our flagship DSA course — designed to take you from zero to interview-ready.
-          </p>
         </motion.div>
 
-        <motion.div
-          className="mt-14 rounded-3xl border border-border bg-card p-8 sm:p-10 hover-lift"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="rounded-full bg-gradient-to-r from-primary to-accent px-3 py-1 text-xs font-bold text-white">
-                  FLAGSHIP
-                </span>
-                <div className="flex items-center gap-1 text-xs text-warning">
-                  <Star className="h-3.5 w-3.5 fill-current" />
-                  <span className="font-semibold">{course.rating}</span>
-                </div>
-              </div>
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <p className="body-lg mb-8 max-w-lg text-[var(--muted)]">{course.longDescription}</p>
 
-              <h3 className="mt-4 text-2xl font-bold text-foreground sm:text-3xl">{course.title}</h3>
-              <p className="mt-3 text-muted leading-relaxed">{course.description}</p>
-
-              <div className="mt-6 flex flex-wrap gap-4 text-sm text-muted">
-                <span className="flex items-center gap-1.5">
-                  <Clock className="h-4 w-4 text-primary" />
-                  {course.duration}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Users className="h-4 w-4 text-accent" />
-                  {course.students.toLocaleString()} students
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <BookOpen className="h-4 w-4 text-success" />
-                  {course.chapters.length} units &middot; {course.chapters.reduce((a, c) => a + c.topics.length, 0)} topics
-                </span>
-              </div>
-
-              <div className="mt-6 flex flex-wrap gap-2">
-                {course.tags.map((tag) => (
-                  <span key={tag} className="rounded-full border border-border bg-surface-elevated px-3 py-1 text-xs font-medium text-muted">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              <div className="mt-8 flex items-center gap-4">
-                <Link
-                  href={`/courses/${course.slug}`}
-                  className="group flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-accent px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:scale-[1.02]"
-                >
-                  Start Course
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </Link>
-                <span className="text-2xl font-bold text-gradient">₹99</span>
-              </div>
+            <div className="mb-8 flex flex-wrap gap-x-8 gap-y-3">
+              <span className="body-sm text-[var(--muted)]">{course.duration}</span>
+              <span className="body-sm text-[var(--muted)]">{course.students.toLocaleString()} students</span>
+              <span className="body-sm text-[var(--muted)]">{course.chapters.length} units</span>
+              <span className="body-sm text-[var(--muted)]">{course.chapters.reduce((a, c) => a + c.topics.length, 0)} topics</span>
             </div>
 
-            <div className="space-y-3">
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-muted">Course Curriculum</h4>
+            <div className="flex items-center gap-4">
+              <Link
+                href={`/courses/${course.slug}/${course.chapters[0].topics[0].slug}`}
+                className="group flex items-center gap-3 rounded-full border border-[var(--fg)] bg-[var(--fg)] px-7 py-3 text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--bg)] transition-all duration-300 hover:bg-transparent hover:text-[var(--fg)]"
+              >
+                Begin Course
+                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+              </Link>
+              <span className="heading-md font-light">₹99</span>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="space-y-0">
               {course.chapters.map((chapter, i) => (
-                <div
+                <Link
                   key={chapter.id}
-                  className="rounded-xl border border-border bg-surface-elevated p-4 transition-all hover:border-primary/20"
+                  href={`/courses/${course.slug}/${chapter.topics[0].slug}`}
+                  className="group flex items-center gap-6 border-t border-[var(--border)] py-6 transition-colors hover:bg-[var(--surface)] -mx-6 px-6 sm:-mx-10 sm:px-10"
                 >
-                  <div className="flex items-start gap-3">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-xs font-bold text-primary">
-                      {chapter.icon}
-                    </span>
-                    <div className="min-w-0">
-                      <h5 className="text-sm font-semibold text-foreground">{chapter.title}</h5>
-                      <p className="mt-0.5 text-xs text-muted">{chapter.topics.length} topics</p>
-                    </div>
+                  <span className="text-[11px] font-medium text-[var(--muted)]">{chapter.icon}</span>
+                  <div className="flex-1">
+                    <h4 className="body-md font-light transition-colors group-hover:text-[var(--fg)]">{chapter.title}</h4>
+                    <p className="body-sm mt-1 text-[var(--muted)]">{chapter.topics.length} topics</p>
                   </div>
-                </div>
+                  <ArrowRight className="h-4 w-4 text-[var(--muted)] opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
+                </Link>
               ))}
+              <div className="border-t border-[var(--border)]" />
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

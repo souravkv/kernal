@@ -1,67 +1,64 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Quote } from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 
 const testimonials = [
   {
+    text: "Kernal helped me crack my campus placement at Amazon. The structured modules and integrated coding IDE made practice effortless.",
     name: "Priya Sharma",
-    role: "B.Tech CS, Delhi Technological University",
-    text: "KERNAL's DSA course helped me crack my campus placement at Amazon. The structured modules and integrated coding IDE made practice so much easier than watching YouTube videos.",
-    avatar: "PS",
+    role: "DTU, B.Tech CS",
+    initials: "PS",
   },
   {
+    text: "Switched from mechanical to software with zero coding background. Kernal gave me the foundation I needed, one mastery gate at a time.",
     name: "Rahul Verma",
     role: "Self-taught Developer",
-    text: "I switched from mechanical engineering to software. KERNAL gave me the foundation I needed. The mastery gates ensured I actually understood each topic before moving on.",
-    avatar: "RV",
+    initials: "RV",
   },
   {
+    text: "The split-screen editor is brilliant. Read theory, implement immediately. Solved 400+ problems through the question bank.",
     name: "Ananya Patel",
-    role: "B.Tech IT, NIT Trichy",
-    text: "The split-screen code editor is brilliant. I can read the theory and immediately implement what I learned. Solved 400+ problems through KERNAL's problem bank.",
-    avatar: "AP",
+    role: "NIT Trichy, B.Tech IT",
+    initials: "AP",
   },
 ];
 
 export default function Testimonials() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
   return (
-    <section className="py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section ref={ref} className="py-32 sm:py-40">
+      <div className="mx-auto max-w-[1400px] px-6 sm:px-10">
         <motion.div
-          className="text-center"
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Loved by <span className="text-gradient">Students</span>
+          <span className="body-xs text-[var(--muted)] mb-4 block tracking-[0.3em]">Testimonials</span>
+          <h2 className="heading-lg mb-16">
+            Students <span className="italic text-[var(--muted)]">love</span> it
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-muted">
-            Join thousands of students who transformed their coding journey with KERNAL.
-          </p>
         </motion.div>
 
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-px bg-[var(--border)] sm:grid-cols-3">
           {testimonials.map((t, i) => (
             <motion.div
               key={t.name}
-              className="rounded-2xl border border-border bg-card p-6 transition-all hover-lift hover:border-primary/20"
+              className="bg-[var(--bg)] p-8 sm:p-10"
               initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.1 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
             >
-              <Quote className="h-8 w-8 text-primary/20" />
-              <p className="mt-3 text-sm leading-relaxed text-muted">{t.text}</p>
-              <div className="mt-5 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-xs font-bold text-white">
-                  {t.avatar}
+              <p className="body-md mb-10 text-[var(--muted)] leading-relaxed">"{t.text}"</p>
+              <div className="flex items-center gap-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] text-[10px] font-medium tracking-wider">
+                  {t.initials}
                 </div>
                 <div>
-                  <div className="text-sm font-semibold text-foreground">{t.name}</div>
-                  <div className="text-xs text-muted">{t.role}</div>
+                  <div className="body-sm font-medium">{t.name}</div>
+                  <div className="text-[11px] text-[var(--muted)]">{t.role}</div>
                 </div>
               </div>
             </motion.div>

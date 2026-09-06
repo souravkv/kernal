@@ -1,91 +1,114 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Play } from "lucide-react";
-import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 export default function Hero() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
   return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
-      <div className="absolute -left-32 -top-32 h-64 w-64 rounded-full bg-primary/10 blur-3xl animate-pulse-glow" />
-      <div className="absolute -bottom-32 -right-32 h-64 w-64 rounded-full bg-accent/10 blur-3xl animate-pulse-glow" style={{ animationDelay: "1s" }} />
+    <section ref={ref} className="relative min-h-screen flex items-center overflow-hidden">
+      <motion.div style={{ y, opacity }} className="mx-auto w-full max-w-[1400px] px-6 pt-32 pb-20 sm:px-10">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <span className="body-xs text-[var(--muted)] mb-8 block tracking-[0.3em]">
+            Learning Platform — 2024
+          </span>
+        </motion.div>
 
-      <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8 lg:py-40">
-        <div className="text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-medium text-primary">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-              DSA Masterclass — Now Live
-            </span>
-          </motion.div>
-
+        <div className="overflow-hidden">
           <motion.h1
-            className="mt-8 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            className="heading-xl"
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
           >
-            Master{" "}
-            <span className="text-gradient">Data Structures</span>
-            <br />
-            & Algorithms
+            Data
           </motion.h1>
-
-          <motion.p
-            className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted sm:text-xl"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+        </div>
+        <div className="overflow-hidden">
+          <motion.h1
+            className="heading-xl italic"
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           >
-            Go from zero coding knowledge to solving medium/hard DSA problems independently.
-            University-aligned curriculum with hands-on coding practice.
-          </motion.p>
-
-          <motion.div
-            className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            Structures
+          </motion.h1>
+        </div>
+        <div className="overflow-hidden">
+          <motion.h1
+            className="heading-xl"
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
           >
+            <span className="text-[var(--muted)]">&</span> Algorithms
+          </motion.h1>
+        </div>
+
+        <motion.div
+          className="mt-16 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+        >
+          <p className="body-lg max-w-md text-[var(--muted)]">
+            Go from zero to solving medium/hard problems independently.
+            University-aligned, hands-on, mastery-based.
+          </p>
+
+          <div className="flex items-center gap-4">
             <Link
               href="/courses/dsa-masterclass"
-              className="group flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-accent px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02]"
+              className="group flex items-center gap-3 rounded-full border border-[var(--fg)] bg-[var(--fg)] px-7 py-3 text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--bg)] transition-all duration-300 hover:bg-transparent hover:text-[var(--fg)]"
             >
               Start Learning
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
-              href="/practice"
-              className="flex items-center gap-2 rounded-xl border border-border bg-surface px-7 py-3.5 text-sm font-semibold text-foreground transition-all hover:bg-card-hover hover:border-primary/30"
+              href="/questions"
+              className="text-[13px] font-light text-[var(--muted)] transition-colors hover:text-[var(--fg)] hover-line"
             >
-              <Play className="h-4 w-4 text-primary" />
-              Try Problems
+              View Questions →
             </Link>
-          </motion.div>
+          </div>
+        </motion.div>
 
-          <motion.div
-            className="mx-auto mt-16 grid max-w-lg grid-cols-3 gap-6 sm:max-w-xl"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            {[
-              { value: "18+", label: "Topics" },
-              { value: "1000+", label: "Problems" },
-              { value: "2847", label: "Students" },
-            ].map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-2xl font-bold text-foreground sm:text-3xl">{stat.value}</div>
-                <div className="mt-1 text-xs text-muted sm:text-sm">{stat.label}</div>
-              </div>
-            ))}
-          </motion.div>
-        </div>
+        <motion.div
+          className="mt-24 grid grid-cols-2 gap-8 border-t border-[var(--border)] pt-10 sm:grid-cols-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+        >
+          {[
+            { value: "16", label: "Topics" },
+            { value: "100+", label: "Problems" },
+            { value: "6", label: "Units" },
+            { value: "∞", label: "Practice" },
+          ].map((stat) => (
+            <div key={stat.label}>
+              <div className="heading-lg">{stat.value}</div>
+              <div className="body-xs mt-1 text-[var(--muted)]">{stat.label}</div>
+            </div>
+          ))}
+        </motion.div>
+      </motion.div>
+
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2">
+        <motion.div
+          className="h-[1px] w-[1px] rounded-full bg-[var(--fg)]"
+          animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        />
       </div>
     </section>
   );

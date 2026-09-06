@@ -11,18 +11,18 @@ export default function Home() {
       <CourseHighlight />
       <Testimonials />
 
-      <section className="py-20">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <div className="rounded-3xl border border-border bg-gradient-to-br from-primary/10 via-surface to-accent/10 p-10 sm:p-14">
-            <h2 className="text-2xl font-bold sm:text-3xl">
-              Ready to Start Your DSA Journey?
+      <section className="py-32 sm:py-40">
+        <div className="mx-auto max-w-[1400px] px-6 text-center sm:px-10">
+          <div className="rounded-none border border-[var(--border)] bg-[var(--surface)] p-12 sm:p-20">
+            <h2 className="heading-lg mb-4">
+              Ready to begin?
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-muted">
-              Join 2847 students already mastering Data Structures & Algorithms with KERNAL.
+            <p className="body-lg mx-auto mb-10 max-w-lg text-[var(--muted)]">
+              Join students already mastering DSA with Kernal.
             </p>
             <a
               href="/courses/dsa-masterclass"
-              className="mt-8 inline-flex rounded-xl bg-gradient-to-r from-primary to-accent px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:scale-[1.02]"
+              className="inline-flex rounded-full border border-[var(--fg)] bg-[var(--fg)] px-8 py-3 text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--bg)] transition-all duration-300 hover:bg-transparent hover:text-[var(--fg)]"
             >
               Get Started for ₹99
             </a>
