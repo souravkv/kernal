@@ -2,7 +2,7 @@
   "id": "dsa-masterclass",
   "title": "DSA Masterclass",
   "slug": "dsa-masterclass",
-  "description": "Master Data Structures & Algorithms from zero to interview-ready. 6 units, 18+ topics, hands-on code examples.",
+  "description": "Master Data Structures & Algorithms from zero to interview-ready. 7 units, 19+ topics, hands-on code examples.",
   "longDescription": "A comprehensive, university-aligned DSA course covering everything from complexity analysis to graphs and hashing. Built for CS students, self-taught programmers, and anyone preparing for coding interviews at top tech companies.",
   "instructor": "KERNAL Platform",
   "duration": "12 weeks",
@@ -19,6 +19,30 @@
     "CS Fundamentals"
   ],
   "chapters": [
+    {
+      "id": "ch0",
+      "title": "Getting Started",
+      "slug": "getting-started",
+      "description": "Set up your environment and write your first program in any language.",
+      "icon": "00",
+      "topics": [
+        {
+          "id": "t0-1",
+          "title": "Hello World",
+          "slug": "hello-world",
+          "description": "Write and run your first program. Submit it to confirm everything works.",
+          "difficulty": "Beginner",
+          "practiceProblems": [
+            "Print Hello World in your preferred language",
+            "Try switching languages and running the same logic"
+          ],
+          "language": "python",
+          "content": "## Hello, World!\n\nWelcome to Kernal. Before diving into data structures and algorithms, let's make sure your setup works by writing the most famous program in computer science.\n\n### What You'll Do\n\nWrite a program that prints `Hello, World!` to the console. That's it.\n\nThis confirms that:\n- Your code editor works\n- The execution engine can compile and run your code\n- Test case evaluation is functioning\n\n### Hello World in Every Language\n\n**Python**\n```python\nprint(\"Hello, World!\")\n```\n\n**JavaScript**\n```javascript\nconsole.log(\"Hello, World!\");\n```\n\n**C++**\n```cpp\n#include <iostream>\nusing namespace std;\nint main() {\n    cout << \"Hello, World!\";\n    return 0;\n}\n```\n\n**Java**\n```java\nclass Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\");\n    }\n}\n```\n\n**C**\n```c\n#include <stdio.h>\nint main() {\n    printf(\"Hello, World!\\n\");\n    return 0;\n}\n```\n\n### Why This Matters\n\nEvery journey starts with a single step. Once you submit this and see the green \"Passed\" indicator, you'll know the platform is ready for the real work ahead.\n\nClick **Submit** below to verify everything is working.",
+          "codeExample": "print(\"Hello, World!\")",
+          "codeExampleLanguage": "python"
+        }
+      ]
+    },
     {
       "id": "ch1",
       "title": "Foundations: Complexity & Arrays",
