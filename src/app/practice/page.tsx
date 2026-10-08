@@ -5,8 +5,8 @@ import Editor from "@monaco-editor/react";
 import { Play, Send, RotateCcw, ChevronDown, ChevronRight, Check, X, Loader2, Eye, EyeOff } from "lucide-react";
 import { practiceProblems, Problem } from "@/data/problems";
 
-// Serverless (Vercel) ships only node + python3 — no gcc/g++/javac.
-// Keep this list in sync with the guard in src/app/api/execute/route.ts.
+// Playground supports only Python + JavaScript (server-side guard in
+// src/app/api/execute/route.ts rejects everything else).
 const langMap: Record<string, string> = {
   python: "python",
   javascript: "javascript",

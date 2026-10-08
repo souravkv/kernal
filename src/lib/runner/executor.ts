@@ -21,7 +21,7 @@ interface RunResult {
 
 const MAX_OUTPUT = 50_000; // chars kept per stream
 
-function runCommand(cmd: string, args: string[], input: string, timeout: number): Promise<{ stdout: string; stderr: string; exitCode: number }> {
+function runCommand(cmd: string, args: string[], input: string, timeout: number): Promise<{ stdout: string; stderr: string; exitCode: number; spawnError?: string }> {
   return new Promise((resolve) => {
     const proc = spawn(cmd, args, {
       timeout,
@@ -37,10 +37,8 @@ function runCommand(cmd: string, args: string[], input: string, timeout: number)
       if (stderr.length < MAX_OUTPUT) stderr += d.toString();
     });
 
-    if (input) {
-      proc.stdin.write(input);
-      proc.stdin.end();
-    }
+    proc.stdin.write(input || "");
+    proc.stdin.end();
 
     const timer = setTimeout(() => {
       proc.kill("SIGKILL");
@@ -58,9 +56,39 @@ function runCommand(cmd: string, args: string[], input: string, timeout: number)
         err.code === "ENOENT"
           ? `${cmd} is not available on this platform`
           : `Process error: ${err.message}`;
-      resolve({ stdout: "", stderr: friendly, exitCode: 1 });
+      resolve({ stdout: "", stderr: friendly, exitCode: 1, spawnError: friendly });
     });
   });
+}
+
+// Vercel's Node runtime ships no python3 — fall back to the Python-runtime
+// sidecar (api/pyexec.py) when the local binary is missing.
+async function runPythonRemote(code: string, stdin: string): Promise<RunResult> {
+  const origin = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000";
+  try {
+    const res = await fetch(`${origin}/api/pyexec`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code, stdin }),
+      signal: AbortSignal.timeout(20_000),
+    });
+    if (!res.ok) {
+      return { stdout: "", stderr: `Python runner error: HTTP ${res.status}`, exitCode: 1, time: 0, memory: 0 };
+    }
+    const data = (await res.json()) as Partial<RunResult>;
+    return {
+      stdout: String(data.stdout ?? "").slice(0, MAX_OUTPUT),
+      stderr: String(data.stderr ?? "").slice(0, MAX_OUTPUT),
+      exitCode: Number(data.exitCode ?? 1),
+      time: Number(data.time ?? 0),
+      memory: 0,
+    };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return { stdout: "", stderr: `Python runner unreachable: ${msg}`, exitCode: 1, time: 0, memory: 0 };
+  }
 }
 
 async function runPython(code: string, stdin: string): Promise<RunResult> {
@@ -69,6 +97,10 @@ async function runPython(code: string, stdin: string): Promise<RunResult> {
   writeFileSync(file, code);
   try {
     const result = await runCommand("python3", [file], stdin, TIMEOUT_MS);
+    if (result.spawnError?.includes("not available")) {
+      const remote = await runPythonRemote(code, stdin);
+      return { ...remote, time: Date.now() - start };
+    }
     return { stdout: result.stdout, stderr: result.stderr, exitCode: result.exitCode, time: Date.now() - start, memory: 0 };
   } finally {
     try { unlinkSync(file); } catch {}

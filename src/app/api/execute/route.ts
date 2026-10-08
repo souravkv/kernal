@@ -5,7 +5,9 @@ const MAX_CODE = 100_000;
 const MAX_STDIN = 10_000;
 const MAX_TEST_CASES = 20;
 
-// Only runtimes available on Vercel serverless (no gcc/g++/javac there).
+// Playground supports only Python + JavaScript: no compilers (gcc/g++/javac)
+// exist on the serverless runtime, and python3 runs via the api/pyexec.py
+// sidecar (Python runtime) when the local binary is missing.
 const ALLOWED_LANGS = new Set(["python", "python3", "javascript", "js", "nodejs"]);
 
 export async function POST(request: NextRequest) {
