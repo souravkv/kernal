@@ -62,11 +62,14 @@ function runCommand(cmd: string, args: string[], input: string, timeout: number)
 }
 
 // Vercel's Node runtime ships no python3 — fall back to the Python-runtime
-// sidecar (api/pyexec.py) when the local binary is missing.
+// sidecar (api/pyexec.py) when the local binary is missing. Prefer the
+// production domain: deployment URLs return 401 under Deployment Protection.
 async function runPythonRemote(code: string, stdin: string): Promise<RunResult> {
-  const origin = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000";
+  const origin = process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "http://localhost:3000";
   try {
     const res = await fetch(`${origin}/api/pyexec`, {
       method: "POST",
