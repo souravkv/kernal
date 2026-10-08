@@ -119,9 +119,13 @@ export async function getUserProgress(userId: string): Promise<UserProgress> {
   }
 
   for (const [courseId, agg] of Object.entries(courseAgg)) {
+    const total = agg.totalTopics + agg.quizzesTotal;
     progress.courseStats[courseId] = {
       ...agg,
-      percent: agg.totalTopics > 0 ? Math.round((agg.doneTopics / agg.totalTopics) * 100) : 0,
+      percent:
+        total > 0
+          ? Math.round(((agg.doneTopics + agg.quizzesPassed) / total) * 100)
+          : 0,
     };
   }
 

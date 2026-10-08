@@ -54,8 +54,11 @@ export default async function ProgressPage() {
     },
     { doneTopics: 0, totalTopics: 0, quizzesPassed: 0, quizzesTotal: 0, modulesComplete: 0, modulesTotal: 0 }
   );
+  const overallTotal = totals.totalTopics + totals.quizzesTotal;
   const overallPercent =
-    totals.totalTopics > 0 ? Math.round((totals.doneTopics / totals.totalTopics) * 100) : 0;
+    overallTotal > 0
+      ? Math.round(((totals.doneTopics + totals.quizzesPassed) / overallTotal) * 100)
+      : 0;
   const hasAnyActivity = totals.doneTopics > 0 || totals.quizzesPassed > 0;
 
   return (

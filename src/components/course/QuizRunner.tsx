@@ -25,12 +25,16 @@ export default function QuizRunner({
   passScore,
   questions,
   doneHref,
+  passed,
+  bestScore,
 }: {
   quizId: string;
   title: string;
   passScore: number;
   questions: QuizQuestionPublic[];
   doneHref: string;
+  passed?: boolean;
+  bestScore?: number | null;
 }) {
   const [answers, setAnswers] = useState<(number | null)[]>(
     questions.map(() => null)
@@ -204,13 +208,23 @@ export default function QuizRunner({
   return (
     <div>
       <div className="mb-10">
-        <span className="body-xs mb-3 block uppercase tracking-[0.3em] text-[var(--muted)]">
-          Module Quiz · optional
-        </span>
+        <div className="mb-3 flex flex-wrap items-center gap-3">
+          <span className="body-xs uppercase tracking-[0.3em] text-[var(--muted)]">
+            Module Quiz · optional
+          </span>
+          {passed && (
+            <span className="flex items-center gap-1.5 border border-[var(--fg)] px-2 py-0.5 text-[10px] uppercase tracking-[0.15em] text-[var(--fg)]">
+              <Check className="h-3 w-3" />
+              Passed · {bestScore}%
+            </span>
+          )}
+        </div>
         <h1 className="heading-lg mb-3">{title}</h1>
         <p className="body-md text-[var(--muted)]">
           {questions.length} questions · pass mark {passScore}% · answers are
           graded the moment you submit.
+          {passed &&
+            " You have already passed this quiz — retaking it can only improve your score."}
         </p>
       </div>
 

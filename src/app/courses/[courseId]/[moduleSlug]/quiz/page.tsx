@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import { getQuizForModule } from "@/lib/courses";
+import { getUserProgress } from "@/lib/progress";
+import { auth } from "@/auth";
 import QuizRunner from "@/components/course/QuizRunner";
 
 export const dynamic = "force-dynamic";
@@ -28,6 +30,10 @@ export default async function QuizPage({
   if (!data) notFound();
 
   const { course, module: mod, quiz, questions } = data;
+
+  const session = await auth();
+  const progress = session?.user?.id ? await getUserProgress(session.user.id) : null;
+  const stat = progress?.moduleStats[mod.id];
 
   return (
     <div className="mx-auto max-w-[900px] px-6 py-20 sm:px-10 sm:py-24">
@@ -59,6 +65,8 @@ export default async function QuizPage({
         passScore={quiz.passScore}
         questions={questions}
         doneHref={`/courses/${course.slug}/${mod.slug}`}
+        passed={stat?.quizPassed ?? false}
+        bestScore={stat?.quizBest ?? null}
       />
     </div>
   );
