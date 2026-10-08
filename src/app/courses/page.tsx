@@ -1,12 +1,13 @@
 import { getAllCourses } from "@/lib/courses";
+import { getUserProgress } from "@/lib/progress";
+import { auth } from "@/auth";
 import CourseList from "@/components/course/CourseList";
 
 export const metadata = { title: "Courses — Kernal" };
 
-export const revalidate = 30;
-
 export default async function CoursesPage() {
-  const courses = await getAllCourses();
+  const [courses, session] = await Promise.all([getAllCourses(), auth()]);
+  const progress = session?.user?.id ? await getUserProgress(session.user.id) : null;
 
   return (
     <div className="mx-auto max-w-[1400px] px-6 py-20 sm:px-10 sm:py-24">
@@ -19,7 +20,7 @@ export default async function CoursesPage() {
         mastery — theory, quizzes and coding problems in one place.
       </p>
 
-      <CourseList courses={courses} />
+      <CourseList courses={courses} progress={progress} />
     </div>
   );
 }

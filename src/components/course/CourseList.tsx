@@ -2,12 +2,19 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { CourseDetail } from "@/lib/courses";
+import { UserProgress } from "@/lib/progress";
 
 const LEVELS = ["All", "Beginner", "Intermediate", "Advanced"] as const;
 
-export default function CourseList({ courses }: { courses: CourseDetail[] }) {
+export default function CourseList({
+  courses,
+  progress,
+}: {
+  courses: CourseDetail[];
+  progress?: UserProgress | null;
+}) {
   const [level, setLevel] = useState<(typeof LEVELS)[number]>("All");
 
   const filtered =
@@ -62,6 +69,33 @@ export default function CourseList({ courses }: { courses: CourseDetail[] }) {
             </div>
 
             <div className="flex items-center gap-8 sm:text-right">
+              {progress && progress.courseStats[course.id] && (
+                <div className="hidden w-40 sm:block">
+                  <div className="mb-2 flex items-center justify-between gap-2">
+                    <span className="text-[10px] uppercase tracking-[0.15em] text-[var(--muted)]">
+                      Progress
+                    </span>
+                    <span className="flex items-center gap-1 text-[11px] font-medium text-[var(--fg)]">
+                      {progress.courseStats[course.id].percent === 100 && (
+                        <Check className="h-3 w-3" />
+                      )}
+                      {progress.courseStats[course.id].percent}%
+                    </span>
+                  </div>
+                  <div className="h-[3px] w-full bg-[var(--border)]">
+                    <div
+                      className="h-full bg-[var(--fg)] transition-all duration-700"
+                      style={{ width: `${progress.courseStats[course.id].percent}%` }}
+                    />
+                  </div>
+                  <div className="mt-2 text-[10px] text-[var(--muted)]">
+                    {progress.courseStats[course.id].doneTopics}/
+                    {progress.courseStats[course.id].totalTopics} topics ·{" "}
+                    {progress.courseStats[course.id].quizzesPassed}/
+                    {progress.courseStats[course.id].quizzesTotal} quizzes
+                  </div>
+                </div>
+              )}
               <div className="space-y-1">
                 <div className="body-sm text-[var(--muted)]">
                   {course.duration}

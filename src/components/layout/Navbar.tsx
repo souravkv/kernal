@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
-import { Menu, X, LogOut, User } from "lucide-react";
+import { Menu, X, LogOut, User, BarChart3 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 
 const navLinks = [
@@ -11,6 +11,7 @@ const navLinks = [
   { href: "/courses", label: "Learn" },
   { href: "/practice", label: "Code" },
   { href: "/questions", label: "Questions" },
+  { href: "/progress", label: "Progress", auth: true },
 ];
 
 export default function Navbar() {
@@ -41,15 +42,17 @@ export default function Navbar() {
         </Link>
 
         <div className="hidden items-center gap-10 md:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="body-sm hover-line transition-opacity hover:opacity-100 opacity-70"
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks
+            .filter((link) => !link.auth || session)
+            .map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="body-sm hover-line transition-opacity hover:opacity-100 opacity-70"
+              >
+                {link.label}
+              </Link>
+            ))}
         </div>
 
         <div className="flex items-center gap-5">
@@ -92,6 +95,14 @@ export default function Navbar() {
                       <User className="h-3.5 w-3.5" />
                       Dashboard
                     </Link>
+                    <Link
+                      href="/progress"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-[13px] font-light transition-colors hover:bg-[var(--surface-alt)]"
+                    >
+                      <BarChart3 className="h-3.5 w-3.5" />
+                      Progress
+                    </Link>
                     <button
                       onClick={() => { signOut(); setUserMenuOpen(false); }}
                       className="flex w-full items-center gap-3 px-4 py-2.5 text-[13px] font-light text-[var(--muted)] transition-colors hover:bg-[var(--surface-alt)] hover:text-[var(--fg)]"
@@ -131,17 +142,19 @@ export default function Navbar() {
 
       {mobileOpen && (
         <div className="border-t border-[var(--border)] bg-[var(--bg)] px-6 pb-8 pt-6 md:hidden">
-          {navLinks.map((link, i) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setMobileOpen(false)}
-              className="block py-3 text-[1.5rem] font-light tracking-tight transition-opacity hover:opacity-60"
-              style={{ animationDelay: `${i * 0.05}s` }}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks
+            .filter((link) => !link.auth || session)
+            .map((link, i) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                className="block py-3 text-[1.5rem] font-light tracking-tight transition-opacity hover:opacity-60"
+                style={{ animationDelay: `${i * 0.05}s` }}
+              >
+                {link.label}
+              </Link>
+            ))}
 
           <div className="mt-6 border-t border-[var(--border)] pt-6">
             {session ? (

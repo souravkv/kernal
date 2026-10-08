@@ -2,14 +2,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight, ArrowLeft, ArrowRight } from "lucide-react";
 import { getTopicDetail } from "@/lib/courses";
+import { getUserProgress } from "@/lib/progress";
 import { renderMarkdown } from "@/lib/markdown";
 import { auth } from "@/auth";
-import { db } from "@/lib/db";
 import CourseSidebar from "@/components/course/CourseSidebar";
 import CodeBlock from "@/components/editor/CodeBlock";
 import MarkComplete from "@/components/course/MarkComplete";
-
-export const revalidate = 30;
 
 export async function generateMetadata({
   params,
@@ -34,15 +32,8 @@ export default async function TopicPage({
 
   // completed state (only for signed-in users)
   const session = await auth();
-  let completed = false;
-  if (session?.user?.id) {
-    const row = await db.topicProgress.findUnique({
-      where: {
-        userId_topicId: { userId: session.user.id, topicId: topic.id },
-      },
-    });
-    completed = !!row;
-  }
+  const progress = session?.user?.id ? await getUserProgress(session.user.id) : null;
+  const completed = progress?.topicDone[topic.id] ?? false;
 
   return (
     <div className="mx-auto flex max-w-[1400px] gap-0 px-6 py-20 sm:px-10 sm:py-24 lg:gap-16">
@@ -50,6 +41,7 @@ export default async function TopicPage({
         course={course}
         currentModuleSlug={mod.slug}
         currentTopicSlug={topic.slug}
+        progress={progress}
       />
 
       <article className="min-w-0 flex-1">
@@ -105,14 +97,21 @@ export default async function TopicPage({
           </div>
         )}
 
-        {session?.user && (
-          <div className="mt-10 flex items-center justify-between border-t border-[var(--border)] pt-8">
-            <span className="body-sm text-[var(--muted)]">
-              Finished reading?
-            </span>
+        <div className="mt-10 flex items-center justify-between border-t border-[var(--border)] pt-8">
+          <span className="body-sm text-[var(--muted)]">
+            Finished reading?
+          </span>
+          {session?.user ? (
             <MarkComplete topicId={topic.id} initialDone={completed} />
-          </div>
-        )}
+          ) : (
+            <Link
+              href="/login"
+              className="flex items-center gap-2 border border-[var(--border)] px-5 py-2.5 text-[10px] font-medium uppercase tracking-[0.15em] text-[var(--muted)] transition-all duration-300 hover:border-[var(--fg)] hover:text-[var(--fg)]"
+            >
+              Sign in to track progress
+            </Link>
+          )}
+        </div>
 
         <div className="mt-12 flex items-center justify-between border-t border-[var(--border)] pt-8">
           {prev ? (

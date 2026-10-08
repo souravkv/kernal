@@ -2,19 +2,22 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronDown, ChevronRight, Play, Circle, X, Menu, ClipboardCheck } from "lucide-react";
+import { ChevronDown, ChevronRight, Play, Circle, X, Menu, ClipboardCheck, Check } from "lucide-react";
 import { CourseDetail } from "@/lib/courses";
+import { UserProgress } from "@/lib/progress";
 
 interface CourseSidebarProps {
   course: CourseDetail;
   currentModuleSlug?: string;
   currentTopicSlug?: string;
+  progress?: UserProgress | null;
 }
 
 export default function CourseSidebar({
   course,
   currentModuleSlug,
   currentTopicSlug,
+  progress,
 }: CourseSidebarProps) {
   const [expanded, setExpanded] = useState<Set<string>>(
     new Set(currentModuleSlug ? [currentModuleSlug] : [course.modules[0]?.slug])
@@ -41,6 +44,7 @@ export default function CourseSidebar({
       {course.modules.map((mod) => {
         const isOpen = expanded.has(mod.slug);
         const isCurrentModule = mod.slug === currentModuleSlug;
+        const stat = progress?.moduleStats[mod.id];
         return (
           <div key={mod.id} className="border-b border-[var(--border)]">
             <button
@@ -59,10 +63,11 @@ export default function CourseSidebar({
                   {mod.title}
                 </span>
                 <span className="mt-0.5 block text-[10px] text-[var(--muted)]">
-                  {mod.topicCount} topics
+                  {stat ? `${stat.doneTopics}/${stat.totalTopics}` : `${mod.topicCount} topics`}
                   {mod.hasQuiz ? " · quiz" : ""}
                 </span>
               </span>
+              {stat?.complete && <Check className="h-3 w-3 shrink-0 text-[var(--fg)]" />}
               {isOpen ? (
                 <ChevronDown className="h-3.5 w-3.5 shrink-0 text-[var(--muted)]" />
               ) : (
@@ -82,6 +87,7 @@ export default function CourseSidebar({
                 {mod.topics.map((topic) => {
                   const isActive =
                     topic.slug === currentTopicSlug && isCurrentModule;
+                  const done = progress?.topicDone[topic.id];
                   return (
                     <Link
                       key={topic.id}
@@ -92,7 +98,9 @@ export default function CourseSidebar({
                           : "text-[var(--muted)] hover:text-[var(--fg)]"
                       }`}
                     >
-                      {isActive ? (
+                      {done ? (
+                        <Check className="h-2.5 w-2.5 shrink-0 text-[var(--fg)]" />
+                      ) : isActive ? (
                         <Play className="h-2.5 w-2.5 shrink-0" />
                       ) : (
                         <Circle className="h-2 w-2 shrink-0" />
@@ -106,8 +114,14 @@ export default function CourseSidebar({
                     href={`/courses/${course.slug}/${mod.slug}/quiz`}
                     className="flex items-center gap-3 py-2 text-[13px] font-light text-[var(--muted)] transition-all hover:text-[var(--fg)]"
                   >
-                    <ClipboardCheck className="h-3 w-3 shrink-0" />
-                    <span className="truncate">Module Quiz</span>
+                    {stat?.quizPassed ? (
+                      <Check className="h-2.5 w-2.5 shrink-0 text-[var(--fg)]" />
+                    ) : (
+                      <ClipboardCheck className="h-3 w-3 shrink-0" />
+                    )}
+                    <span className={`truncate ${stat?.quizPassed ? "text-[var(--fg)]" : ""}`}>
+                      {stat?.quizPassed ? `Quiz passed — ${stat.quizBest}%` : "Module Quiz"}
+                    </span>
                   </Link>
                 )}
               </div>

@@ -2,10 +2,17 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronDown, ChevronRight, ArrowRight, ClipboardCheck } from "lucide-react";
+import { ChevronDown, ChevronRight, ArrowRight, ClipboardCheck, Check } from "lucide-react";
 import { CourseDetail } from "@/lib/courses";
+import { UserProgress } from "@/lib/progress";
 
-export default function ModuleAccordion({ course }: { course: CourseDetail }) {
+export default function ModuleAccordion({
+  course,
+  progress,
+}: {
+  course: CourseDetail;
+  progress?: UserProgress | null;
+}) {
   const [open, setOpen] = useState<Set<string>>(new Set([course.modules[0]?.id]));
 
   const toggle = (id: string) => {
@@ -21,6 +28,9 @@ export default function ModuleAccordion({ course }: { course: CourseDetail }) {
     <div className="space-y-0">
       {course.modules.map((mod) => {
         const isOpen = open.has(mod.id);
+        const stat = progress?.moduleStats[mod.id];
+        const isDone = stat?.complete;
+        const quizPassed = stat?.quizPassed;
         return (
           <div key={mod.id} className="border-t border-[var(--border)]">
             <button
@@ -39,13 +49,28 @@ export default function ModuleAccordion({ course }: { course: CourseDetail }) {
                 </span>
               </span>
               <span className="hidden items-center gap-4 sm:flex">
+                {stat && (
+                  <span className="text-[10px] uppercase tracking-[0.15em] text-[var(--muted)]">
+                    {stat.doneTopics}/{stat.totalTopics}
+                  </span>
+                )}
                 <span className="text-[10px] uppercase tracking-[0.15em] text-[var(--muted)]">
                   {mod.topicCount} topics
                 </span>
                 {mod.hasQuiz && (
-                  <span className="flex items-center gap-1 text-[10px] uppercase tracking-[0.15em] text-[var(--muted)]">
-                    <ClipboardCheck className="h-3 w-3" />
-                    {mod.questionCount} questions
+                  <span
+                    className={`flex items-center gap-1 text-[10px] uppercase tracking-[0.15em] ${
+                      quizPassed ? "text-[var(--fg)]" : "text-[var(--muted)]"
+                    }`}
+                  >
+                    {quizPassed ? <Check className="h-3 w-3" /> : <ClipboardCheck className="h-3 w-3" />}
+                    {quizPassed ? `Quiz ${stat?.quizBest}%` : `${mod.questionCount} questions`}
+                  </span>
+                )}
+                {isDone && (
+                  <span className="flex items-center gap-1 text-[10px] uppercase tracking-[0.15em] text-[var(--fg)]">
+                    <Check className="h-3 w-3" />
+                    Done
                   </span>
                 )}
               </span>
@@ -66,24 +91,39 @@ export default function ModuleAccordion({ course }: { course: CourseDetail }) {
                     <ArrowRight className="h-3 w-3 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
                     <span>Module overview</span>
                   </Link>
-                  {mod.topics.map((t) => (
-                    <Link
-                      key={t.id}
-                      href={`/courses/${course.slug}/${mod.slug}/${t.slug}`}
-                      className="group flex items-center gap-3 py-2 text-[13px] font-light text-[var(--muted)] transition-colors hover:text-[var(--fg)]"
-                    >
-                      <ArrowRight className="h-3 w-3 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
-                      <span>{t.title}</span>
-                    </Link>
-                  ))}
+                  {mod.topics.map((t) => {
+                    const done = progress?.topicDone[t.id];
+                    return (
+                      <Link
+                        key={t.id}
+                        href={`/courses/${course.slug}/${mod.slug}/${t.slug}`}
+                        className="group flex items-center gap-3 py-2 text-[13px] font-light text-[var(--muted)] transition-colors hover:text-[var(--fg)]"
+                      >
+                        {done ? (
+                          <Check className="h-3 w-3 shrink-0 text-[var(--fg)]" />
+                        ) : (
+                          <ArrowRight className="h-3 w-3 shrink-0 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
+                        )}
+                        <span className={done ? "text-[var(--fg)]" : ""}>{t.title}</span>
+                      </Link>
+                    );
+                  })}
                   {mod.hasQuiz && (
                     <div className="mt-2 border-t border-[var(--border)] pt-2">
                       <Link
                         href={`/courses/${course.slug}/${mod.slug}/quiz`}
                         className="group flex items-center gap-3 py-2 text-[13px] font-light text-[var(--muted)] transition-colors hover:text-[var(--fg)]"
                       >
-                        <ClipboardCheck className="h-3 w-3" />
-                        <span>Module Quiz — {mod.questionCount} questions</span>
+                        {quizPassed ? (
+                          <Check className="h-3 w-3 shrink-0 text-[var(--fg)]" />
+                        ) : (
+                          <ClipboardCheck className="h-3 w-3 shrink-0" />
+                        )}
+                        <span className={quizPassed ? "text-[var(--fg)]" : ""}>
+                          {quizPassed
+                            ? `Quiz passed — ${stat?.quizBest}%`
+                            : `Module Quiz — ${mod.questionCount} questions`}
+                        </span>
                       </Link>
                     </div>
                   )}

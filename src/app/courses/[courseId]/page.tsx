@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { getCourseBySlug } from "@/lib/courses";
+import { getUserProgress } from "@/lib/progress";
+import { auth } from "@/auth";
 import ModuleAccordion from "@/components/course/ModuleAccordion";
-
-export const revalidate = 30;
 
 export async function generateMetadata({
   params,
@@ -24,6 +24,10 @@ export default async function CourseOverviewPage({
   const { courseId } = await params;
   const course = await getCourseBySlug(courseId);
   if (!course) notFound();
+
+  const session = await auth();
+  const progress = session?.user?.id ? await getUserProgress(session.user.id) : null;
+  const stat = progress?.courseStats[course.id];
 
   const firstModule = course.modules[0];
 
@@ -79,10 +83,35 @@ export default async function CourseOverviewPage({
         </span>
       </div>
 
-      <h2 className="heading-sm mb-6 uppercase tracking-[0.2em] text-[var(--muted)]">
-        Syllabus
-      </h2>
-      <ModuleAccordion course={course} />
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+        <h2 className="heading-sm uppercase tracking-[0.2em] text-[var(--muted)]">
+          Syllabus
+        </h2>
+        {stat && stat.totalTopics > 0 && (
+          <div className="min-w-[240px]">
+            <div className="mb-2 flex items-center justify-between gap-4">
+              <span className="body-sm text-[var(--muted)]">
+                {stat.doneTopics}/{stat.totalTopics} topics · {stat.quizzesPassed}/
+                {stat.quizzesTotal} quizzes
+              </span>
+              <span className="body-sm text-[var(--fg)]">{stat.percent}%</span>
+            </div>
+            <div className="h-[3px] w-full bg-[var(--border)]">
+              <div
+                className="h-full bg-[var(--fg)] transition-all duration-700"
+                style={{ width: `${stat.percent}%` }}
+              />
+            </div>
+          </div>
+        )}
+        {stat && stat.doneTopics === stat.totalTopics && stat.totalTopics > 0 && (
+          <span className="flex items-center gap-1.5 text-[11px] uppercase tracking-[0.2em] text-[var(--fg)]">
+            <Check className="h-3.5 w-3.5" />
+            All topics complete
+          </span>
+        )}
+      </div>
+      <ModuleAccordion course={course} progress={progress} />
     </div>
   );
 }

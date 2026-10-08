@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, ClipboardCheck, ArrowLeft, ArrowRight, Circle } from "lucide-react";
+import { ChevronRight, ClipboardCheck, ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { getCourseBySlug, getModuleDetail } from "@/lib/courses";
+import { getUserProgress } from "@/lib/progress";
+import { auth } from "@/auth";
 import CodeBlock from "@/components/editor/CodeBlock";
-
-export const revalidate = 30;
 
 export async function generateMetadata({
   params,
@@ -29,6 +29,11 @@ export default async function ModulePage({
   const ctx = await getModuleDetail(courseId, moduleSlug);
   if (!ctx) notFound();
   const { course, module: mod } = ctx;
+
+  const session = await auth();
+  const progress = session?.user?.id ? await getUserProgress(session.user.id) : null;
+  const stat = progress?.moduleStats[mod.id];
+  const quizPassed = stat?.quizPassed ?? false;
 
   const idx = course.modules.findIndex((m) => m.slug === moduleSlug);
   const prevModule = idx > 0 ? course.modules[idx - 1] : null;
@@ -104,30 +109,49 @@ export default async function ModulePage({
 
       {/* topics */}
       <div className="mb-12">
-        <h2 className="heading-sm mb-4 uppercase tracking-[0.2em] text-[var(--muted)]">
-          Topics
-        </h2>
-        <div className="space-y-0">
-          {mod.topics.map((t, i) => (
-            <Link
-              key={t.id}
-              href={`/courses/${course.slug}/${mod.slug}/${t.slug}`}
-              className="group flex items-center gap-5 border-t border-[var(--border)] py-5 transition-colors hover:bg-[var(--surface)] -mx-6 px-6 sm:-mx-10 sm:px-10"
+        <div className="mb-4 flex items-center justify-between gap-4">
+          <h2 className="heading-sm uppercase tracking-[0.2em] text-[var(--muted)]">
+            Topics
+          </h2>
+          {stat && (
+            <span
+              className={`text-[11px] uppercase tracking-[0.2em] ${
+                stat.complete ? "text-[var(--fg)]" : "text-[var(--muted)]"
+              }`}
             >
-              <span className="text-[11px] font-medium text-[var(--muted)]">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="body-md block transition-colors group-hover:text-[var(--fg)]">
-                  {t.title}
+              {stat.doneTopics}/{stat.totalTopics} completed
+            </span>
+          )}
+        </div>
+        <div className="space-y-0">
+          {mod.topics.map((t, i) => {
+            const done = progress?.topicDone[t.id];
+            return (
+              <Link
+                key={t.id}
+                href={`/courses/${course.slug}/${mod.slug}/${t.slug}`}
+                className="group flex items-center gap-5 border-t border-[var(--border)] py-5 transition-colors hover:bg-[var(--surface)] -mx-6 px-6 sm:-mx-10 sm:px-10"
+              >
+                <span className="text-[11px] font-medium text-[var(--muted)]">
+                  {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="body-sm mt-0.5 block text-[var(--muted)]">
-                  {t.description}
+                <span className="min-w-0 flex-1">
+                  <span className="body-md block transition-colors group-hover:text-[var(--fg)]">
+                    {t.title}
+                  </span>
+                  <span className="body-sm mt-0.5 block text-[var(--muted)]">
+                    {t.description}
+                  </span>
                 </span>
-              </span>
-              <ArrowRight className="h-4 w-4 text-[var(--muted)] opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
-            </Link>
-          ))}
+                {done && (
+                  <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.15em] text-[var(--fg)]">
+                    <Check className="h-3.5 w-3.5" />
+                  </span>
+                )}
+                <ArrowRight className="h-4 w-4 text-[var(--muted)] opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
+              </Link>
+            );
+          })}
           <div className="border-t border-[var(--border)]" />
         </div>
       </div>
@@ -140,6 +164,12 @@ export default async function ModulePage({
             <span className="body-xs uppercase tracking-[0.25em] text-[var(--muted)]">
               Module Quiz
             </span>
+            {quizPassed && (
+              <span className="flex items-center gap-1.5 border border-[var(--fg)] px-2 py-0.5 text-[10px] uppercase tracking-[0.15em] text-[var(--fg)]">
+                <Check className="h-3 w-3" />
+                Passed · {stat?.quizBest}%
+              </span>
+            )}
           </div>
           <h3 className="heading-sm mb-2">{mod.quiz.title}</h3>
           <p className="body-md mb-6 text-[var(--muted)]">
@@ -150,7 +180,7 @@ export default async function ModulePage({
             href={`/courses/${course.slug}/${mod.slug}/quiz`}
             className="group inline-flex items-center gap-3 rounded-full border border-[var(--fg)] bg-[var(--fg)] px-7 py-3 text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--bg)] transition-all duration-300 hover:bg-transparent hover:text-[var(--fg)]"
           >
-            Start Quiz
+            {quizPassed ? "Retake Quiz" : "Start Quiz"}
             <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
