@@ -28,13 +28,15 @@ export default async function QuizPage({
   params: Promise<{ courseId: string; moduleSlug: string }>;
 }) {
   const { courseId, moduleSlug } = await params;
-  const data = await getQuizForModule(courseId, moduleSlug);
+  const [data, session] = await Promise.all([
+    getQuizForModule(courseId, moduleSlug),
+    auth(),
+  ]);
   if (!data) notFound();
 
   const { course, module: mod, quiz, questions } = data;
 
-  const session = await auth();
-  if (!(await hasCourseAccess(session?.user?.id ?? null, course.id))) {
+  if (!(await hasCourseAccess(session?.user?.id ?? null, course.id, course.price))) {
     return (
       <Paywall
         course={{

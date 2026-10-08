@@ -28,12 +28,14 @@ export default async function ModulePage({
   params: Promise<{ courseId: string; moduleSlug: string }>;
 }) {
   const { courseId, moduleSlug } = await params;
-  const ctx = await getModuleDetail(courseId, moduleSlug);
+  const [ctx, session] = await Promise.all([
+    getModuleDetail(courseId, moduleSlug),
+    auth(),
+  ]);
   if (!ctx) notFound();
   const { course, module: mod } = ctx;
 
-  const session = await auth();
-  if (!(await hasCourseAccess(session?.user?.id ?? null, course.id))) {
+  if (!(await hasCourseAccess(session?.user?.id ?? null, course.id, course.price))) {
     return (
       <Paywall
         course={{

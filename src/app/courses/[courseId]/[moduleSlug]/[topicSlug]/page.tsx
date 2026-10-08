@@ -27,14 +27,16 @@ export default async function TopicPage({
   params: Promise<{ courseId: string; moduleSlug: string; topicSlug: string }>;
 }) {
   const { courseId, moduleSlug, topicSlug } = await params;
-  const ctx = await getTopicDetail(courseId, moduleSlug, topicSlug);
+  const [ctx, session] = await Promise.all([
+    getTopicDetail(courseId, moduleSlug, topicSlug),
+    auth(),
+  ]);
   if (!ctx) notFound();
 
   const { course, module: mod, topic, prev, next } = ctx;
 
   // completed state (only for signed-in users)
-  const session = await auth();
-  if (!(await hasCourseAccess(session?.user?.id ?? null, course.id))) {
+  if (!(await hasCourseAccess(session?.user?.id ?? null, course.id, course.price))) {
     return (
       <Paywall
         course={{

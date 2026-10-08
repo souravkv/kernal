@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { db } from "@/lib/db";
 
 // ---------- serializable types (safe to pass to client components) ----------
@@ -95,26 +96,52 @@ function parseJson<T>(raw: string | null | undefined, fallback: T): T {
 
 // ---------- queries ----------
 
-export async function getAllCourses(): Promise<CourseDetail[]> {
-  const courses = await db.course.findMany({
-    orderBy: { order: "asc" },
+const courseInclude = {
+  modules: {
+    orderBy: { order: "asc" } as const,
     include: {
-      modules: {
-        orderBy: { order: "asc" },
-        include: {
-          topics: {
-            orderBy: { order: "asc" },
-            select: { id: true, slug: true, title: true },
-          },
-          _count: { select: { topics: true } },
-          quiz: { include: { _count: { select: { questions: true } } } },
-        },
+      topics: {
+        orderBy: { order: "asc" } as const,
+        select: { id: true, slug: true, title: true },
       },
-      _count: { select: { modules: true } },
+      _count: { select: { topics: true } },
+      quiz: { include: { _count: { select: { questions: true } } } },
     },
-  });
+  },
+  _count: { select: { modules: true } },
+};
 
-  return courses.map((c) => ({
+type CourseRow = {
+  id: string;
+  code: string;
+  slug: string;
+  title: string;
+  level: string;
+  order: number;
+  description: string;
+  duration: string;
+  price: number;
+  rating: number;
+  students: number;
+  tags: string;
+  longDescription: string;
+  instructor: string;
+  modules: {
+    id: string;
+    number: string;
+    order: number;
+    title: string;
+    slug: string;
+    description: string;
+    icon: string;
+    _count: { topics: number };
+    topics: { id: string; slug: string; title: string }[];
+    quiz: { _count: { questions: number } } | null;
+  }[];
+};
+
+function mapCourse(c: CourseRow): CourseDetail {
+  return {
     id: c.id,
     code: c.code,
     slug: c.slug,
@@ -144,29 +171,45 @@ export async function getAllCourses(): Promise<CourseDetail[]> {
       questionCount: m.quiz?._count.questions ?? 0,
       topics: m.topics,
     })),
-  }));
+  };
 }
 
-export async function getCourseBySlug(slug: string): Promise<CourseDetail | null> {
-  const all = await getAllCourses();
-  return all.find((c) => c.slug === slug) ?? null;
-}
-
-export async function getModuleDetail(
-  courseSlug: string,
-  moduleSlug: string
-): Promise<{ course: CourseDetail; module: ModuleDetail } | null> {
-  const mod = await db.module.findFirst({
-    where: { slug: moduleSlug, course: { slug: courseSlug } },
-    include: {
-      topics: { orderBy: { order: "asc" } },
-      quiz: { include: { _count: { select: { questions: true } } } },
-      course: true,
-    },
+// cache(): generateMetadata + page share one query set per request
+export const getAllCourses = cache(async (): Promise<CourseDetail[]> => {
+  const courses = await db.course.findMany({
+    orderBy: { order: "asc" },
+    include: courseInclude,
   });
-  if (!mod) return null;
-  const course = await getCourseBySlug(courseSlug);
-  if (!course) return null;
+  return courses.map(mapCourse);
+});
+
+export const getCourseBySlug = cache(
+  async (slug: string): Promise<CourseDetail | null> => {
+    const course = await db.course.findFirst({
+      where: { slug },
+      include: courseInclude,
+    });
+    return course ? mapCourse(course) : null;
+  }
+);
+
+export const getModuleDetail = cache(
+  async (
+    courseSlug: string,
+    moduleSlug: string
+  ): Promise<{ course: CourseDetail; module: ModuleDetail } | null> => {
+    const [mod, course] = await Promise.all([
+      db.module.findFirst({
+        where: { slug: moduleSlug, course: { slug: courseSlug } },
+        include: {
+          topics: { orderBy: { order: "asc" } },
+          quiz: { include: { _count: { select: { questions: true } } } },
+          course: true,
+        },
+      }),
+      getCourseBySlug(courseSlug),
+    ]);
+    if (!mod || !course) return null;
 
   return {
     course,
@@ -205,7 +248,8 @@ export async function getModuleDetail(
         : null,
     },
   };
-}
+  }
+);
 
 export interface TopicContext {
   course: CourseDetail;
@@ -215,72 +259,83 @@ export interface TopicContext {
   next: { moduleSlug: string; topic: TopicRef } | null;
 }
 
-export async function getTopicDetail(
-  courseSlug: string,
-  moduleSlug: string,
-  topicSlug: string
-): Promise<TopicContext | null> {
-  const ctx = await getModuleDetail(courseSlug, moduleSlug);
-  if (!ctx) return null;
-  const topic = ctx.module.topics.find((t) => t.slug === topicSlug);
-  if (!topic) return null;
+export const getTopicDetail = cache(
+  async (
+    courseSlug: string,
+    moduleSlug: string,
+    topicSlug: string
+  ): Promise<TopicContext | null> => {
+    const [ctx, rows] = await Promise.all([
+      getModuleDetail(courseSlug, moduleSlug),
+      // flat order across the whole course (single query)
+      db.topic.findMany({
+        where: { module: { course: { slug: courseSlug } } },
+        orderBy: [{ module: { order: "asc" } }, { order: "asc" }],
+        select: {
+          slug: true,
+          title: true,
+          id: true,
+          module: { select: { slug: true } },
+        },
+      }),
+    ]);
+    if (!ctx) return null;
+    const topic = ctx.module.topics.find((t) => t.slug === topicSlug);
+    if (!topic) return null;
 
-  // flat order across the whole course (single query)
-  const rows = await db.topic.findMany({
-    where: { module: { course: { slug: courseSlug } } },
-    orderBy: [{ module: { order: "asc" } }, { order: "asc" }],
-    select: { slug: true, title: true, id: true, module: { select: { slug: true } } },
-  });
-  const flat = rows.map((r) => ({
-    moduleSlug: r.module.slug,
-    topic: { id: r.id, slug: r.slug, title: r.title },
-  }));
-  const idx = flat.findIndex(
-    (f) => f.moduleSlug === moduleSlug && f.topic.slug === topicSlug
-  );
+    const flat = rows.map((r) => ({
+      moduleSlug: r.module.slug,
+      topic: { id: r.id, slug: r.slug, title: r.title },
+    }));
+    const idx = flat.findIndex(
+      (f) => f.moduleSlug === moduleSlug && f.topic.slug === topicSlug
+    );
 
-  return {
-    ...ctx,
-    topic,
-    prev: idx > 0 ? flat[idx - 1] : null,
-    next: idx >= 0 && idx < flat.length - 1 ? flat[idx + 1] : null,
-  };
-}
+    return {
+      ...ctx,
+      topic,
+      prev: idx > 0 ? flat[idx - 1] : null,
+      next: idx >= 0 && idx < flat.length - 1 ? flat[idx + 1] : null,
+    };
+  }
+);
 
-export async function getQuizForModule(
-  courseSlug: string,
-  moduleSlug: string
-): Promise<
-  | {
-      course: CourseDetail;
-      module: ModuleDetail;
-      quiz: { id: string; title: string; passScore: number };
-      questions: QuizQuestionPublic[];
-    }
-  | null
-> {
-  const ctx = await getModuleDetail(courseSlug, moduleSlug);
-  if (!ctx || !ctx.module.quiz) return null;
+export const getQuizForModule = cache(
+  async (
+    courseSlug: string,
+    moduleSlug: string
+  ): Promise<
+    | {
+        course: CourseDetail;
+        module: ModuleDetail;
+        quiz: { id: string; title: string; passScore: number };
+        questions: QuizQuestionPublic[];
+      }
+    | null
+  > => {
+    const ctx = await getModuleDetail(courseSlug, moduleSlug);
+    if (!ctx || !ctx.module.quiz) return null;
 
-  const questions = await db.quizQuestion.findMany({
-    where: { quizId: ctx.module.quiz.id },
-    orderBy: { order: "asc" },
-  });
+    const questions = await db.quizQuestion.findMany({
+      where: { quizId: ctx.module.quiz.id },
+      orderBy: { order: "asc" },
+    });
 
-  return {
-    course: ctx.course,
-    module: ctx.module,
-    quiz: {
-      id: ctx.module.quiz.id,
-      title: ctx.module.quiz.title,
-      passScore: ctx.module.quiz.passScore,
-    },
-    // NOTE: correctIndex is intentionally NOT sent to the client
-    questions: questions.map((q) => ({
-      id: q.id,
-      order: q.order,
-      prompt: q.prompt,
-      options: parseJson<string[]>(q.options, []),
-    })),
-  };
-}
+    return {
+      course: ctx.course,
+      module: ctx.module,
+      quiz: {
+        id: ctx.module.quiz.id,
+        title: ctx.module.quiz.title,
+        passScore: ctx.module.quiz.passScore,
+      },
+      // NOTE: correctIndex is intentionally NOT sent to the client
+      questions: questions.map((q) => ({
+        id: q.id,
+        order: q.order,
+        prompt: q.prompt,
+        options: parseJson<string[]>(q.options, []),
+      })),
+    };
+  }
+);

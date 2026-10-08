@@ -24,12 +24,18 @@ export default async function CourseOverviewPage({
   params: Promise<{ courseId: string }>;
 }) {
   const { courseId } = await params;
-  const course = await getCourseBySlug(courseId);
+  const [course, session] = await Promise.all([
+    getCourseBySlug(courseId),
+    auth(),
+  ]);
   if (!course) notFound();
 
-  const session = await auth();
-  const owned = await hasCourseAccess(session?.user?.id ?? null, course.id);
-  const progress = session?.user?.id ? await getUserProgress(session.user.id) : null;
+  const [owned, progress] = await Promise.all([
+    hasCourseAccess(session?.user?.id ?? null, course.id, course.price),
+    session?.user?.id
+      ? getUserProgress(session.user.id)
+      : Promise.resolve(null),
+  ]);
   const stat = progress?.courseStats[course.id];
 
   const firstModule = course.modules[0];
