@@ -5,6 +5,9 @@ const MAX_CODE = 100_000;
 const MAX_STDIN = 10_000;
 const MAX_TEST_CASES = 20;
 
+// Only runtimes available on Vercel serverless (no gcc/g++/javac there).
+const ALLOWED_LANGS = new Set(["python", "python3", "javascript", "js", "nodejs"]);
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -12,6 +15,12 @@ export async function POST(request: NextRequest) {
 
     if (!language || typeof language !== "string" || typeof code !== "string") {
       return NextResponse.json({ error: "Language and code are required" }, { status: 400 });
+    }
+    if (!ALLOWED_LANGS.has(language.toLowerCase())) {
+      return NextResponse.json(
+        { error: `Language "${language}" is not available on this platform — use Python or JavaScript.` },
+        { status: 400 }
+      );
     }
     if (code.length > MAX_CODE) {
       return NextResponse.json({ error: "Code too large" }, { status: 413 });

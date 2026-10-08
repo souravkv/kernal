@@ -1,15 +1,16 @@
 // KERNAL LMS — Prisma schema
 //
-// Development: SQLite (DATABASE_URL="file:./dev.db")
-// Production (Vercel): change `provider` below to "postgresql" and set
-// DATABASE_URL to a Neon/Vercel Postgres connection string. No other changes needed.
+// Database: Neon Postgres (Vercel Marketplace integration).
+// Local dev + production share the same Neon database.
+//   DATABASE_URL          → pooled endpoint (app runtime)
+//   DATABASE_URL_UNPOOLED → direct endpoint (prisma migrate / DDL)
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 

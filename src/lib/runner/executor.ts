@@ -52,9 +52,13 @@ function runCommand(cmd: string, args: string[], input: string, timeout: number)
       resolve({ stdout: stdout.slice(0, MAX_OUTPUT), stderr: stderr.slice(0, MAX_OUTPUT), exitCode: code ?? 1 });
     });
 
-    proc.on("error", () => {
+    proc.on("error", (err: NodeJS.ErrnoException) => {
       clearTimeout(timer);
-      resolve({ stdout: "", stderr: "Process spawn error", exitCode: 1 });
+      const friendly =
+        err.code === "ENOENT"
+          ? `${cmd} is not available on this platform`
+          : `Process error: ${err.message}`;
+      resolve({ stdout: "", stderr: friendly, exitCode: 1 });
     });
   });
 }
