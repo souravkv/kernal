@@ -3,11 +3,13 @@ import { notFound } from "next/navigation";
 import { ChevronRight, ArrowLeft, ArrowRight } from "lucide-react";
 import { getTopicDetail } from "@/lib/courses";
 import { getUserProgress } from "@/lib/progress";
+import { hasCourseAccess } from "@/lib/access";
 import { renderMarkdown } from "@/lib/markdown";
 import { auth } from "@/auth";
 import CourseSidebar from "@/components/course/CourseSidebar";
 import CodeBlock from "@/components/editor/CodeBlock";
 import MarkComplete from "@/components/course/MarkComplete";
+import Paywall from "@/components/course/Paywall";
 
 export async function generateMetadata({
   params,
@@ -32,6 +34,19 @@ export default async function TopicPage({
 
   // completed state (only for signed-in users)
   const session = await auth();
+  if (!(await hasCourseAccess(session?.user?.id ?? null, course.id))) {
+    return (
+      <Paywall
+        course={{
+          id: course.id,
+          slug: course.slug,
+          code: course.code,
+          title: course.title,
+          price: course.price,
+        }}
+      />
+    );
+  }
   const progress = session?.user?.id ? await getUserProgress(session.user.id) : null;
   const completed = progress?.topicDone[topic.id] ?? false;
 

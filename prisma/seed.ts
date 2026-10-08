@@ -16,7 +16,7 @@ const COURSE = {
     "A beginner-to-intermediate foundations course covering data, algorithms, complexity, arrays, strings, recursion, searching, sorting, linked lists, stacks, queues, trees, graphs and hashing. Every module follows the same flow: story-driven intro, theory notes, an MCQ quiz, and coding problems with worked solutions.",
   instructor: "KERNAL Platform",
   duration: "12 weeks",
-  price: 99,
+  price: 2699,
   rating: 4.9,
   students: 2847,
   tags: JSON.stringify([
@@ -86,6 +86,19 @@ async function main() {
     update: COURSE,
     create: COURSE,
   });
+
+  // promo codes — idempotent upserts, re-seeding never clobbers redemptions
+  const COUPONS = [
+    { code: "KERNAL999", type: "SET_PRICE", value: 999 },
+    { code: "KERNALFREE", type: "SET_PRICE", value: 0 },
+  ];
+  for (const c of COUPONS) {
+    await db.coupon.upsert({
+      where: { code: c.code },
+      update: { type: c.type, value: c.value, active: true },
+      create: { ...c, active: true },
+    });
+  }
 
   for (const m of wanted) {
     // idempotent + user-data-safe: upsert keeping stable IDs so that

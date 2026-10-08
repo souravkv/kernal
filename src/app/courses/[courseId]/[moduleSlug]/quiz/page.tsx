@@ -3,8 +3,10 @@ import { notFound } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import { getQuizForModule } from "@/lib/courses";
 import { getUserProgress } from "@/lib/progress";
+import { hasCourseAccess } from "@/lib/access";
 import { auth } from "@/auth";
 import QuizRunner from "@/components/course/QuizRunner";
+import Paywall from "@/components/course/Paywall";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +34,19 @@ export default async function QuizPage({
   const { course, module: mod, quiz, questions } = data;
 
   const session = await auth();
+  if (!(await hasCourseAccess(session?.user?.id ?? null, course.id))) {
+    return (
+      <Paywall
+        course={{
+          id: course.id,
+          slug: course.slug,
+          code: course.code,
+          title: course.title,
+          price: course.price,
+        }}
+      />
+    );
+  }
   const progress = session?.user?.id ? await getUserProgress(session.user.id) : null;
   const stat = progress?.moduleStats[mod.id];
 

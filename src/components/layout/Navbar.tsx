@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
-import { Menu, X, LogOut, User, BarChart3 } from "lucide-react";
+import { Menu, X, LogOut, User, BarChart3, ShoppingBag } from "lucide-react";
+import { useCart } from "@/lib/cart";
 import ThemeToggle from "./ThemeToggle";
 
 const navLinks = [
@@ -16,6 +17,7 @@ const navLinks = [
 
 export default function Navbar() {
   const { data: session, status } = useSession();
+  const cartItems = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -56,6 +58,19 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-5">
+          <Link
+            href="/cart"
+            aria-label="Cart"
+            className="relative flex h-8 w-8 items-center justify-center transition-colors hover:text-[var(--muted)]"
+          >
+            <ShoppingBag className="h-4 w-4" />
+            {cartItems.length > 0 && (
+              <span className="absolute -right-1 -top-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[var(--fg)] px-1 text-[9px] font-medium text-[var(--bg)]">
+                {cartItems.length}
+              </span>
+            )}
+          </Link>
+
           <ThemeToggle />
 
           {status === "loading" ? (
@@ -157,6 +172,14 @@ export default function Navbar() {
             ))}
 
           <div className="mt-6 border-t border-[var(--border)] pt-6">
+            <Link
+              href="/cart"
+              onClick={() => setMobileOpen(false)}
+              className="mb-4 flex items-center justify-center gap-2 border border-[var(--border)] py-2.5 text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--muted)]"
+            >
+              <ShoppingBag className="h-3.5 w-3.5" />
+              Cart{cartItems.length > 0 ? ` (${cartItems.length})` : ""}
+            </Link>
             {session ? (
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
