@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import Editor from "@monaco-editor/react";
 import { Play, Send, RotateCcw, ChevronDown, ChevronRight, Check, X, Loader2, Eye, EyeOff } from "lucide-react";
 import { practiceProblems, Problem } from "@/data/problems";
@@ -96,16 +96,6 @@ export default function PracticePage() {
   const passedCount = testResults ? testResults.filter((r) => r.passed).length : 0;
   const totalCount = testResults ? testResults.length : 0;
   const allPassed = testResults ? testResults.every((r) => r.passed) : false;
-
-  // Extract only the function part from starter code
-  const getFunctionCode = (code: string): string => {
-    const lines = code.split("\n");
-    const fnStart = lines.findIndex((l) => l.trim().startsWith("def ") || l.trim().startsWith("function ") || l.trim().startsWith("int ") || l.trim().startsWith("void ") || l.trim().startsWith("public static"));
-    if (fnStart === -1) return code;
-    const commentIdx = lines.findIndex((l, i) => i > fnStart && (l.trim().startsWith("# Test") || l.trim().startsWith("// Test") || l.trim().startsWith("int main") || l.trim().startsWith("public static void main")));
-    if (commentIdx === -1) return code;
-    return lines.slice(fnStart, commentIdx).join("\n");
-  };
 
   return (
     <div className="mx-auto max-w-[1400px] px-6 py-20 sm:px-10 sm:py-24">

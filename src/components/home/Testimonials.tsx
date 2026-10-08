@@ -51,7 +51,7 @@ export default function Testimonials() {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
             >
-              <p className="body-md mb-10 text-[var(--muted)] leading-relaxed">"{t.text}"</p>
+              <p className="body-md mb-10 text-[var(--muted)] leading-relaxed">&ldquo;{t.text}&rdquo;</p>
               <div className="flex items-center gap-4">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] text-[10px] font-medium tracking-wider">
                   {t.initials}

@@ -31,10 +31,14 @@ export default function Footer() {
           <div className="md:col-span-2">
             <h4 className="body-xs mb-4 text-[var(--muted)]">Course</h4>
             <ul className="space-y-3">
-              {["Curriculum", "Problems", "Visualizers"].map((item) => (
-                <li key={item}>
-                  <Link href="/courses/dsa-masterclass" className="body-sm hover-line transition-opacity hover:opacity-100 opacity-60">
-                    {item}
+              {[
+                { label: "Curriculum", href: "/courses" },
+                { label: "Problems", href: "/questions" },
+                { label: "Playground", href: "/practice" },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link href={item.href} className="body-sm hover-line transition-opacity hover:opacity-100 opacity-60">
+                    {item.label}
                   </Link>
                 </li>
               ))}

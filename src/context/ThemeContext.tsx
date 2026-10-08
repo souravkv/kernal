@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useSyncExternalStore,
+  ReactNode,
+} from "react";
 
 type Theme = "light" | "dark";
 
@@ -9,32 +15,44 @@ interface ThemeContextType {
   toggleTheme: () => void;
 }
 
+const THEME_KEY = "kernal-theme";
+const CHANGE_EVENT = "kernal-theme-change";
+
+function subscribe(onStoreChange: () => void) {
+  window.addEventListener(CHANGE_EVENT, onStoreChange);
+  window.addEventListener("storage", onStoreChange);
+  return () => {
+    window.removeEventListener(CHANGE_EVENT, onStoreChange);
+    window.removeEventListener("storage", onStoreChange);
+  };
+}
+
+function getSnapshot(): Theme {
+  return (localStorage.getItem(THEME_KEY) as Theme | null) ?? "dark";
+}
+
+function getServerSnapshot(): Theme {
+  return "dark";
+}
+
 const ThemeContext = createContext<ThemeContextType>({
   theme: "dark",
   toggleTheme: () => {},
 });
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("dark");
-  const [mounted, setMounted] = useState(false);
+  const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   useEffect(() => {
-    setMounted(true);
-    const stored = localStorage.getItem("kernal-theme") as Theme | null;
-    if (stored) {
-      setTheme(stored);
-    } else {
-      setTheme("dark");
-    }
-  }, []);
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    localStorage.setItem(THEME_KEY, theme);
+  }, [theme]);
 
-  useEffect(() => {
-    if (!mounted) return;
-    document.documentElement.className = `${theme === "dark" ? "dark" : ""}`;
-    localStorage.setItem("kernal-theme", theme);
-  }, [theme, mounted]);
-
-  const toggleTheme = () => setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  const toggleTheme = () => {
+    const next: Theme = theme === "dark" ? "light" : "dark";
+    localStorage.setItem(THEME_KEY, next);
+    window.dispatchEvent(new Event(CHANGE_EVENT));
+  };
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>

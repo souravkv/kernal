@@ -7,22 +7,26 @@ const features = [
   {
     number: "01",
     title: "Structured Curriculum",
-    description: "University-aligned 6-unit DSA course building concepts progressively from fundamentals to advanced problem solving.",
+    description:
+      "University-aligned courses built from classic references — theory notes, learning outcomes and worked examples in every module.",
   },
   {
     number: "02",
     title: "Integrated IDE",
-    description: "Monaco code editor with Python, C++, Java, JavaScript. Write, run, and test code without leaving the browser.",
+    description:
+      "Monaco editor with Python, C++, Java, JavaScript and C. Write, run and test code without leaving the page.",
   },
   {
     number: "03",
-    title: "Mastery Gates",
-    description: "Prove understanding before advancing. Pass each module assessment to unlock the next chapter.",
+    title: "Module Quizzes",
+    description:
+      "A multiple-choice quiz at the end of every module with instant scoring, correct answers and explanations.",
   },
   {
     number: "04",
     title: "100+ Problems",
-    description: "Curated problems across 19 categories — exactly what top tech companies ask in coding interviews.",
+    description:
+      "Curated problems across 19 categories — exactly what top tech companies ask in coding interviews.",
   },
 ];
 

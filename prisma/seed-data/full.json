@@ -1,0 +1,2559 @@
+{
+ "modules": [
+  {
+   "number": 1,
+   "title": "Thinking in Data & Algorithms",
+   "slug": "thinking-in-data-algorithms",
+   "coldOpen": "Cold open (Code Chronicles, Ep. 1): Zara's phone has 4,000 contacts and she can't find \"Dr. Menon\" before the bus leaves. Bit appears: \"The problem isn't your phone. It's how the data is organised.\" Cliffhanger: The contact list freezes. Bit whispers, \"How slow is too slow? We need a ruler for speed.\"",
+   "outcomes": [
+    "Define data, data item, record, file, data structure, ADT and algorithm.",
+    "Describe the four stages of problem solving.",
+    "Write simple algorithms in pseudocode and draw flowcharts."
+   ],
+   "topics": [
+    {
+     "order": 1,
+     "title": "1.1 Basic terms",
+     "slug": "basic-terms",
+     "description": "Basic terms",
+     "content": "- Data: raw facts (e.g., 25, \"Zara\", 9.5).\n\n- Data item / field: the smallest named unit. Example: Name .\n\n- Record: a collection of related fields. Example: Student(RollNo, Name, Marks).\n\n- File: a collection of records.\n\n- Entity and attribute: an entity is something with properties; an attribute is one\n\n- property. Entity = Student, attributes = RollNo, Name, Marks.\n\n```\n  FILE (Students)\n   ├── RECORD 1 : [ RollNo=101 | Name=Zara | Marks=88 ]\n   ├── RECORD 2 : [ RollNo=102 | Name=Arun | Marks=75 ]\n   └── RECORD 3 : [ RollNo=103 | Name=Mia          | Marks=92 ]\n            ▲                ▲            ▲\n         field          field           field\n```"
+    },
+    {
+     "order": 2,
+     "title": "1.2 What is a data structure?",
+     "slug": "what-is-a-data-structure",
+     "description": "What is a data structure?",
+     "content": "A data structure is a way of storing and organising data in memory so that it can be used\n\n#### efficiently. It has two parts\n\n- 1. Organisation: how items are arranged in memory.\n\n- 2. Operations: what you can do (insert, delete, search, traverse, sort, merge).\n\nClassification\n\n```\n                             DATA STRUCTURES\n                         /                     \\\n\n               PRIMITIVE                      NON-PRIMITIVE\n          (int, float, char, bool)            /           \\\n                                     LINEAR             NON-LINEAR\n                               (Array, Linked List,      (Tree, Graph)\n                                Stack, Queue)\n\n\n    Linear: elements form a sequence; each has one predecessor and one successor.\n    Non-linear: an element can connect to many others.\n    Static vs dynamic: size fixed at compile time (arrays) versus growing and shrinking at\n    run time (linked lists).\n```"
+    },
+    {
+     "order": 3,
+     "title": "1.3 Abstract Data Type (ADT)",
+     "slug": "abstract-data-type-adt",
+     "description": "Abstract Data Type (ADT)",
+     "content": "An ADT describes what a structure does (values and operations) without saying how it is implemented. [AHU] defines an ADT as a mathematical model with a collection of operations defined on it.\n\n```\n  ADT                Operations (the interface)               Possible implementations\n\n  Stack              push, pop, peek, isEmpty                 array, linked list\n\n  Queue              enqueue, dequeue, front                  circular array, linked list\n\n  List               insert, delete, search                   array, linked list\n\n  Dictionary         insert, delete, lookup                   hash table, BST\n```\n\nAnalogy: a TV remote is an interface. You don't need to know the circuits inside."
+    },
+    {
+     "order": 4,
+     "title": "1.4 What is an algorithm?",
+     "slug": "what-is-an-algorithm",
+     "description": "What is an algorithm?",
+     "content": "A finite sequence of well-defined steps that solves a problem. Five properties:\n\n- 1. Input: zero or more.\n\n- 2. Output: at least one.\n\n- 3. Definiteness: each step is unambiguous.\n\n- 4. Finiteness: it stops after finitely many steps.\n\n- 5. Effectiveness: each step is simple enough to be carried out."
+    },
+    {
+     "order": 5,
+     "title": "1.5 Writing algorithms the Lipschutz way",
+     "slug": "writing-algorithms-the-lipschutz-way",
+     "description": "Writing algorithms the Lipschutz way",
+     "content": "Algorithm 1.1: Find the largest element of an array DATA with N elements\n\n```\n 1. [Initialise]     Set MAX := DATA[1], K := 2.\n 2. Repeat Steps 3 and 4 while K <= N:\n 3.      If MAX < DATA[K], then: Set MAX := DATA[K].\n 4.      Set K := K + 1.\n 5. Write: MAX.\n 6. Exit.\n```\n\n#### Python version\n\n```\n def find_max(data):\n      mx = data[0]\n      for x in data[1:]:\n            if x > mx:\n                mx = x\n      return mx\n```\n\n#### Flowchart symbols (text form)\n\n```\n   ( Start/End )     [ Process ]    < Decision? >       /Input-Output/\n```\n\n#### Flowchart of Algorithm 1.1\n\n```\n   (Start) → [MAX=DATA[1], K=2] → <K <= N?> ──No──→ /Print MAX/ → (End)\n                                         │Yes\n                                         ▼\n                              <MAX < DATA[K]?> ─Yes→ [MAX=DATA[K]]\n                                         │No                    │\n                                         └────────┬─────────┘\n                                                    ▼\n                                                [K = K+1] ──→ (back to K <= N?)\n```"
+    },
+    {
+     "order": 6,
+     "title": "1.6 Four stages of problem solving",
+     "slug": "four-stages-of-problem-solving",
+     "description": "Four stages of problem solving",
+     "content": "- 1. Understand the problem: input, output, constraints.\n\n- 2. Plan: pick a data structure and an algorithm.\n\n- 3. Implement: write the code.\n\n- 4. Review: test with normal, edge and large cases, and check the cost."
+    },
+    {
+     "order": 7,
+     "title": "1.7 Operations on data structures",
+     "slug": "operations-on-data-structures",
+     "description": "Operations on data structures",
+     "content": "Traversing, searching, inserting, deleting, sorting, merging.\n\n#### Common Mistakes\n\n- Confusing a data structure (the storage layout) with an algorithm (the procedure).\n\n- Starting to code before understanding the input and output.\n\n- Ignoring edge cases such as an empty array or a single element.\n\n#### Quick Revision\n\nData → record → file. A data structure is organisation plus operations. An ADT is a what- only interface. An algorithm is finite and definite, with input and output.\n\n#### Common Mistakes\n\n- Confusing a data structure (the storage layout) with an algorithm (the procedure).\n\n- Starting to code before understanding the input and output.\n\n- Ignoring edge cases such as an empty array or a single element.\n\n#### Quick Revision\n\nData → record → file. A data structure is organisation plus operations. An ADT is a what- only interface. An algorithm is finite and definite, with input and output."
+    }
+   ],
+   "quiz": {
+    "questions": [
+     {
+      "order": 1,
+      "prompt": "The smallest named unit of data in a record is called a?",
+      "options": [
+       "file",
+       "field",
+       "entity",
+       "database"
+      ],
+      "correctIndex": 1,
+      "explanation": "A field (data item) is the smallest named unit; fields make a record, records make a file."
+     },
+     {
+      "order": 2,
+      "prompt": "Which of these is NOT a required property of an algorithm?",
+      "options": [
+       "Finiteness",
+       "Definiteness",
+       "A graphical user interface",
+       "At least one output"
+      ],
+      "correctIndex": 2,
+      "explanation": "Algorithms need input (zero or more), output (at least one), definiteness, finiteness and effectiveness. A GUI is not required."
+     },
+     {
+      "order": 3,
+      "prompt": "Which of the following is a non-linear data structure?",
+      "options": [
+       "Array",
+       "Stack",
+       "Queue",
+       "Tree"
+      ],
+      "correctIndex": 3,
+      "explanation": "In a tree one node can connect to many children."
+     },
+     {
+      "order": 4,
+      "prompt": "An Abstract Data Type specifies?",
+      "options": [
+       "how data is stored in memory",
+       "the values and operations, not the implementation",
+       "the programming language to use",
+       "the hardware needed"
+      ],
+      "correctIndex": 1,
+      "explanation": "An ADT is a what-only interface."
+     },
+     {
+      "order": 5,
+      "prompt": "A collection of related records is called a?",
+      "options": [
+       "field",
+       "file",
+       "pointer",
+       "attribute"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 6,
+      "prompt": "What is the first step in solving a problem with a program?",
+      "options": [
+       "Write code",
+       "Choose a language",
+       "Understand the problem (input, output, constraints)",
+       "Test the code"
+      ],
+      "correctIndex": 2,
+      "explanation": ""
+     },
+     {
+      "order": 7,
+      "prompt": "Which pair shows a data structure and an ADT that it can implement?",
+      "options": [
+       "Array → Stack",
+       "Stack → Array",
+       "Queue → Tree",
+       "Record → Graph"
+      ],
+      "correctIndex": 0,
+      "explanation": "A stack (ADT) can be implemented using an array (data structure)."
+     },
+     {
+      "order": 8,
+      "prompt": "In a flowchart, a diamond symbol represents?",
+      "options": [
+       "start/end",
+       "a process",
+       "a decision",
+       "input/output"
+      ],
+      "correctIndex": 2,
+      "explanation": ""
+     }
+    ]
+   },
+   "practiceProblems": [
+    {
+     "number": 1,
+     "difficulty": "Easy",
+     "title": "Largest and smallest",
+     "statement": "Given an array, return its minimum and maximum in one pass.",
+     "example": "[4, 9, 1, 7] → (1, 9)",
+     "solution": "def min_max(a):\n     mn = mx = a[0]\n     for x in a[1:]:\n           if x < mn: mn = x\n           if x > mx: mx = x\n     return mn, mx",
+     "complexity": "Time O(n), space O(1)."
+    },
+    {
+     "number": 2,
+     "difficulty": "Easy",
+     "title": "Swap without a temporary variable",
+     "statement": "Swap two integers a and b without a third variable.",
+     "example": "a=5, b=9 → a=9, b=5",
+     "solution": "def swap(a, b):\n     a = a + b         # a = 14\n     b = a - b         # b = 5\n     a = a - b         # a = 9\n     return a, b\n\n\n(In Python you can simply write a, b = b, a ; in C use the arithmetic or XOR trick.)",
+     "complexity": "O(1)."
+    },
+    {
+     "number": 3,
+     "difficulty": "Easy",
+     "title": "Count vowels",
+     "statement": "Count the vowels in a string (case-insensitive).",
+     "example": "\"Data Structures\" → 5",
+     "solution": "def count_vowels(s):\n    return sum(1 for ch in s.lower() if ch in \"aeiou\")",
+     "complexity": "O(n)."
+    },
+    {
+     "number": 4,
+     "difficulty": "Easy",
+     "title": "Sum of digits (algorithm-writing practice)",
+     "statement": "Write a numbered-step algorithm (Lipschutz style) and code to find the sum of digits of N. Algorithm: 1. Set SUM := 0. 2. Repeat while N > 0: SUM := SUM + (N mod 10); N := N div 10. 3. Write SUM. 4. Exit.",
+     "example": "4521 → 12. Complexity: O(log₁₀ n).",
+     "solution": "def digit_sum(n):\n    s = 0\n    while n > 0:\n          s += n % 10\n          n //= 10\n    return s",
+     "complexity": ""
+    }
+   ],
+   "practiceProblemsMd": "### Code Problem 1 (Easy): Largest and smallest\n\n**Statement:** Given an array, return its minimum and maximum in one pass.\n\n**Example:** [4, 9, 1, 7] → (1, 9)\n\n```python\ndef min_max(a):\n     mn = mx = a[0]\n     for x in a[1:]:\n           if x < mn: mn = x\n           if x > mx: mx = x\n     return mn, mx\n```\n\n**Complexity:** Time O(n), space O(1).\n\n### Code Problem 2 (Easy): Swap without a temporary variable\n\n**Statement:** Swap two integers a and b without a third variable.\n\n**Example:** a=5, b=9 → a=9, b=5\n\n```python\ndef swap(a, b):\n     a = a + b         # a = 14\n     b = a - b         # b = 5\n     a = a - b         # a = 9\n     return a, b\n\n\n(In Python you can simply write a, b = b, a ; in C use the arithmetic or XOR trick.)\n```\n\n**Complexity:** O(1).\n\n### Code Problem 3 (Easy): Count vowels\n\n**Statement:** Count the vowels in a string (case-insensitive).\n\n**Example:** \"Data Structures\" → 5\n\n```python\ndef count_vowels(s):\n    return sum(1 for ch in s.lower() if ch in \"aeiou\")\n```\n\n**Complexity:** O(n).\n\n### Code Problem 4 (Easy): Sum of digits (algorithm-writing practice)\n\n**Statement:** Write a numbered-step algorithm (Lipschutz style) and code to find the sum of digits of N. Algorithm: 1. Set SUM := 0. 2. Repeat while N > 0: SUM := SUM + (N mod 10); N := N div 10. 3. Write SUM. 4. Exit.\n\n**Example:** 4521 → 12. Complexity: O(log₁₀ n).\n\n```python\ndef digit_sum(n):\n    s = 0\n    while n > 0:\n          s += n % 10\n          n //= 10\n    return s\n```"
+  },
+  {
+   "number": 2,
+   "title": "Analysing Algorithms (Complexity)",
+   "slug": "analysing-algorithms",
+   "coldOpen": "Cold open (Ep. 2): Two bots race to find a name in a 1,000,000-name list. One takes 1 second; the other takes 4 hours. Same answer. Bit: \"Correct isn't enough. We need fast and lean.\" Cliffhanger: A tiny bug doubles the data every second. Memory fills up. \"We need to store data in clean rows, or this is going to crash!\"",
+   "outcomes": [
+    "Explain time and space complexity.",
+    "Use Big-O, Big-Omega and Big-Theta correctly.",
+    "Compare growth rates and compute the cost of loops."
+   ],
+   "topics": [
+    {
+     "order": 1,
+     "title": "2.1 Why analyse?",
+     "slug": "why-analyse",
+     "description": "Why analyse?",
+     "content": "Running time depends on the machine, language and input, so we count basic operations as a function of input size n. We ignore constants and keep the dominant term."
+    },
+    {
+     "order": 2,
+     "title": "2.2 Time and space complexity",
+     "slug": "time-and-space-complexity",
+     "description": "Time and space complexity",
+     "content": "- Time complexity T(n): number of basic steps.\n\n- Space complexity S(n): extra memory used besides the input."
+    },
+    {
+     "order": 3,
+     "title": "2.3 Cases (Lipschutz: best, average, worst)",
+     "slug": "cases-lipschutz-best-average-worst",
+     "description": "Cases (Lipschutz: best, average, worst)",
+     "content": "Example: linear search for ITEM in an array of n elements.\n\n```\n Case                       Meaning                               Comparisons\n\n Best                       Item at position 1                    1\n\n Average                    Item uniformly anywhere               (n+1)/2\n\n Worst                      Last position or absent               n\n```\n\nWe usually quote the worst case because it is a guarantee."
+    },
+    {
+     "order": 4,
+     "title": "2.4 Asymptotic notation",
+     "slug": "asymptotic-notation",
+     "description": "Asymptotic notation",
+     "content": "- O(g(n)) is an upper bound: f(n) ≤ c·g(n) for n ≥ n₀.\n\n- Ω(g(n)) is a lower bound.\n\n- Θ(g(n)) is a tight bound (both O and Ω).\n\n```\n  cost\n    │                                      c·g(n) ← upper bound\n    │                                 ╱╱\n    │                           ╱╱     ·    f(n)\n    │                     ╱╱    ·\n    │                ╱╱ ·\n    │          ╱╱·\n    │    ╱╱·     ← after n0, f(n) stays below c·g(n)\n    └───────────┬──────────────────── n\n                     n0\n```\n\nRules\n\n- 1. Drop constants: 5n → O(n).\n\n- 2. Drop lower-order terms: n² + n + 7 → O(n²).\n\n- 3. Sequential blocks add: O(n) + O(n²) → O(n²).\n\n- 4. Nested loops multiply: n × n → O(n²)."
+    },
+    {
+     "order": 5,
+     "title": "2.5 Growth-rate ladder",
+     "slug": "growth-rate-ladder",
+     "description": "Growth-rate ladder",
+     "content": "```\n Slowest growth (best)                                       Fastest growth (worst)\n O(1) < O(log n) < O(n) < O(n log n) < O(n²) < O(n³) < O(2ⁿ) < O(n!)\n```\n\n#### Operations needed (approximate)\n\n```\n  n                log₂ n        n log₂ n        n²            2ⁿ\n\n  10               3             33              100           1,024\n\n  100              7             664             10,000        1.3×10³⁰\n\n  1,000            10            9,966           1,000,000     ∞ (practically)\n```\n\n#### Text graph (cost against n)\n\n```\n cost\n   │ 2ⁿ │               n²\n   │      │        ╱\n   │      │    ╱       n log n\n   │      │╱   ╱─────\n   │      ╱╱──────── n\n   │ ──────────────── log n\n   │ ═════════════════ 1\n   └────────────────────── n\n```"
+    },
+    {
+     "order": 6,
+     "title": "2.6 Analysing code: worked examples",
+     "slug": "analysing-code-worked-examples",
+     "description": "Analysing code: worked examples",
+     "content": "```\n # A: O(1)\n x = a[0]\n\n\n # B: O(n)\n for i in range(n):\n        total += a[i]\n\n # C: O(n^2)     (nested)\n for i in range(n):\n      for j in range(n):\n          count += 1\n\n\n # D: O(n^2)     (inner depends on i: 0+1+...+(n-1) = n(n-1)/2)\n for i in range(n):\n      for j in range(i):\n          count += 1\n\n\n # E: O(log n)     (i doubles each time)\n i = 1\n while i < n:\n      i *= 2\n\n\n # F: O(n log n)\n for i in range(n):             # n times\n      j = 1\n      while j < n:              # log n times\n          j *= 2\n```"
+    },
+    {
+     "order": 7,
+     "title": "2.7 Space complexity",
+     "slug": "space-complexity",
+     "description": "Space complexity",
+     "content": "- Sum of an array with one loop variable: O(1) extra space.\n\n- Building a copy of the array: O(n) extra space.\n\n- Recursion depth d uses O(d) stack space (more in Module 5)."
+    },
+    {
+     "order": 8,
+     "title": "2.8 Time–space trade-off",
+     "slug": "time-space-trade-off",
+     "description": "Time–space trade-off",
+     "content": "You can often be faster by using more memory. Example: precompute a lookup table to answer queries in O(1), costing O(n) space.\n\n#### Common Mistakes\n\n- Saying O(2n) is different from O(n). It is not.\n\n- Treating best-case as the cost.\n\n- Forgetting that a + b on huge numbers or strings may not be O(1).\n\n#### Quick Revision\n\nBig-O means \"no worse than\". Drop constants and small terms. A loop that halves or\n\ndoubles gives log n. Nested loops multiply.\n\n#### Common Mistakes\n\n- Saying O(2n) is different from O(n). It is not.\n\n- Treating best-case as the cost.\n\n- Forgetting that a + b on huge numbers or strings may not be O(1).\n\n#### Quick Revision\n\nBig-O means \"no worse than\". Drop constants and small terms. A loop that halves or\n\ndoubles gives log n. Nested loops multiply."
+    }
+   ],
+   "quiz": {
+    "questions": [
+     {
+      "order": 1,
+      "prompt": "The time complexity of the loop for i in range(n): for j in range(n): x += 1 is?",
+      "options": [
+       "O(n)",
+       "O(n²)",
+       "O(log n)",
+       "O(2ⁿ)"
+      ],
+      "correctIndex": 1,
+      "explanation": "Nested loops multiply: n × n."
+     },
+     {
+      "order": 2,
+      "prompt": "Simplify O(3n² + 5n + 2)?",
+      "options": [
+       "O(n)",
+       "O(3n²)",
+       "O(n²)",
+       "O(n³)"
+      ],
+      "correctIndex": 2,
+      "explanation": "Drop constants and lower-order terms."
+     },
+     {
+      "order": 3,
+      "prompt": "The best case of linear search occurs when the item is?",
+      "options": [
+       "at the last position",
+       "absent",
+       "at the first position",
+       "in the middle"
+      ],
+      "correctIndex": 2,
+      "explanation": "Only 1 comparison."
+     },
+     {
+      "order": 4,
+      "prompt": "Which is the correct growth-rate order, slowest-growing first?",
+      "options": [
+       "n, log n, n², 2ⁿ",
+       "log n, n, n², 2ⁿ",
+       "2ⁿ, n², n, log n",
+       "log n, n², n, 2ⁿ"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 5,
+      "prompt": "The loop i = 1; while i < n: i *= 2 runs?",
+      "options": [
+       "n times",
+       "log₂ n times",
+       "n/2 times",
+       "√n times"
+      ],
+      "correctIndex": 1,
+      "explanation": "i doubles each iteration."
+     },
+     {
+      "order": 6,
+      "prompt": "Which notation gives a tight bound?",
+      "options": [
+       "O",
+       "Ω",
+       "Θ",
+       "o"
+      ],
+      "correctIndex": 2,
+      "explanation": "Θ is both an upper and a lower bound."
+     },
+     {
+      "order": 7,
+      "prompt": "Average number of comparisons in a successful linear search on n items (item equally likely anywhere) is?",
+      "options": [
+       "n",
+       "(n+1)/2",
+       "n/2 + 2",
+       "log n"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 8,
+      "prompt": "Extra space used by an algorithm that only uses a few variables regardless of input size is?",
+      "options": [
+       "O(n)",
+       "O(log n)",
+       "O(1)",
+       "O(n²)"
+      ],
+      "correctIndex": 2,
+      "explanation": ""
+     }
+    ]
+   },
+   "practiceProblems": [
+    {
+     "number": 1,
+     "difficulty": "Easy",
+     "title": "Count loop operations",
+     "statement": "Write a function that returns how many times the inner statement runs for for i in range(n): for j in range(i, n): ... . Compare with the formula n(n+1)/2.",
+     "example": "",
+     "solution": "def count_ops(n):\n     c = 0\n     for i in range(n):\n           for j in range(i, n):\n                c += 1\n     return c\n\n\nprint(count_ops(5), 5 * 6 // 2)          # 15 15",
+     "complexity": "O(n²) — matches n(n+1)/2."
+    },
+    {
+     "number": 2,
+     "difficulty": "Easy",
+     "title": "Duplicates, two ways",
+     "statement": "Check whether an array has a duplicate. Give an O(n²) and an O(n) (average) solution. Note: this is the time–space trade-off.",
+     "example": "",
+     "solution": "def has_dup_slow(a):                      # O(n^2) time, O(1) space\n     for i in range(len(a)):\n           for j in range(i + 1, len(a)):\n                if a[i] == a[j]: return True\n     return False\n\n\ndef has_dup_fast(a):                      # O(n) time, O(n) space\n     seen = set()\n     for x in a:\n           if x in seen: return True\n           seen.add(x)\n     return False",
+     "complexity": ""
+    },
+    {
+     "number": 3,
+     "difficulty": "Easy",
+     "title": "Sum 1..n three ways",
+     "statement": "Compute 1 + 2 + … + n by (a) a loop, (b) the formula, (c) recursion. State each complexity.",
+     "example": "",
+     "solution": "def loop_sum(n):\n     s = 0\n     for i in range(1, n + 1): s += i\n\n     return s                                      # O(n) time, O(1) space\n\n\ndef formula_sum(n):\n     return n * (n + 1) // 2                       # O(1)\n\n\ndef rec_sum(n):\n     return 0 if n == 0 else n + rec_sum(n - 1)                 # O(n) time, O(n) stack",
+     "complexity": ""
+    },
+    {
+     "number": 4,
+     "difficulty": "Medium",
+     "title": "Is it a power of two?",
+     "statement": "Return True if n is a power of two, in O(1). Explanation: a power of two has exactly one set bit; n & (n-1) clears the lowest set bit.",
+     "example": "",
+     "solution": "def is_pow2(n):\n     return n > 0 and (n & (n - 1)) == 0",
+     "complexity": ""
+    }
+   ],
+   "practiceProblemsMd": "### Code Problem 1 (Easy): Count loop operations\n\n**Statement:** Write a function that returns how many times the inner statement runs for for i in range(n): for j in range(i, n): ... . Compare with the formula n(n+1)/2.\n\n```python\ndef count_ops(n):\n     c = 0\n     for i in range(n):\n           for j in range(i, n):\n                c += 1\n     return c\n\n\nprint(count_ops(5), 5 * 6 // 2)          # 15 15\n```\n\n**Complexity:** O(n²) — matches n(n+1)/2.\n\n### Code Problem 2 (Easy): Duplicates, two ways\n\n**Statement:** Check whether an array has a duplicate. Give an O(n²) and an O(n) (average) solution. Note: this is the time–space trade-off.\n\n```python\ndef has_dup_slow(a):                      # O(n^2) time, O(1) space\n     for i in range(len(a)):\n           for j in range(i + 1, len(a)):\n                if a[i] == a[j]: return True\n     return False\n\n\ndef has_dup_fast(a):                      # O(n) time, O(n) space\n     seen = set()\n     for x in a:\n           if x in seen: return True\n           seen.add(x)\n     return False\n```\n\n### Code Problem 3 (Easy): Sum 1..n three ways\n\n**Statement:** Compute 1 + 2 + … + n by (a) a loop, (b) the formula, (c) recursion. State each complexity.\n\n```python\ndef loop_sum(n):\n     s = 0\n     for i in range(1, n + 1): s += i\n\n     return s                                      # O(n) time, O(1) space\n\n\ndef formula_sum(n):\n     return n * (n + 1) // 2                       # O(1)\n\n\ndef rec_sum(n):\n     return 0 if n == 0 else n + rec_sum(n - 1)                 # O(n) time, O(n) stack\n```\n\n### Code Problem 4 (Medium): Is it a power of two?\n\n**Statement:** Return True if n is a power of two, in O(1). Explanation: a power of two has exactly one set bit; n & (n-1) clears the lowest set bit.\n\n```python\ndef is_pow2(n):\n     return n > 0 and (n & (n - 1)) == 0\n```"
+  },
+  {
+   "number": 3,
+   "title": "Arrays & Records",
+   "slug": "arrays-and-records",
+   "coldOpen": "Cold open (Ep. 3): Zara opens Bit's memory vault: a long street of numbered mailboxes. \"Arrays work because every box is next to the last one.\" Cliffhanger: She tries to insert a new item in the middle and everything shifts. \"Why does it take so long?!\"",
+   "outcomes": [
+    "Explain contiguous memory and index-to-address calculation.",
+    "Perform traversal, insertion, deletion and searching on linear arrays and state their costs.",
+    "Work with 2D arrays and records."
+   ],
+   "topics": [
+    {
+     "order": 1,
+     "title": "3.1 Linear array",
+     "slug": "linear-array",
+     "description": "Linear array",
+     "content": "A list of n items of the same type, stored in consecutive memory locations, accessed by an index (subscript).\n\n```\n Index :      0      1        2         3      4\n            ┌─────┬─────┬─────┬─────┬─────┐\n   DATA     │ 12   │ 45   │       7   │ 33   │ 90     │\n\n             └─────┴─────┴─────┴─────┴─────┘\n  Address: 1000         1004    1008   1012       1016     (4 bytes per int)\n```\n\nTerms (Lipschutz): LB (lower bound), UB (upper bound), length = UB − LB + 1."
+    },
+    {
+     "order": 2,
+     "title": "3.2 Address calculation",
+     "slug": "address-calculation",
+     "description": "Address calculation",
+     "content": "```\n  LOC(DATA[K]) = Base(DATA) + w × (K − LB)\n```\n\nwhere w = size of one element. Example: Base = 1000, w = 4, LB = 0, K = 3 → 1000 + 4×3 = 1012. This formula is why access by index is O(1)."
+    },
+    {
+     "order": 3,
+     "title": "3.3 Operations and costs",
+     "slug": "operations-and-costs",
+     "description": "Operations and costs",
+     "content": "Traversal. Visit every element: O(n).\n\nInsertion (Algorithm 3.1: insert ITEM at position K in LA with N elements)\n\n```\n  1. Set J := N.\n  2. Repeat Steps 3 and 4 while J >= K:\n  3.        Set LA[J+1] := LA[J].                   (move element down)\n  4.        Set J := J - 1.\n  5. Set LA[K] := ITEM.\n  6. Set N := N + 1.\n  7. Exit.\n\n\n\n  Insert 20 at index 2 :\n  before: [12][45][ 7][33][90][               ]\n  shift :     12   45     ─►7    ─►33 ─►90                (move right, last to first)\n  after : [12][45][20][ 7][33][90]\n```\n\nDeletion is the reverse: shift left, O(n).\n\n```\n  def insert(a, k, item):                         # a is a Python list used as a fixed array\n        a.append(None)\n        for j in range(len(a) - 1, k, -1):\n             a[j] = a[j - 1]\n        a[k] = item\n\n\n  def delete(a, k):\n        for j in range(k, len(a) - 1):\n\n               a[j] = a[j + 1]\n        a.pop()\n\n\n\n  Operation                                     Best         Worst\n\n  Access by index                               O(1)         O(1)\n\n  Search (unsorted)                             O(1)         O(n)\n\n  Insert at end                                 O(1)         O(1) (if space)\n\n  Insert at middle or front                     O(1)         O(n)\n\n  Delete                                        O(1)         O(n)\n```"
+    },
+    {
+     "order": 4,
+     "title": "3.4 Two-dimensional arrays",
+     "slug": "two-dimensional-arrays",
+     "description": "Two-dimensional arrays",
+     "content": "A table with rows and columns: A[i][j] .\n\n```\n               col0       col1       col2\n row0      [    1     |    2     |    3     ]\n row1      [    4     |    5     |    6     ]\n row2      [    7     |    8     |    9     ]\n```\n\nRow-major order (C, Python, Java): row 0, then row 1, ... LOC(A[i][j]) = Base + w × (i × COLS + j) Column-major order (Fortran): column 0, then column 1, ... LOC(A[i][j]) = Base + w × (j × ROWS + i)\n\nExample: 3×3, Base = 2000, w = 2, row-major, A[2][1] → 2000 + 2×(2×3+1) = 2014."
+    },
+    {
+     "order": 5,
+     "title": "3.5 Records",
+     "slug": "records",
+     "description": "Records",
+     "content": "A record groups fields of different types.\n\n```\n class Student:\n        def __init__(self, roll, name, marks):\n               self.roll, self.name, self.marks = roll, name, marks\n\n\n students = [Student(101, \"Zara\", 88), Student(102, \"Arun\", 75)]          # array of records\n```"
+    },
+    {
+     "order": 6,
+     "title": "3.6 Pointers (idea)",
+     "slug": "pointers-idea",
+     "description": "Pointers (idea)",
+     "content": "A pointer stores the address of another variable. Pointers make linked structures possible (Module 7).\n\n```\n   p ─────────►    [ 42 ]\n (address 3000)     value at 3000\n```"
+    },
+    {
+     "order": 7,
+     "title": "3.7 Common array patterns (beginner toolkit)",
+     "slug": "common-array-patterns-beginner-toolkit",
+     "description": "Common array patterns (beginner toolkit)",
+     "content": "- Prefix sums: pre[i] = pre[i-1] + a[i] , so any range sum is pre[r] - pre[l-1] in\n\n- O(1).\n\n- Reverse in place: swap a[i] and a[n-1-i] .\n\n- Rotate: reverse the whole array, then reverse the two parts.\n\n- Kadane-style max subarray (preview for Course 2).\n\n#### Common Mistakes\n\n- Off-by-one errors (index runs 0..n−1).\n\n- Shifting in the wrong direction when inserting (overwrites data).\n\n- Assuming a Python list is a fixed array. It is a dynamic array.\n\n#### Quick Revision\n\nArrays give O(1) index access thanks to the address formula. Insert and delete in the middle cost O(n) because of shifting. A 2D array is stored row by row (row-major).\n\n#### Common Mistakes\n\n- Off-by-one errors (index runs 0..n−1).\n\n- Shifting in the wrong direction when inserting (overwrites data).\n\n- Assuming a Python list is a fixed array. It is a dynamic array.\n\n#### Quick Revision\n\nArrays give O(1) index access thanks to the address formula. Insert and delete in the middle cost O(n) because of shifting. A 2D array is stored row by row (row-major)."
+    }
+   ],
+   "quiz": {
+    "questions": [
+     {
+      "order": 1,
+      "prompt": "An array has base address 1000, element size 4 bytes, lower bound 0. The address of A[5] is?",
+      "options": [
+       "1005",
+       "1020",
+       "1024",
+       "1040"
+      ],
+      "correctIndex": 1,
+      "explanation": "1000 + 4 × 5 = 1020."
+     },
+     {
+      "order": 2,
+      "prompt": "Worst-case time to insert an element at the beginning of an array of n elements is?",
+      "options": [
+       "O(1)",
+       "O(log n)",
+       "O(n)",
+       "O(n²)"
+      ],
+      "correctIndex": 2,
+      "explanation": "All n elements shift."
+     },
+     {
+      "order": 3,
+      "prompt": "Array elements are accessed in O(1) because?",
+      "options": [
+       "they are sorted",
+       "the address is computed directly from the index",
+       "they use pointers",
+       "they use hashing"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 4,
+      "prompt": "In row-major order, the address of A[i][j] in an array with C columns is?",
+      "options": [
+       "Base + w(j×R + i)",
+       "Base + w(i×C + j)",
+       "Base + w(i + j)",
+       "Base + w(i×j)"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 5,
+      "prompt": "A 3×4 integer array (w = 2 bytes), Base = 500, row-major. The address of A[2][1] is?",
+      "options": [
+       "514",
+       "518",
+       "522",
+       "526"
+      ],
+      "correctIndex": 1,
+      "explanation": "500 + 2 × (2×4 + 1) = 500 + 18 = 518."
+     },
+     {
+      "order": 6,
+      "prompt": "When inserting into the middle of an array, elements should be shifted?",
+      "options": [
+       "left to right, from the start",
+       "starting from the last element toward the insertion point",
+       "randomly",
+       "not at all"
+      ],
+      "correctIndex": 1,
+      "explanation": "Shifting from the end avoids overwriting."
+     },
+     {
+      "order": 7,
+      "prompt": "Which statement about records is true?",
+      "options": [
+       "All fields must be of the same type",
+       "A record can hold fields of different types",
+       "A record is the same as an array",
+       "Records cannot be placed in arrays"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 8,
+      "prompt": "Prefix sums allow the sum of any range to be found in?",
+      "options": [
+       "O(n)",
+       "O(log n)",
+       "O(1) after O(n) preprocessing",
+       "O(n²)"
+      ],
+      "correctIndex": 2,
+      "explanation": ""
+     }
+    ]
+   },
+   "practiceProblems": [
+    {
+     "number": 1,
+     "difficulty": "Easy",
+     "title": "Reverse an array in place",
+     "statement": "",
+     "example": "[1,2,3,4,5] → [5,4,3,2,1]",
+     "solution": "def reverse(a):\n     i, j = 0, len(a) - 1\n     while i < j:\n          a[i], a[j] = a[j], a[i]\n          i += 1; j -= 1\n     return a",
+     "complexity": "O(n) time, O(1) space."
+    },
+    {
+     "number": 2,
+     "difficulty": "Easy",
+     "title": "Second largest element",
+     "statement": "Find the second largest distinct value in one pass.",
+     "example": "[12, 35, 1, 10, 34, 1] → 34",
+     "solution": "def second_largest(a):\n     first = second = float('-inf')\n     for x in a:\n          if x > first:\n                first, second = x, first\n          elif first > x > second:\n                second = x\n     return second if second != float('-inf') else None",
+     "complexity": "O(n), O(1)."
+    },
+    {
+     "number": 3,
+     "difficulty": "Medium",
+     "title": "Rotate an array by k",
+     "statement": "Rotate right by k positions in place. Idea: reverse all, then reverse the first k and the rest. Complexity: O(n), O(1).",
+     "example": "[1,2,3,4,5,6,7] , k=3 → [5,6,7,1,2,3,4]",
+     "solution": "def rotate(a, k):\n     n = len(a); k %= n\n     def rev(i, j):\n          while i < j:\n                a[i], a[j] = a[j], a[i]; i += 1; j -= 1\n     rev(0, n - 1); rev(0, k - 1); rev(k, n - 1)\n     return a",
+     "complexity": ""
+    },
+    {
+     "number": 4,
+     "difficulty": "Medium",
+     "title": "Range sum queries (prefix sums)",
+     "statement": "Answer many queries sum(l, r) quickly.",
+     "example": "",
+     "solution": "def build(a):\n     pre = [0]\n     for x in a: pre.append(pre[-1] + x)\n     return pre\n\n\ndef range_sum(pre, l, r):                # inclusive, 0-based\n     return pre[r + 1] - pre[l]\n\n\npre = build([2, 4, 5, 7, 1])\nprint(range_sum(pre, 1, 3))              # 16",
+     "complexity": "build O(n), each query O(1)."
+    },
+    {
+     "number": 5,
+     "difficulty": "Easy",
+     "title": "Transpose a matrix",
+     "statement": "",
+     "example": "",
+     "solution": "def transpose(m):\n     r, c = len(m), len(m[0])\n     return [[m[i][j] for i in range(r)] for j in range(c)]\n# [[1,2,3],[4,5,6]] -> [[1,4],[2,5],[3,6]]",
+     "complexity": "O(r·c)."
+    }
+   ],
+   "practiceProblemsMd": "### Code Problem 1 (Easy): Reverse an array in place\n\n**Example:** [1,2,3,4,5] → [5,4,3,2,1]\n\n```python\ndef reverse(a):\n     i, j = 0, len(a) - 1\n     while i < j:\n          a[i], a[j] = a[j], a[i]\n          i += 1; j -= 1\n     return a\n```\n\n**Complexity:** O(n) time, O(1) space.\n\n### Code Problem 2 (Easy): Second largest element\n\n**Statement:** Find the second largest distinct value in one pass.\n\n**Example:** [12, 35, 1, 10, 34, 1] → 34\n\n```python\ndef second_largest(a):\n     first = second = float('-inf')\n     for x in a:\n          if x > first:\n                first, second = x, first\n          elif first > x > second:\n                second = x\n     return second if second != float('-inf') else None\n```\n\n**Complexity:** O(n), O(1).\n\n### Code Problem 3 (Medium): Rotate an array by k\n\n**Statement:** Rotate right by k positions in place. Idea: reverse all, then reverse the first k and the rest. Complexity: O(n), O(1).\n\n**Example:** [1,2,3,4,5,6,7] , k=3 → [5,6,7,1,2,3,4]\n\n```python\ndef rotate(a, k):\n     n = len(a); k %= n\n     def rev(i, j):\n          while i < j:\n                a[i], a[j] = a[j], a[i]; i += 1; j -= 1\n     rev(0, n - 1); rev(0, k - 1); rev(k, n - 1)\n     return a\n```\n\n### Code Problem 4 (Medium): Range sum queries (prefix sums)\n\n**Statement:** Answer many queries sum(l, r) quickly.\n\n```python\ndef build(a):\n     pre = [0]\n     for x in a: pre.append(pre[-1] + x)\n     return pre\n\n\ndef range_sum(pre, l, r):                # inclusive, 0-based\n     return pre[r + 1] - pre[l]\n\n\npre = build([2, 4, 5, 7, 1])\nprint(range_sum(pre, 1, 3))              # 16\n```\n\n**Complexity:** build O(n), each query O(1).\n\n### Code Problem 5 (Easy): Transpose a matrix\n\n```python\ndef transpose(m):\n     r, c = len(m), len(m[0])\n     return [[m[i][j] for i in range(r)] for j in range(c)]\n# [[1,2,3],[4,5,6]] -> [[1,4],[2,5],[3,6]]\n```\n\n**Complexity:** O(r·c)."
+  },
+  {
+   "number": 4,
+   "title": "Strings",
+   "slug": "strings",
+   "coldOpen": "Cold open (Ep. 4): A secret message arrives for Zara: \"ABBA CAB ABBA.\" Bit: \"Strings are arrays of characters. Let's learn to read and search them.\" Cliffhanger: The message is scrambled by a function that calls itself. Bit gasps: \"A function that calls itself... Zara, we need recursion.\"",
+   "outcomes": [
+    "Treat a string as a character array and apply basic string operations.",
+    "Implement brute-force pattern matching and know its cost.",
+    "Solve basic palindrome, anagram and frequency problems."
+   ],
+   "topics": [
+    {
+     "order": 1,
+     "title": "4.1 Strings",
+     "slug": "strings",
+     "description": "Strings",
+     "content": "A string is a finite sequence of characters. Stored as an array of characters (C: terminated by '\\0' ; Python/Java: immutable objects).\n\n```\n   \"HELLO\"\n   index:     0   1   2    3    4\n            ┌───┬───┬───┬───┬───┐\n            │ H │ E │ L │ L │ O │       (+ '\\0' in C)\n            └───┴───┴───┴───┴───┘\n```\n\nTerminology [L]: length, substring, prefix, suffix, empty (null) string, concatenation."
+    },
+    {
+     "order": 2,
+     "title": "4.2 Basic operations and costs",
+     "slug": "basic-operations-and-costs",
+     "description": "Basic operations and costs",
+     "content": "```\n  Operation               Meaning                            Cost\n\n  Length                  count chars                        O(1) stored or O(n) in C\n\n  Concatenate            s+t                           O(n + m)\n\n  Substring              s[i:j]                        O(j − i)\n\n  Compare                s == t                        O(min(n, m))\n\n  Index/search           where does P occur in T       see below\n```"
+    },
+    {
+     "order": 3,
+     "title": "4.3 Pattern matching: brute force",
+     "slug": "pattern-matching-brute-force",
+     "description": "Pattern matching: brute force",
+     "content": "Find pattern P (length m) in text T (length n). Algorithm 4.1 (slide and compare)\n\n```\n 1. For each start position S = 0 .. n-m:\n 2.        Compare P[0..m-1] with T[S..S+m-1] character by character.\n 3.        If all match, report S.\n\n\n\n T: A B A B C A B A B\n P: A B C\n S=0: A B A      ✗ (mismatch at 3rd char)\n S=1:      B A B ✗\n S=2:         A B C ✓   → found at index 2\n\n\n\n def find(text, pat):\n        n, m = len(text), len(pat)\n        for s in range(n - m + 1):\n            if text[s:s+m] == pat:\n                 return s\n        return -1\n\n\n   Worst case O(n × m), for example T = \"AAAAAAAB\", P = \"AAAB\".\n   Faster methods (KMP, Rabin–Karp) come in DSA Mastery, Module 6.\n```"
+    },
+    {
+     "order": 4,
+     "title": "4.4 Useful patterns",
+     "slug": "useful-patterns",
+     "description": "Useful patterns",
+     "content": "- Frequency array: count[ord(c) - ord('a')] += 1 , O(n) time, O(26) space.\n\n- Palindrome check: two pointers moving inward.\n\n- Anagram check: compare frequency arrays.\n\n- Reverse words: split, reverse the list, join.\n\n```\n def is_palindrome(s):\n\n      i, j = 0, len(s) - 1\n      while i < j:\n            if s[i] != s[j]:\n                return False\n            i += 1; j -= 1\n      return True\n```"
+    },
+    {
+     "order": 5,
+     "title": "4.5 Word-processing idea [L]",
+     "slug": "word-processing-idea",
+     "description": "Word-processing idea [L]",
+     "content": "Text editors treat a document as strings and apply insert, delete, replace on substrings. Insertion of a string into the middle costs O(n) because of shifting, just like array insertion.\n\n#### Common Mistakes\n\n- Forgetting that strings are immutable in Python/Java. Repeated += in a loop is O(n²).\n\n- Case sensitivity (\"A\" ≠ \"a\") and ignoring spaces in palindromes.\n\n- Off-by-one in substring ranges.\n\n#### Quick Revision\n\nA string is an array of characters. Brute-force matching is O(n·m). Frequency arrays solve many string problems in O(n).\n\n#### Common Mistakes\n\n- Forgetting that strings are immutable in Python/Java. Repeated += in a loop is O(n²).\n\n- Case sensitivity (\"A\" ≠ \"a\") and ignoring spaces in palindromes.\n\n- Off-by-one in substring ranges.\n\n#### Quick Revision\n\nA string is an array of characters. Brute-force matching is O(n·m). Frequency arrays solve many string problems in O(n)."
+    }
+   ],
+   "quiz": {
+    "questions": [
+     {
+      "order": 1,
+      "prompt": "Strings in C end with the character?",
+      "options": [
+       "'\\n'",
+       "'\\0'",
+       "' '",
+       "'$'"
+      ],
+      "correctIndex": 1,
+      "explanation": "The null terminator."
+     },
+     {
+      "order": 2,
+      "prompt": "Worst-case time of brute-force pattern matching (text n, pattern m) is?",
+      "options": [
+       "O(n + m)",
+       "O(n)",
+       "O(n × m)",
+       "O(log n)"
+      ],
+      "correctIndex": 2,
+      "explanation": ""
+     },
+     {
+      "order": 3,
+      "prompt": "Which technique gives O(n) anagram checking for lowercase strings?",
+      "options": [
+       "Sorting both strings",
+       "Comparing frequency arrays of size 26",
+       "Nested loops",
+       "Recursion"
+      ],
+      "correctIndex": 1,
+      "explanation": "Sorting would be O(n log n); frequency arrays are O(n)."
+     },
+     {
+      "order": 4,
+      "prompt": "In Python, s += ch inside a loop of n iterations costs about?",
+      "options": [
+       "O(n)",
+       "O(n²) in the worst case (strings are immutable)",
+       "O(1)",
+       "O(log n)"
+      ],
+      "correctIndex": 1,
+      "explanation": "Each concatenation may copy the string. Use a list and ''.join ."
+     },
+     {
+      "order": 5,
+      "prompt": "A string equal to its reverse is called a?",
+      "options": [
+       "anagram",
+       "palindrome",
+       "substring",
+       "subsequence"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 6,
+      "prompt": "The number of non-empty substrings of a string of length n is?",
+      "options": [
+       "n",
+       "n²",
+       "n(n+1)/2",
+       "2ⁿ"
+      ],
+      "correctIndex": 2,
+      "explanation": "For each start, there are n − start end positions."
+     },
+     {
+      "order": 7,
+      "prompt": "Which of these is a prefix of \"DATA\"?",
+      "options": [
+       "\"ATA\"",
+       "\"DA\"",
+       "\"TA\"",
+       "\"AT\""
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 8,
+      "prompt": "Comparing two strings of lengths n and m takes at most?",
+      "options": [
+       "O(n + m)",
+       "O(n × m)",
+       "O(min(n, m))",
+       "O(1)"
+      ],
+      "correctIndex": 2,
+      "explanation": ""
+     }
+    ]
+   },
+   "practiceProblems": [
+    {
+     "number": 1,
+     "difficulty": "Easy",
+     "title": "Reverse a string",
+     "statement": "",
+     "example": "",
+     "solution": "def reverse_string(s):\n    return s[::-1]",
+     "complexity": "O(n)."
+    },
+    {
+     "number": 2,
+     "difficulty": "Easy",
+     "title": "Valid palindrome (ignore case and punctuation)",
+     "statement": "",
+     "example": "\"A man, a plan, a canal: Panama\" → True",
+     "solution": "def is_palindrome(s):\n    t = [c.lower() for c in s if c.isalnum()]\n    i, j = 0, len(t) - 1\n    while i < j:\n         if t[i] != t[j]: return False\n         i += 1; j -= 1\n    return True",
+     "complexity": "O(n)."
+    },
+    {
+     "number": 3,
+     "difficulty": "Easy",
+     "title": "First non-repeating character",
+     "statement": "",
+     "example": "\"loveleetcode\" → index 2 ( 'v' )",
+     "solution": "def first_unique(s):\n     freq = {}\n     for ch in s: freq[ch] = freq.get(ch, 0) + 1\n     for i, ch in enumerate(s):\n          if freq[ch] == 1: return i\n     return -1",
+     "complexity": "O(n), O(k) space."
+    },
+    {
+     "number": 4,
+     "difficulty": "Easy",
+     "title": "Valid anagram",
+     "statement": "",
+     "example": "",
+     "solution": "def is_anagram(a, b):\n     if len(a) != len(b): return False\n     cnt = [0] * 26\n     for x, y in zip(a, b):\n          cnt[ord(x) - 97] += 1\n          cnt[ord(y) - 97] -= 1\n     return all(c == 0 for c in cnt)",
+     "complexity": "O(n), O(1)."
+    },
+    {
+     "number": 5,
+     "difficulty": "Medium",
+     "title": "Count occurrences of a pattern (overlaps",
+     "statement": "",
+     "example": "text \"ababababa\" , pattern \"aba\" → 4",
+     "solution": "def count_pattern(t, p):\n     n, m, c = len(t), len(p), 0\n     for s in range(n - m + 1):\n          if t[s:s+m] == p: c += 1\n     return c",
+     "complexity": "O(n·m) (brute force)."
+    }
+   ],
+   "practiceProblemsMd": "### Code Problem 1 (Easy): Reverse a string\n\n```python\ndef reverse_string(s):\n    return s[::-1]\n```\n\n**Complexity:** O(n).\n\n### Code Problem 2 (Easy): Valid palindrome (ignore case and punctuation)\n\n**Example:** \"A man, a plan, a canal: Panama\" → True\n\n```python\ndef is_palindrome(s):\n    t = [c.lower() for c in s if c.isalnum()]\n    i, j = 0, len(t) - 1\n    while i < j:\n         if t[i] != t[j]: return False\n         i += 1; j -= 1\n    return True\n```\n\n**Complexity:** O(n).\n\n### Code Problem 3 (Easy): First non-repeating character\n\n**Example:** \"loveleetcode\" → index 2 ( 'v' )\n\n```python\ndef first_unique(s):\n     freq = {}\n     for ch in s: freq[ch] = freq.get(ch, 0) + 1\n     for i, ch in enumerate(s):\n          if freq[ch] == 1: return i\n     return -1\n```\n\n**Complexity:** O(n), O(k) space.\n\n### Code Problem 4 (Easy): Valid anagram\n\n```python\ndef is_anagram(a, b):\n     if len(a) != len(b): return False\n     cnt = [0] * 26\n     for x, y in zip(a, b):\n          cnt[ord(x) - 97] += 1\n          cnt[ord(y) - 97] -= 1\n     return all(c == 0 for c in cnt)\n```\n\n**Complexity:** O(n), O(1).\n\n### Code Problem 5 (Medium): Count occurrences of a pattern (overlaps\n\n**Example:** text \"ababababa\" , pattern \"aba\" → 4\n\n```python\ndef count_pattern(t, p):\n     n, m, c = len(t), len(p), 0\n     for s in range(n - m + 1):\n          if t[s:s+m] == p: c += 1\n     return c\n```\n\n**Complexity:** O(n·m) (brute force)."
+  },
+  {
+   "number": 5,
+   "title": "Recursion",
+   "slug": "recursion",
+   "coldOpen": "Cold open (Ep. 5): Zara stands between two mirrors and sees infinite copies of herself. Bit: \"That's recursion: a thing defined in terms of a smaller version of itself.\" Cliffhanger: A recursive spell never stops. The stack of calls rises toward the sky. \"Always plan your exit, Zara.\"",
+   "outcomes": [
+    "Identify the base case and recursive case.",
+    "Trace recursion using the call stack.",
+    "Write recursive solutions (factorial, Fibonacci, power, Tower of Hanoi) and spot their costs."
+   ],
+   "topics": [
+    {
+     "order": 1,
+     "title": "5.1 Definition",
+     "slug": "definition",
+     "description": "Definition",
+     "content": "A function is recursive if it calls itself with a smaller input. Every recursive solution needs:\n\n- 1. Base case: a stopping condition with a direct answer.\n\n- 2. Recursive case: moves toward the base case."
+    },
+    {
+     "order": 2,
+     "title": "5.2 Factorial",
+     "slug": "factorial",
+     "description": "Factorial",
+     "content": "n! = n × (n−1)!, with 0! = 1.\n\n```\n  def fact(n):\n       if n == 0:               # base case\n             return 1\n       return n * fact(n - 1)        # recursive case\n```\n\nCall stack trace of fact(4)\n\n```\n  fact(4) → 4 * fact(3)\n                    fact(3) → 3 * fact(2)\n                                    fact(2) → 2 * fact(1)\n                                                    fact(1) → 1 * fact(0)\n                                                                    fact(0) → 1\n  unwinding:     fact(1)=1 · fact(2)=2 · fact(3)=6 · fact(4)=24\n\n\n\n  Call stack (top ↑)\n   ┌─────────┐\n   │ fact(0) │ ← top\n   │ fact(1) │\n   │ fact(2) │\n   │ fact(3) │\n   │ fact(4) │ ← bottom (first call)\n   └─────────┘\n```\n\nTime O(n), space O(n) (stack depth)."
+    },
+    {
+     "order": 3,
+     "title": "5.3 Fibonacci",
+     "slug": "fibonacci",
+     "description": "Fibonacci",
+     "content": "F(0)=0, F(1)=1, F(n)=F(n−1)+F(n−2).\n\n```\n def fib(n):\n        if n < 2: return n\n        return fib(n-1) + fib(n-2)\n```\n\nRecursion tree for fib(5)\n\n```\n                            fib(5)\n                        /            \\\n                   fib(4)            fib(3)\n               /        \\            /       \\\n         fib(3)       fib(2)    fib(2) fib(1)\n         /     \\\n   fib(2) fib(1) ...\n```\n\nThe same sub-problems are recomputed, giving O(2ⁿ). Fix: store results (memoization),\n\n#### covered fully in Mastery (DP). Quick fix\n\n```\n memo = {}\n def fib(n):\n        if n < 2: return n\n        if n not in memo:\n              memo[n] = fib(n-1) + fib(n-2)\n        return memo[n]                      # now O(n)\n```"
+    },
+    {
+     "order": 4,
+     "title": "5.4 Tower of Hanoi [L]",
+     "slug": "tower-of-hanoi",
+     "description": "Tower of Hanoi [L]",
+     "content": "Move n disks from peg A to peg C using peg B; never place a larger disk on a smaller one.\n\n```\n Procedure: Hanoi(n, A, C, B)\n 1. If n = 1: move disk from A to C. Return.\n 2. Hanoi(n-1, A, B, C)                          (move n-1 disks out of the way)\n 3. Move disk n from A to C.\n 4. Hanoi(n-1, B, C, A)                          (put them on top)\n```\n\nMoves required: 2ⁿ − 1. Time O(2ⁿ).\n\n```\n n=2:        A: [1,2]        B: []        C: []\n   move 1: A→B              A:[2]        B:[1]\n\n   move 2: A→C       A:[]       B:[1]   C:[2]\n   move 3: B→C       A:[]       B:[]    C:[1,2]\n```"
+    },
+    {
+     "order": 5,
+     "title": "5.5 Other classic recursions",
+     "slug": "other-classic-recursions",
+     "description": "Other classic recursions",
+     "content": "- Power: pow(x, n) = x * pow(x, n-1) is O(n); the smarter pow(x, n) = pow(x, n/2)²\n\n- is O(log n).\n\n- GCD (Euclid): gcd(a, b) = gcd(b, a mod b) , with base gcd(a, 0) = a .\n\n- Sum of digits, reverse a string, binary search (recursive)."
+    },
+    {
+     "order": 6,
+     "title": "5.6 Recursion vs iteration",
+     "slug": "recursion-vs-iteration",
+     "description": "Recursion vs iteration",
+     "content": "```\n                    Recursion                                      Iteration\n\n  Code              short, elegant                                 longer\n\n  Space             O(depth) stack                                 O(1) usually\n\n  Risk              stack overflow                                 none\n\n  Best for          trees, divide and conquer                      simple repetition\n```\n\nAny recursion can be converted to a loop with an explicit stack.\n\n#### Common Mistakes\n\n- Missing or wrong base case (infinite recursion).\n\n- Recursive call not moving closer to the base case.\n\n- Using naïve Fibonacci for large n.\n\n#### Quick Revision\n\nBase case plus recursive case. Calls pile up on the stack. Overlapping sub-problems mean you should memoize.\n\n#### Common Mistakes\n\n- Missing or wrong base case (infinite recursion).\n\n- Recursive call not moving closer to the base case.\n\n- Using naïve Fibonacci for large n.\n\n#### Quick Revision\n\nBase case plus recursive case. Calls pile up on the stack. Overlapping sub-problems mean you should memoize."
+    }
+   ],
+   "quiz": {
+    "questions": [
+     {
+      "order": 1,
+      "prompt": "Every recursive function must have?",
+      "options": [
+       "a loop",
+       "a base case",
+       "a global variable",
+       "two parameters"
+      ],
+      "correctIndex": 1,
+      "explanation": "Without a base case the recursion never stops."
+     },
+     {
+      "order": 2,
+      "prompt": "What does this print? def f(n): if n == 0: return 0 return n + f(n - 1) print(f(4))?",
+      "options": [
+       "4",
+       "6",
+       "10",
+       "24"
+      ],
+      "correctIndex": 2,
+      "explanation": "4 + 3 + 2 + 1 + 0 = 10."
+     },
+     {
+      "order": 3,
+      "prompt": "The number of moves needed to solve Tower of Hanoi with n disks is?",
+      "options": [
+       "n",
+       "2n",
+       "2ⁿ − 1",
+       "n²"
+      ],
+      "correctIndex": 2,
+      "explanation": ""
+     },
+     {
+      "order": 4,
+      "prompt": "The naïve recursive Fibonacci has time complexity?",
+      "options": [
+       "O(n)",
+       "O(n²)",
+       "O(2ⁿ)",
+       "O(log n)"
+      ],
+      "correctIndex": 2,
+      "explanation": "It recomputes the same sub-problems. Memoisation reduces it to O(n)."
+     },
+     {
+      "order": 5,
+      "prompt": "The space used by fact(n) (recursive factorial) is?",
+      "options": [
+       "O(1)",
+       "O(n) due to the call stack",
+       "O(n²)",
+       "O(log n)"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 6,
+      "prompt": "Which data structure does the system use to manage function calls?",
+      "options": [
+       "Queue",
+       "Stack",
+       "Heap tree",
+       "Hash table"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 7,
+      "prompt": "What is gcd(48, 18) using Euclid's recursion gcd(a,b) = gcd(b, a mod b)?",
+      "options": [
+       "3",
+       "6",
+       "9",
+       "12"
+      ],
+      "correctIndex": 1,
+      "explanation": "gcd(48,18) → gcd(18,12) → gcd(12,6) → gcd(6,0) = 6."
+     },
+     {
+      "order": 8,
+      "prompt": "A recursion that never reaches its base case causes?",
+      "options": [
+       "a compile error",
+       "stack overflow",
+       "an infinite output of 0",
+       "nothing"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     }
+    ]
+   },
+   "practiceProblems": [
+    {
+     "number": 1,
+     "difficulty": "Easy",
+     "title": "Sum of first n numbers (recursive)",
+     "statement": "",
+     "example": "",
+     "solution": "def sum_n(n):\n     return 0 if n == 0 else n + sum_n(n - 1)",
+     "complexity": "O(n) time and stack space."
+    },
+    {
+     "number": 2,
+     "difficulty": "Easy",
+     "title": "Reverse a string recursively",
+     "statement": "",
+     "example": "",
+     "solution": "def rev(s):\n     return s if len(s) <= 1 else rev(s[1:]) + s[0]\n# rev(\"abc\") -> \"cba\"",
+     "complexity": "O(n²) with slicing (fine for learning)."
+    },
+    {
+     "number": 3,
+     "difficulty": "Medium",
+     "title": "Fast power",
+     "statement": "Compute xⁿ in O(log n).",
+     "example": "",
+     "solution": "def power(x, n):\n     if n == 0: return 1\n     half = power(x, n // 2)\n     return half * half if n % 2 == 0 else half * half * x\n# power(2, 10) -> 1024",
+     "complexity": "O(log n)."
+    },
+    {
+     "number": 4,
+     "difficulty": "Medium",
+     "title": "All subsets of a list",
+     "statement": "",
+     "example": "[1,2] → [[], [2], [1], [1,2]] (any order)",
+     "solution": "def subsets(nums):\n     if not nums: return [[]]\n     rest = subsets(nums[1:])\n     return rest + [[nums[0]] + r for r in rest]",
+     "complexity": "O(2ⁿ · n)."
+    },
+    {
+     "number": 5,
+     "difficulty": "Medium",
+     "title": "Tower of Hanoi moves",
+     "statement": "",
+     "example": "",
+     "solution": "def hanoi(n, a, c, b, moves):\n     if n == 0: return\n     hanoi(n - 1, a, b, c, moves)\n     moves.append((a, c))\n     hanoi(n - 1, b, c, a, moves)\n\n\nm = []; hanoi(3, 'A', 'C', 'B', m)\nprint(len(m))       # 7",
+     "complexity": "O(2ⁿ)."
+    }
+   ],
+   "practiceProblemsMd": "### Code Problem 1 (Easy): Sum of first n numbers (recursive)\n\n```python\ndef sum_n(n):\n     return 0 if n == 0 else n + sum_n(n - 1)\n```\n\n**Complexity:** O(n) time and stack space.\n\n### Code Problem 2 (Easy): Reverse a string recursively\n\n```python\ndef rev(s):\n     return s if len(s) <= 1 else rev(s[1:]) + s[0]\n# rev(\"abc\") -> \"cba\"\n```\n\n**Complexity:** O(n²) with slicing (fine for learning).\n\n### Code Problem 3 (Medium): Fast power\n\n**Statement:** Compute xⁿ in O(log n).\n\n```python\ndef power(x, n):\n     if n == 0: return 1\n     half = power(x, n // 2)\n     return half * half if n % 2 == 0 else half * half * x\n# power(2, 10) -> 1024\n```\n\n**Complexity:** O(log n).\n\n### Code Problem 4 (Medium): All subsets of a list\n\n**Example:** [1,2] → [[], [2], [1], [1,2]] (any order)\n\n```python\ndef subsets(nums):\n     if not nums: return [[]]\n     rest = subsets(nums[1:])\n     return rest + [[nums[0]] + r for r in rest]\n```\n\n**Complexity:** O(2ⁿ · n).\n\n### Code Problem 5 (Medium): Tower of Hanoi moves\n\n```python\ndef hanoi(n, a, c, b, moves):\n     if n == 0: return\n     hanoi(n - 1, a, b, c, moves)\n     moves.append((a, c))\n     hanoi(n - 1, b, c, a, moves)\n\n\nm = []; hanoi(3, 'A', 'C', 'B', m)\nprint(len(m))       # 7\n```\n\n**Complexity:** O(2ⁿ)."
+  },
+  {
+   "number": 6,
+   "title": "Searching & Basic Sorting",
+   "slug": "searching-and-basic-sorting",
+   "coldOpen": "Cold open (Ep. 6): The Great Library of Bit-Land has a million scrolls. The librarian sorts them by title and then finds any scroll in 20 steps. Zara: \"Twenty?!\" Cliffhanger: Bubble sort finishes... but the shelves shift for hours. \"There must be a better way to organise memory than rows...\"",
+   "outcomes": [
+    "Implement linear and binary search and state their conditions.",
+    "Implement bubble, selection and insertion sort and compare them.",
+    "Define stability and in-place sorting."
+   ],
+   "topics": [
+    {
+     "order": 1,
+     "title": "6.1 Linear search",
+     "slug": "linear-search",
+     "description": "Linear search",
+     "content": "Check each element in turn. Works on any array. Worst case O(n).\n\n```\n def linear_search(a, x):\n      for i, v in enumerate(a):\n          if v == x: return i\n      return -1\n```"
+    },
+    {
+     "order": 2,
+     "title": "6.2 Binary search (sorted array only)",
+     "slug": "binary-search-sorted-array-only",
+     "description": "Binary search (sorted array only)",
+     "content": "Compare with the middle and discard half each step.\n\n```\n Find 23 in [2, 5, 8, 12, 16, 23, 38, 56, 72]\n  low=0 high=8 mid=4 → 16 < 23 → search right\n  low=5 high=8 mid=6 → 38 > 23 → search left\n  low=5 high=5 mid=5 → 23 ✓ found\n\n\n\n Algorithm 6.1 (Binary search) [L]\n 1. Set BEG := LB, END := UB, MID := INT((BEG+END)/2).\n 2. Repeat Steps 3 and 4 while BEG <= END and DATA[MID] != ITEM:\n 3.      If ITEM < DATA[MID], set END := MID - 1.\n         Else set BEG := MID + 1.\n 4.      Set MID := INT((BEG+END)/2).\n 5. If DATA[MID] = ITEM, set LOC := MID. Else set LOC := NULL.\n\n def binary_search(a, x):\n      lo, hi = 0, len(a) - 1\n      while lo <= hi:\n          mid = (lo + hi) // 2\n          if a[mid] == x: return mid\n          if a[mid] < x: lo = mid + 1\n          else: hi = mid - 1\n      return -1\n```\n\nCost O(log n): 1,000,000 items need at most 20 comparisons."
+    },
+    {
+     "order": 3,
+     "title": "6.3 Sorting basics",
+     "slug": "sorting-basics",
+     "description": "Sorting basics",
+     "content": "Sorting arranges items in order (ascending or descending). Terms:\n\n- In-place: uses O(1) extra space.\n\n- Stable: equal items keep their original relative order.\n\n- Internal vs external: data fits in memory or not."
+    },
+    {
+     "order": 4,
+     "title": "6.4 Bubble sort",
+     "slug": "bubble-sort",
+     "description": "Bubble sort",
+     "content": "Repeatedly swap adjacent out-of-order pairs. After pass k, the k largest items are in place.\n\n```\n [5, 1, 4, 2]\n pass1: 1 5 4 2 → 1 4 5 2 → 1 4 2 5\n pass2: 1 4 2 5 → 1 2 4 5\n pass3: no swaps → sorted\n\n\n\n def bubble(a):\n      n = len(a)\n      for p in range(n - 1):\n          swapped = False\n          for i in range(n - 1 - p):\n                if a[i] > a[i+1]:\n                    a[i], a[i+1] = a[i+1], a[i]\n                    swapped = True\n          if not swapped: break          # best case O(n)\n```"
+    },
+    {
+     "order": 5,
+     "title": "6.5 Selection sort",
+     "slug": "selection-sort",
+     "description": "Selection sort",
+     "content": "Find the minimum of the unsorted part and swap it to the front.\n\n```\n  [29, 10, 14, 37, 13]\n   pick 10 → [10, 29, 14, 37, 13]\n   pick 13 → [10, 13, 14, 37, 29]\n   pick 14 → already placed\n   pick 29 → [10, 13, 14, 29, 37]\n```\n\nAlways O(n²) comparisons, but only n−1 swaps."
+    },
+    {
+     "order": 6,
+     "title": "6.6 Insertion sort",
+     "slug": "insertion-sort",
+     "description": "Insertion sort",
+     "content": "Build a sorted prefix; insert each new item into its place (like sorting playing cards).\n\n```\n  [7, 3, 5, 1]\n   take 3 : [3, 7, 5, 1]\n   take 5 : [3, 5, 7, 1]\n   take 1 : [1, 3, 5, 7]\n\n\n\n  def insertion(a):\n      for i in range(1, len(a)):\n              key, j = a[i], i - 1\n              while j >= 0 and a[j] > key:\n                  a[j+1] = a[j]; j -= 1\n              a[j+1] = key\n```\n\nBest case O(n) (already sorted), good for small or nearly sorted data."
+    },
+    {
+     "order": 7,
+     "title": "6.7 Comparison",
+     "slug": "comparison",
+     "description": "Comparison",
+     "content": "```\n  Algorithm       Best       Average   Worst    Space      Stable    Note\n\n  Bubble          O(n)*      O(n²)     O(n²)    O(1)       Yes       simple, slow\n\n  Selection       O(n²)      O(n²)     O(n²)    O(1)       No        few swaps\n\n                                                                     great for small/nearly\n  Insertion       O(n)       O(n²)     O(n²)    O(1)       Yes\n                                                                     sorted\n```\n\n*with the early-exit flag.\n\n#### Common Mistakes\n\n- Using binary search on unsorted data.\n\n- mid = (lo+hi)/2 overflow in fixed-width languages. Use lo + (hi-lo)/2 .\n\n- Infinite loops from lo = mid instead of mid + 1 .\n\n#### Quick Revision\n\nBinary search needs sorted data and runs in O(log n). The three basic sorts are all O(n²); insertion sort is the best of them in practice.\n\n#### Common Mistakes\n\n- Using binary search on unsorted data.\n\n- mid = (lo+hi)/2 overflow in fixed-width languages. Use lo + (hi-lo)/2 .\n\n- Infinite loops from lo = mid instead of mid + 1 .\n\n#### Quick Revision\n\nBinary search needs sorted data and runs in O(log n). The three basic sorts are all O(n²); insertion sort is the best of them in practice."
+    }
+   ],
+   "quiz": {
+    "questions": [
+     {
+      "order": 1,
+      "prompt": "Binary search requires the array to be?",
+      "options": [
+       "of even length",
+       "sorted",
+       "of distinct values",
+       "stored as a linked list"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 2,
+      "prompt": "Maximum comparisons of binary search on 1,000,000 sorted items is about?",
+      "options": [
+       "20",
+       "100",
+       "1,000",
+       "500,000"
+      ],
+      "correctIndex": 0,
+      "explanation": "⌈log₂ 10⁶⌉ = 20."
+     },
+     {
+      "order": 3,
+      "prompt": "Which sort makes the fewest swaps (at most n − 1)?",
+      "options": [
+       "Bubble",
+       "Selection",
+       "Insertion",
+       "All equal"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 4,
+      "prompt": "Best-case time of insertion sort (already sorted input) is?",
+      "options": [
+       "O(1)",
+       "O(n)",
+       "O(n log n)",
+       "O(n²)"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 5,
+      "prompt": "After the first pass of bubble sort on [5, 1, 4, 2] , the array is?",
+      "options": [
+       "[1, 4, 2, 5]",
+       "[1, 5, 4, 2]",
+       "[5, 1, 2, 4]",
+       "[1, 2, 4, 5]"
+      ],
+      "correctIndex": 0,
+      "explanation": "5 bubbles to the end: (5,1)→swap, (5,4)→swap, (5,2)→swap."
+     },
+     {
+      "order": 6,
+      "prompt": "A sorting algorithm is stable if?",
+      "options": [
+       "it never crashes",
+       "equal elements keep their original relative order",
+       "it uses no extra memory",
+       "it runs in O(n)"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 7,
+      "prompt": "Which of these is stable?",
+      "options": [
+       "Selection sort",
+       "Insertion sort",
+       "Both",
+       "Neither"
+      ],
+      "correctIndex": 1,
+      "explanation": "Standard selection sort swaps distant elements and can break stability."
+     },
+     {
+      "order": 8,
+      "prompt": "In binary search, mid = (lo + hi) // 2 . If a[mid] < x , the next step is?",
+      "options": [
+       "hi = mid − 1",
+       "lo = mid + 1",
+       "lo = mid",
+       "return mid"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     }
+    ]
+   },
+   "practiceProblems": [
+    {
+     "number": 1,
+     "difficulty": "Easy",
+     "title": "Binary search (iterative and recursive)",
+     "statement": "",
+     "example": "",
+     "solution": "def bs_iter(a, x):\n     lo, hi = 0, len(a) - 1\n     while lo <= hi:\n         mid = lo + (hi - lo) // 2\n         if a[mid] == x: return mid\n         if a[mid] < x: lo = mid + 1\n         else: hi = mid - 1\n     return -1\n\n\ndef bs_rec(a, x, lo, hi):\n     if lo > hi: return -1\n     mid = lo + (hi - lo) // 2\n     if a[mid] == x: return mid\n     return bs_rec(a, x, mid + 1, hi) if a[mid] < x else bs_rec(a, x, lo, mid - 1)",
+     "complexity": "O(log n); recursive version uses O(log n) stack."
+    },
+    {
+     "number": 2,
+     "difficulty": "Medium",
+     "title": "First and last position of a value",
+     "statement": "",
+     "example": "[5,7,7,8,8,10] , target 8 → (3, 4)",
+     "solution": "def first_last(a, x):\n     def bound(find_first):\n         lo, hi, ans = 0, len(a) - 1, -1\n         while lo <= hi:\n              mid = (lo + hi) // 2\n              if a[mid] == x:\n                  ans = mid\n                  if find_first: hi = mid - 1\n                  else: lo = mid + 1\n              elif a[mid] < x: lo = mid + 1\n              else: hi = mid - 1\n         return ans\n     return bound(True), bound(False)",
+     "complexity": "O(log n)."
+    },
+    {
+     "number": 3,
+     "difficulty": "Medium",
+     "title": "Sort 0s, 1s and 2s (Dutch national flag)",
+     "statement": "",
+     "example": "[2,0,2,1,1,0] → [0,0,1,1,2,2]",
+     "solution": "def sort_colors(a):\n     lo, mid, hi = 0, 0, len(a) - 1\n     while mid <= hi:\n         if a[mid] == 0:\n                a[lo], a[mid] = a[mid], a[lo]; lo += 1; mid += 1\n         elif a[mid] == 1:\n                mid += 1\n         else:\n                a[mid], a[hi] = a[hi], a[mid]; hi -= 1\n     return a",
+     "complexity": "O(n), O(1)."
+    },
+    {
+     "number": 4,
+     "difficulty": "Easy",
+     "title": "Bubble sort that counts swaps",
+     "statement": "",
+     "example": "",
+     "solution": "def bubble_count(a):\n     swaps = 0\n     n = len(a)\n     for p in range(n - 1):\n         swapped = False\n         for i in range(n - 1 - p):\n                if a[i] > a[i + 1]:\n                    a[i], a[i + 1] = a[i + 1], a[i]\n                    swaps += 1; swapped = True\n         if not swapped: break\n     return swaps\n# bubble_count([3, 2, 1]) -> 3 (equals the number of inversions)",
+     "complexity": ""
+    },
+    {
+     "number": 5,
+     "difficulty": "Easy",
+     "title": "Insertion sort",
+     "statement": "",
+     "example": "",
+     "solution": "def insertion_sort(a):\n     for i in range(1, len(a)):\n         key, j = a[i], i - 1\n         while j >= 0 and a[j] > key:\n                a[j + 1] = a[j]; j -= 1\n         a[j + 1] = key\n     return a",
+     "complexity": ""
+    }
+   ],
+   "practiceProblemsMd": "### Code Problem 1 (Easy): Binary search (iterative and recursive)\n\n```python\ndef bs_iter(a, x):\n     lo, hi = 0, len(a) - 1\n     while lo <= hi:\n         mid = lo + (hi - lo) // 2\n         if a[mid] == x: return mid\n         if a[mid] < x: lo = mid + 1\n         else: hi = mid - 1\n     return -1\n\n\ndef bs_rec(a, x, lo, hi):\n     if lo > hi: return -1\n     mid = lo + (hi - lo) // 2\n     if a[mid] == x: return mid\n     return bs_rec(a, x, mid + 1, hi) if a[mid] < x else bs_rec(a, x, lo, mid - 1)\n```\n\n**Complexity:** O(log n); recursive version uses O(log n) stack.\n\n### Code Problem 2 (Medium): First and last position of a value\n\n**Example:** [5,7,7,8,8,10] , target 8 → (3, 4)\n\n```python\ndef first_last(a, x):\n     def bound(find_first):\n         lo, hi, ans = 0, len(a) - 1, -1\n         while lo <= hi:\n              mid = (lo + hi) // 2\n              if a[mid] == x:\n                  ans = mid\n                  if find_first: hi = mid - 1\n                  else: lo = mid + 1\n              elif a[mid] < x: lo = mid + 1\n              else: hi = mid - 1\n         return ans\n     return bound(True), bound(False)\n```\n\n**Complexity:** O(log n).\n\n### Code Problem 3 (Medium): Sort 0s, 1s and 2s (Dutch national flag)\n\n**Example:** [2,0,2,1,1,0] → [0,0,1,1,2,2]\n\n```python\ndef sort_colors(a):\n     lo, mid, hi = 0, 0, len(a) - 1\n     while mid <= hi:\n         if a[mid] == 0:\n                a[lo], a[mid] = a[mid], a[lo]; lo += 1; mid += 1\n         elif a[mid] == 1:\n                mid += 1\n         else:\n                a[mid], a[hi] = a[hi], a[mid]; hi -= 1\n     return a\n```\n\n**Complexity:** O(n), O(1).\n\n### Code Problem 4 (Easy): Bubble sort that counts swaps\n\n```python\ndef bubble_count(a):\n     swaps = 0\n     n = len(a)\n     for p in range(n - 1):\n         swapped = False\n         for i in range(n - 1 - p):\n                if a[i] > a[i + 1]:\n                    a[i], a[i + 1] = a[i + 1], a[i]\n                    swaps += 1; swapped = True\n         if not swapped: break\n     return swaps\n# bubble_count([3, 2, 1]) -> 3 (equals the number of inversions)\n```\n\n### Code Problem 5 (Easy): Insertion sort\n\n```python\ndef insertion_sort(a):\n     for i in range(1, len(a)):\n         key, j = a[i], i - 1\n         while j >= 0 and a[j] > key:\n                a[j + 1] = a[j]; j -= 1\n         a[j + 1] = key\n     return a\n```"
+  },
+  {
+   "number": 7,
+   "title": "Linked Lists",
+   "slug": "linked-lists",
+   "coldOpen": "Cold open (Ep. 7): Bit builds a treasure hunt: each clue says where the next clue is hidden. No fixed street, no waiting for neighbours to shift. Cliffhanger: Zara loses the head clue and the whole chain is gone. \"Guard the head, Zara. Always.\"",
+   "outcomes": [
+    "Draw and explain nodes, head and next pointers.",
+    "Insert, delete, search and traverse singly linked lists.",
+    "Describe doubly and circular lists and compare with arrays."
+   ],
+   "topics": [
+    {
+     "order": 1,
+     "title": "7.1 Why linked lists?",
+     "slug": "why-linked-lists",
+     "description": "Why linked lists?",
+     "content": "Arrays need contiguous memory and O(n) shifting for insertion. A linked list stores each element in a separate node that holds data and a pointer to the next node.\n\n```\n  head\n   │\n   ▼\n  ┌──────┬───┐      ┌──────┬───┐     ┌──────┬───┐\n  │ 12      │ ●─┼──►│ 45     │ ●─┼──►│ 7       │ ∅ │\n  └──────┴───┘      └──────┴───┘     └──────┴───┘\n   data     next      data    next      data   next(NULL)\n\n\n\n  class Node:\n         def __init__(self, data):\n             self.data = data\n             self.next = None\n```\n\n[L] uses INFO and LINK for the two fields, START for the head, and AVAIL for the free- storage list."
+    },
+    {
+     "order": 2,
+     "title": "7.2 Traversal",
+     "slug": "traversal",
+     "description": "Traversal",
+     "content": "```\n  1. Set PTR := START.\n  2. Repeat Steps 3 and 4 while PTR != NULL:\n  3.        Apply PROCESS to PTR->INFO.\n  4.        Set PTR := PTR->LINK.\n  5. Exit.\n```\n\nO(n)."
+    },
+    {
+     "order": 3,
+     "title": "7.3 Insertion",
+     "slug": "insertion",
+     "description": "Insertion",
+     "content": "At the front: O(1)\n\n```\n new.next = head\n head = new\n\n\n before: head → [A] → [B]\n after : head → [N] → [A] → [B]\n```\n\nAfter a given node: O(1) (once you have the node)\n\n```\n new.next = p.next\n p.next     = new\n   p → [P] → [Q]          becomes        p → [P] → [N] → [Q]\n```\n\nOrder matters: set new.next first, then p.next , otherwise you lose the rest of the list. At the end: O(n) if only the head is stored, O(1) with a tail pointer."
+    },
+    {
+     "order": 4,
+     "title": "7.4 Deletion",
+     "slug": "deletion",
+     "description": "Deletion",
+     "content": "```\n Delete node after p:          p → [P] → [X] → [Q]\n     p.next = p.next.next      p → [P] ───────► [Q]           ([X] is freed)\n```\n\nDeleting a given value needs a search (O(n)) to find the previous node.\n\n```\n def delete_value(head, val):\n      if head is None: return None\n      if head.data == val: return head.next\n      cur = head\n      while cur.next and cur.next.data != val:\n           cur = cur.next\n      if cur.next:\n           cur.next = cur.next.next\n      return head\n```"
+    },
+    {
+     "order": 5,
+     "title": "7.5 Reversing a linked list (classic)",
+     "slug": "reversing-a-linked-list-classic",
+     "description": "Reversing a linked list (classic)",
+     "content": "```\n prev=None, cur=head\n loop: nxt=cur.next ; cur.next=prev ; prev=cur ; cur=nxt\n\n Before: 1 → 2 → 3 → ∅\n After : ∅ ← 1 ← 2 ← 3           (head = 3)\n\n\n\n def reverse(head):\n        prev, cur = None, head\n        while cur:\n            nxt = cur.next\n            cur.next = prev\n            prev, cur = cur, nxt\n        return prev\n```"
+    },
+    {
+     "order": 6,
+     "title": "7.6 Variants",
+     "slug": "variants",
+     "description": "Variants",
+     "content": "Doubly linked list: prev and next pointers; easy to go backwards; O(1) deletion given the node.\n\n```\n ∅ ◄──[ 1 ]◄──►[ 2 ]◄──►[ 3 ]──► ∅\n```\n\nCircular linked list: last node points back to the head; useful for round-robin scheduling.\n\n```\n ┌──►[ 1 ]──►[ 2 ]──►[ 3 ]──┐\n └──────────────────────────┘\n```\n\nHeader node: a dummy node before the first element that simplifies edge cases [L]."
+    },
+    {
+     "order": 7,
+     "title": "7.7 Array vs linked list",
+     "slug": "array-vs-linked-list",
+     "description": "Array vs linked list",
+     "content": "```\n                                           Array                     Linked list\n\n  Access by index                          O(1)                      O(n)\n\n  Insert/delete at front                   O(n)                      O(1)\n\n  Insert/delete in middle (node known)     O(n)                      O(1)\n\n  Memory                                   compact, contiguous       extra pointer per node\n\n  Cache friendliness                       high                      low\n```"
+    },
+    {
+     "order": 8,
+     "title": "7.8 Two-pointer tricks",
+     "slug": "two-pointer-tricks",
+     "description": "Two-pointer tricks",
+     "content": "- Find the middle: slow moves 1, fast moves 2; when fast ends, slow is at the middle.\n\n- Detect a cycle (Floyd): if slow and fast ever meet, there is a cycle.\n\n- Merge two sorted lists: compare heads and splice.\n\n#### Common Mistakes\n\n- Losing the rest of the list by reordering pointer updates wrongly.\n\n- Dereferencing None /NULL.\n\n- Forgetting to update head when the first node is changed.\n\n#### Quick Revision\n\nNode = data + pointer. Insert or delete is O(1) once the position is known, but search is O(n). Always draw boxes and arrows before coding.\n\n#### Common Mistakes\n\n- Losing the rest of the list by reordering pointer updates wrongly.\n\n- Dereferencing None /NULL.\n\n- Forgetting to update head when the first node is changed.\n\n#### Quick Revision\n\nNode = data + pointer. Insert or delete is O(1) once the position is known, but search is O(n). Always draw boxes and arrows before coding."
+    }
+   ],
+   "quiz": {
+    "questions": [
+     {
+      "order": 1,
+      "prompt": "Inserting a node at the head of a singly linked list takes?",
+      "options": [
+       "O(1)",
+       "O(n)",
+       "O(log n)",
+       "O(n²)"
+      ],
+      "correctIndex": 0,
+      "explanation": ""
+     },
+     {
+      "order": 2,
+      "prompt": "Accessing the k-th element of a singly linked list takes?",
+      "options": [
+       "O(1)",
+       "O(k)",
+       "O(log n)",
+       "O(n²)"
+      ],
+      "correctIndex": 1,
+      "explanation": "You must walk k nodes from the head."
+     },
+     {
+      "order": 3,
+      "prompt": "In a singly linked list, what is the correct order to insert new after node p?",
+      "options": [
+       "p.next = new; new.next = p.next",
+       "new.next = p.next; p.next = new",
+       "either order works",
+       "new.next = p"
+      ],
+      "correctIndex": 1,
+      "explanation": "Setting p.next first loses the rest of the list."
+     },
+     {
+      "order": 4,
+      "prompt": "Which list allows traversal in both directions?",
+      "options": [
+       "Singly",
+       "Circular singly",
+       "Doubly",
+       "None"
+      ],
+      "correctIndex": 2,
+      "explanation": ""
+     },
+     {
+      "order": 5,
+      "prompt": "To find the middle node in one pass, use?",
+      "options": [
+       "two pointers: slow (1 step) and fast (2 steps)",
+       "recursion only",
+       "sorting",
+       "hashing"
+      ],
+      "correctIndex": 0,
+      "explanation": ""
+     },
+     {
+      "order": 6,
+      "prompt": "Floyd's cycle-detection algorithm detects a cycle when?",
+      "options": [
+       "the fast pointer reaches NULL",
+       "the slow and fast pointers meet",
+       "the list is sorted",
+       "head equals tail"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 7,
+      "prompt": "Compared with arrays, linked lists?",
+      "options": [
+       "have O(1) random access",
+       "use extra memory for pointers",
+       "are always faster",
+       "need contiguous memory"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 8,
+      "prompt": "After reversing 1 → 2 → 3 → NULL , the head is?",
+      "options": [
+       "1",
+       "2",
+       "3",
+       "NULL"
+      ],
+      "correctIndex": 2,
+      "explanation": ""
+     }
+    ]
+   },
+   "practiceProblems": [
+    {
+     "number": 1,
+     "difficulty": "Easy",
+     "title": "Insert at front and at end",
+     "statement": "",
+     "example": "",
+     "solution": "def insert_front(head, v):\n     return Node(v, head)\n\n\ndef insert_end(head, v):\n     n = Node(v)\n     if not head: return n\n     cur = head\n     while cur.next: cur = cur.next\n     cur.next = n\n     return head",
+     "complexity": "front O(1); end O(n) (O(1) with a tail pointer)."
+    },
+    {
+     "number": 2,
+     "difficulty": "Medium",
+     "title": "Delete the n-th node from the end",
+     "statement": "",
+     "example": "[1,2,3,4,5] , n=2 → [1,2,3,5]",
+     "solution": "def remove_nth_from_end(head, n):\n     dummy = Node(0, head)\n     fast = slow = dummy\n     for _ in range(n): fast = fast.next\n     while fast.next:\n         fast = fast.next; slow = slow.next\n     slow.next = slow.next.next\n     return dummy.next",
+     "complexity": "O(L), one pass; O(1) space."
+    },
+    {
+     "number": 3,
+     "difficulty": "Easy",
+     "title": "Reverse a linked list",
+     "statement": "",
+     "example": "",
+     "solution": "def reverse(head):\n     prev, cur = None, head\n     while cur:\n         cur.next, prev, cur = prev, cur, cur.next\n     return prev",
+     "complexity": "O(n), O(1)."
+    },
+    {
+     "number": 4,
+     "difficulty": "Easy",
+     "title": "Middle of the list",
+     "statement": "",
+     "example": "",
+     "solution": "def middle(head):\n     slow = fast = head\n     while fast and fast.next:\n         slow = slow.next; fast = fast.next.next\n     return slow          # for even length, returns the second middle",
+     "complexity": ""
+    },
+    {
+     "number": 5,
+     "difficulty": "Medium",
+     "title": "Detect a cycle (Floyd)",
+     "statement": "",
+     "example": "",
+     "solution": "def has_cycle(head):\n     slow = fast = head\n     while fast and fast.next:\n         slow, fast = slow.next, fast.next.next\n         if slow is fast: return True\n     return False",
+     "complexity": "O(n), O(1)."
+    },
+    {
+     "number": 6,
+     "difficulty": "Medium",
+     "title": "Merge two sorted lists",
+     "statement": "",
+     "example": "",
+     "solution": "def merge(a, b):\n     dummy = tail = Node(0)\n     while a and b:\n          if a.data <= b.data: tail.next, a = a, a.next\n          else: tail.next, b = b, b.next\n          tail = tail.next\n     tail.next = a or b\n     return dummy.next",
+     "complexity": "O(n + m), O(1)."
+    }
+   ],
+   "practiceProblemsMd": "### Code Problem 1 (Easy): Insert at front and at end\n\n```python\ndef insert_front(head, v):\n     return Node(v, head)\n\n\ndef insert_end(head, v):\n     n = Node(v)\n     if not head: return n\n     cur = head\n     while cur.next: cur = cur.next\n     cur.next = n\n     return head\n```\n\n**Complexity:** front O(1); end O(n) (O(1) with a tail pointer).\n\n### Code Problem 2 (Medium): Delete the n-th node from the end\n\n**Example:** [1,2,3,4,5] , n=2 → [1,2,3,5]\n\n```python\ndef remove_nth_from_end(head, n):\n     dummy = Node(0, head)\n     fast = slow = dummy\n     for _ in range(n): fast = fast.next\n     while fast.next:\n         fast = fast.next; slow = slow.next\n     slow.next = slow.next.next\n     return dummy.next\n```\n\n**Complexity:** O(L), one pass; O(1) space.\n\n### Code Problem 3 (Easy): Reverse a linked list\n\n```python\ndef reverse(head):\n     prev, cur = None, head\n     while cur:\n         cur.next, prev, cur = prev, cur, cur.next\n     return prev\n```\n\n**Complexity:** O(n), O(1).\n\n### Code Problem 4 (Easy): Middle of the list\n\n```python\ndef middle(head):\n     slow = fast = head\n     while fast and fast.next:\n         slow = slow.next; fast = fast.next.next\n     return slow          # for even length, returns the second middle\n```\n\n### Code Problem 5 (Medium): Detect a cycle (Floyd)\n\n```python\ndef has_cycle(head):\n     slow = fast = head\n     while fast and fast.next:\n         slow, fast = slow.next, fast.next.next\n         if slow is fast: return True\n     return False\n```\n\n**Complexity:** O(n), O(1).\n\n### Code Problem 6 (Medium): Merge two sorted lists\n\n```python\ndef merge(a, b):\n     dummy = tail = Node(0)\n     while a and b:\n          if a.data <= b.data: tail.next, a = a, a.next\n          else: tail.next, b = b, b.next\n          tail = tail.next\n     tail.next = a or b\n     return dummy.next\n```\n\n**Complexity:** O(n + m), O(1)."
+  },
+  {
+   "number": 8,
+   "title": "Stacks",
+   "slug": "stacks",
+   "coldOpen": "Cold open (Ep. 8): At a cafeteria, Bit stacks plates. Zara takes the top one only. \"Last in, first out.\" Cliffhanger: A line of villagers waits to be served, but the stack serves the last one first. \"That's unfair. We need the opposite structure...\"",
+   "outcomes": [
+    "Explain LIFO and implement a stack with an array and a linked list.",
+    "Solve parentheses matching, expression conversion and evaluation.",
+    "Relate stacks to recursion."
+   ],
+   "topics": [
+    {
+     "order": 1,
+     "title": "8.1 The stack ADT",
+     "slug": "the-stack-adt",
+     "description": "The stack ADT",
+     "content": "A stack allows insertion and deletion only at one end, the top.\n\n```\n           push(30)              pop()\n                │                  ▲\n                ▼                  │\n           ┌────┐\n   TOP →   │ 30 │\n           │ 20 │\n           │ 10 │\n           └────┘\n            (bottom)\n```\n\nOperations: push , pop , peek/top , isEmpty , isFull . All O(1). Errors: overflow (push on a full stack) and underflow (pop on an empty stack)."
+    },
+    {
+     "order": 2,
+     "title": "8.2 Array implementation [L]",
+     "slug": "array-implementation",
+     "description": "Array implementation [L]",
+     "content": "```\n PUSH(STACK, TOP, MAXSTK, ITEM)\n 1. If TOP = MAXSTK, write OVERFLOW and return.\n 2. Set TOP := TOP + 1.\n 3. Set STACK[TOP] := ITEM.\n 4. Return.\n\n\n\n class Stack:\n      def __init__(self): self.a = []\n      def push(self, x): self.a.append(x)\n      def pop(self):\n          if not self.a: raise IndexError(\"underflow\")\n          return self.a.pop()\n      def peek(self): return self.a[-1]\n      def is_empty(self): return not self.a\n```\n\nLinked-list implementation: push and pop at the head, no size limit."
+    },
+    {
+     "order": 3,
+     "title": "8.3 Application 1: balanced parentheses",
+     "slug": "application-1-balanced-parentheses",
+     "description": "Application 1: balanced parentheses",
+     "content": "Push opening brackets; on a closing bracket, pop and check that it matches.\n\n```\n \"{ [ ( ) ] }\"\n  { → push            stack: {\n  [ → push            stack: { [\n  ( → push            stack: { [ (\n  ) → pop (           stack: { [\n  ] → pop [           stack: {\n  } → pop {           stack: (empty) ✓ balanced\n\n\n\n def balanced(s):\n      pairs = {')': '(', ']': '[', '}': '{'}\n      st = []\n      for ch in s:\n          if ch in '([{': st.append(ch)\n          elif ch in pairs:\n                if not st or st.pop() != pairs[ch]: return False\n      return not st\n```"
+    },
+    {
+     "order": 4,
+     "title": "8.4 Application 2: infix, postfix, prefix",
+     "slug": "application-2-infix-postfix-prefix",
+     "description": "Application 2: infix, postfix, prefix",
+     "content": "```\n  Infix                             Postfix                     Prefix\n\n  A+B                               AB+                         +AB\n\n  (A + B) * C                       AB+C*                       *+ABC\n\n  A+B*C                             ABC*+                       +A*BC\n```\n\nPostfix needs no parentheses and no precedence rules at evaluation time.\n\nEvaluating postfix with a stack: push operands; on an operator, pop two, apply, push the result.\n\n```\n  Postfix: 5 6 2 + * 12 4 / -\n   5            stack: 5\n   6            stack: 5 6\n   2            stack: 5 6 2\n   +            pop 2,6 → 8      stack: 5 8\n   *            pop 8,5 → 40     stack: 40\n   12           stack: 40 12\n   4            stack: 40 12 4\n   /            pop 4,12 → 3     stack: 40 3\n   -            pop 3,40 → 37 stack: 37        ✓ answer 37\n```\n\nInfix → postfix (shunting-yard): operands go to the output; operators wait on the stack and pop while the stack top has precedence ≥ the incoming operator; ( is pushed; ) pops until ( . Precedence: ^ (highest, right-assoc) > * / > + - .\n\n```\n  Infix:    A + B * C\n   A → out: A\n   + → stack: +\n   B → out: A B\n   * → higher than + → stack: + *\n   C → out: A B C\n   end → pop all → out: A B C * +\n```"
+    },
+    {
+     "order": 5,
+     "title": "8.5 Application 3: recursion and undo",
+     "slug": "application-3-recursion-and-undo",
+     "description": "Application 3: recursion and undo",
+     "content": "- The program's call stack stores return addresses and local variables (Module 5).\n\n- Browser back button and editor undo are stacks.\n\n- Next greater element and similar problems use a monotonic stack (preview)."
+    },
+    {
+     "order": 6,
+     "title": "8.6 Complexity",
+     "slug": "complexity",
+     "description": "Complexity",
+     "content": "All operations O(1). Space O(n).\n\n#### Common Mistakes\n\n- Popping an empty stack.\n\n- Forgetting to check that the stack is empty at the end of bracket matching.\n\n- Getting operand order wrong in postfix (the first popped is the right operand).\n\n#### Quick Revision\n\nA stack is last-in-first-out with all operations O(1). Use it for matching, backtracking, expression evaluation and recursion.\n\n#### Common Mistakes\n\n- Popping an empty stack.\n\n- Forgetting to check that the stack is empty at the end of bracket matching.\n\n- Getting operand order wrong in postfix (the first popped is the right operand).\n\n#### Quick Revision\n\nA stack is last-in-first-out with all operations O(1). Use it for matching, backtracking, expression evaluation and recursion."
+    }
+   ],
+   "quiz": {
+    "questions": [
+     {
+      "order": 1,
+      "prompt": "A stack follows?",
+      "options": [
+       "FIFO",
+       "LIFO",
+       "random order",
+       "priority order"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 2,
+      "prompt": "Pushing 1, 2, 3 and then popping once returns?",
+      "options": [
+       "1",
+       "2",
+       "3",
+       "error"
+      ],
+      "correctIndex": 2,
+      "explanation": ""
+     },
+     {
+      "order": 3,
+      "prompt": "Popping from an empty stack is called?",
+      "options": [
+       "overflow",
+       "underflow",
+       "deadlock",
+       "segmentation"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 4,
+      "prompt": "The postfix form of A + B * C is?",
+      "options": [
+       "A B + C *",
+       "A B C * +",
+       "+ A * B C",
+       "A + B C *"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 5,
+      "prompt": "Value of the postfix expression 5 6 2 + * 12 4 / - is?",
+      "options": [
+       "37",
+       "40",
+       "43",
+       "35"
+      ],
+      "correctIndex": 0,
+      "explanation": "6+2=8; 5×8=40; 12/4=3; 40−3=37."
+     },
+     {
+      "order": 6,
+      "prompt": "Which application uses a stack?",
+      "options": [
+       "Breadth-first search",
+       "Matching parentheses",
+       "Print-queue scheduling",
+       "Round- robin scheduling"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 7,
+      "prompt": "Is \"{[(])}\" balanced?",
+      "options": [
+       "Yes",
+       "No",
+       "Only if sorted",
+       "Depends on language"
+      ],
+      "correctIndex": 1,
+      "explanation": "] arrives while the top of the stack is ( ."
+     },
+     {
+      "order": 8,
+      "prompt": "Time complexity of push and pop on an array-based stack is?",
+      "options": [
+       "O(n)",
+       "O(log n)",
+       "O(1)",
+       "O(n²)"
+      ],
+      "correctIndex": 2,
+      "explanation": ""
+     }
+    ]
+   },
+   "practiceProblems": [
+    {
+     "number": 1,
+     "difficulty": "Easy",
+     "title": "Balanced brackets",
+     "statement": "",
+     "example": "\"{[()]}\" → True; \"([)]\" → False",
+     "solution": "def balanced(s):\n     pairs = {')': '(', ']': '[', '}': '{'}\n     st = []\n     for ch in s:\n          if ch in '([{': st.append(ch)\n          elif ch in pairs:\n               if not st or st.pop() != pairs[ch]: return False\n     return not st",
+     "complexity": "O(n)."
+    },
+    {
+     "number": 2,
+     "difficulty": "Medium",
+     "title": "Evaluate a postfix expression",
+     "statement": "",
+     "example": "\"5 6 2 + * 12 4 / -\" → 37",
+     "solution": "def eval_postfix(expr):\n     st = []\n     for tok in expr.split():\n          if tok in \"+-*/\":\n               b, a = st.pop(), st.pop()              # right operand popped first\n               if tok == '+': st.append(a + b)\n               elif tok == '-': st.append(a - b)\n               elif tok == '*': st.append(a * b)\n               else: st.append(int(a / b))            # truncate toward zero\n          else:\n\n              st.append(int(tok))\n    return st[0]",
+     "complexity": "O(n)."
+    },
+    {
+     "number": 3,
+     "difficulty": "Medium",
+     "title": "Infix to postfix",
+     "statement": "",
+     "example": "\"A+B*C\" → \"ABC*+\"",
+     "solution": "def to_postfix(s):\n    prec = {'+': 1, '-': 1, '*': 2, '/': 2, '^': 3}\n    out, st = [], []\n    for ch in s:\n        if ch.isalnum(): out.append(ch)\n        elif ch == '(': st.append(ch)\n        elif ch == ')':\n              while st and st[-1] != '(': out.append(st.pop())\n              st.pop()\n        else:\n              while st and st[-1] != '(' and (prec[st[-1]] > prec[ch] or\n                     (prec[st[-1]] == prec[ch] and ch != '^')):\n                   out.append(st.pop())\n              st.append(ch)\n    while st: out.append(st.pop())\n    return ''.join(out)",
+     "complexity": "O(n)."
+    },
+    {
+     "number": 4,
+     "difficulty": "Easy",
+     "title": "Reverse a string with a stack",
+     "statement": "",
+     "example": "",
+     "solution": "def rev(s):\n    st = list(s)\n    return ''.join(st.pop() for _ in range(len(st)))",
+     "complexity": ""
+    },
+    {
+     "number": 5,
+     "difficulty": "Medium",
+     "title": "Next greater element",
+     "statement": "",
+     "example": "[4, 5, 2, 25] → [5, 25, 25, -1]",
+     "solution": "def next_greater(a):\n    res, st = [-1] * len(a), []            # st holds indices\n    for i, x in enumerate(a):\n        while st and a[st[-1]] < x:\n              res[st.pop()] = x\n        st.append(i)\n\n     return res",
+     "complexity": "O(n) (each index pushed and popped once)."
+    },
+    {
+     "number": 6,
+     "difficulty": "Medium",
+     "title": "Min-stack with O(1) get_min",
+     "statement": "",
+     "example": "",
+     "solution": "class MinStack:\n     def __init__(self): self.s, self.m = [], []\n     def push(self, x):\n          self.s.append(x)\n          self.m.append(x if not self.m else min(x, self.m[-1]))\n     def pop(self):\n          self.m.pop(); return self.s.pop()\n     def get_min(self): return self.m[-1]",
+     "complexity": ""
+    }
+   ],
+   "practiceProblemsMd": "### Code Problem 1 (Easy): Balanced brackets\n\n**Example:** \"{[()]}\" → True; \"([)]\" → False\n\n```python\ndef balanced(s):\n     pairs = {')': '(', ']': '[', '}': '{'}\n     st = []\n     for ch in s:\n          if ch in '([{': st.append(ch)\n          elif ch in pairs:\n               if not st or st.pop() != pairs[ch]: return False\n     return not st\n```\n\n**Complexity:** O(n).\n\n### Code Problem 2 (Medium): Evaluate a postfix expression\n\n**Example:** \"5 6 2 + * 12 4 / -\" → 37\n\n```python\ndef eval_postfix(expr):\n     st = []\n     for tok in expr.split():\n          if tok in \"+-*/\":\n               b, a = st.pop(), st.pop()              # right operand popped first\n               if tok == '+': st.append(a + b)\n               elif tok == '-': st.append(a - b)\n               elif tok == '*': st.append(a * b)\n               else: st.append(int(a / b))            # truncate toward zero\n          else:\n\n              st.append(int(tok))\n    return st[0]\n```\n\n**Complexity:** O(n).\n\n### Code Problem 3 (Medium): Infix to postfix\n\n**Example:** \"A+B*C\" → \"ABC*+\"\n\n```python\ndef to_postfix(s):\n    prec = {'+': 1, '-': 1, '*': 2, '/': 2, '^': 3}\n    out, st = [], []\n    for ch in s:\n        if ch.isalnum(): out.append(ch)\n        elif ch == '(': st.append(ch)\n        elif ch == ')':\n              while st and st[-1] != '(': out.append(st.pop())\n              st.pop()\n        else:\n              while st and st[-1] != '(' and (prec[st[-1]] > prec[ch] or\n                     (prec[st[-1]] == prec[ch] and ch != '^')):\n                   out.append(st.pop())\n              st.append(ch)\n    while st: out.append(st.pop())\n    return ''.join(out)\n```\n\n**Complexity:** O(n).\n\n### Code Problem 4 (Easy): Reverse a string with a stack\n\n```python\ndef rev(s):\n    st = list(s)\n    return ''.join(st.pop() for _ in range(len(st)))\n```\n\n### Code Problem 5 (Medium): Next greater element\n\n**Example:** [4, 5, 2, 25] → [5, 25, 25, -1]\n\n```python\ndef next_greater(a):\n    res, st = [-1] * len(a), []            # st holds indices\n    for i, x in enumerate(a):\n        while st and a[st[-1]] < x:\n              res[st.pop()] = x\n        st.append(i)\n\n     return res\n```\n\n**Complexity:** O(n) (each index pushed and popped once).\n\n### Code Problem 6 (Medium): Min-stack with O(1) get_min\n\n```python\nclass MinStack:\n     def __init__(self): self.s, self.m = [], []\n     def push(self, x):\n          self.s.append(x)\n          self.m.append(x if not self.m else min(x, self.m[-1]))\n     def pop(self):\n          self.m.pop(); return self.s.pop()\n     def get_min(self): return self.m[-1]\n```"
+  },
+  {
+   "number": 9,
+   "title": "Queues",
+   "slug": "queues",
+   "coldOpen": "Cold open (Ep. 9): The Bit-Land bakery has a long line. First to arrive is first served. Bit: \"Fairness has a name: FIFO.\" Cliffhanger: The bakery owner's family tree appears on the wall... and a single line can't show who is whose child. \"We need a shape that branches.\"",
+   "outcomes": [
+    "Explain FIFO and implement simple, circular and linked queues.",
+    "Describe deque and priority queue.",
+    "Use queues in simple applications (scheduling, level-by-level processing)."
+   ],
+   "topics": [
+    {
+     "order": 1,
+     "title": "9.1 The queue ADT",
+     "slug": "the-queue-adt",
+     "description": "The queue ADT",
+     "content": "Insertion at the rear, deletion at the front.\n\n```\n   dequeue ◄── FRONT [ 10 | 20 | 30 | 40 ] REAR ◄── enqueue\n```\n\nOperations: enqueue , dequeue , front , isEmpty , isFull . All O(1) when implemented well."
+    },
+    {
+     "order": 2,
+     "title": "9.2 Simple array queue and its flaw",
+     "slug": "simple-array-queue-and-its-flaw",
+     "description": "Simple array queue and its flaw",
+     "content": "```\n Array size 5:       [ _ | _ | 30 | 40 | 50 ]    front=2, rear=4\n```\n\nAfter dequeues, the slots at the left are wasted, and the queue looks \"full\" when rear reaches the end."
+    },
+    {
+     "order": 3,
+     "title": "9.3 Circular queue",
+     "slug": "circular-queue",
+     "description": "Circular queue",
+     "content": "Wrap the indices using modulo, so the array is treated as a ring.\n\n```\n               index 0\n           ┌───┐\n     4 ───┤      ├─── 1\n           │     │\n     3 ───┤      ├─── 2\n           └───┘\n   rear = (rear + 1) % N\n   front = (front + 1) % N\n\n\n\n class CircularQueue:\n      def __init__(self, n):\n           self.a = [None]*n; self.n = n\n           self.front = 0; self.size = 0\n      def enqueue(self, x):\n           if self.size == self.n: raise OverflowError\n           self.a[(self.front + self.size) % self.n] = x\n           self.size += 1\n      def dequeue(self):\n           if self.size == 0: raise IndexError\n           x = self.a[self.front]\n           self.front = (self.front + 1) % self.n\n           self.size -= 1\n           return x\n```\n\nTracking size separates \"full\" from \"empty\" (both can have front == rear otherwise)."
+    },
+    {
+     "order": 4,
+     "title": "9.4 Linked queue",
+     "slug": "linked-queue",
+     "description": "Linked queue",
+     "content": "Keep front and rear pointers: enqueue at the rear, dequeue at the front, both O(1).\n\n```\n front → [10]→[20]→[30]→∅\n                          ▲\n                         rear\n```"
+    },
+    {
+     "order": 5,
+     "title": "9.5 Deque (double-ended queue)",
+     "slug": "deque-double-ended-queue",
+     "description": "Deque (double-ended queue)",
+     "content": "Insert and delete at both ends.\n\n```\n   push_front ► [ a | b | c | d ] ◄ push_back\n   pop_front     ◄                    ► pop_back\n```\n\nVariants: input-restricted and output-restricted deques [L]."
+    },
+    {
+     "order": 6,
+     "title": "9.6 Priority queue (introduction)",
+     "slug": "priority-queue-introduction",
+     "description": "Priority queue (introduction)",
+     "content": "Each element has a priority; the highest-priority element leaves first (not arrival order).\n\n```\n  Implementation                                   insert                extract-min\n\n  Unsorted array                                   O(1)                  O(n)\n\n  Sorted array                                     O(n)                  O(1)\n\n  Heap (Mastery, Module 3)                         O(log n)              O(log n)\n```\n\nUse cases: hospital triage, CPU task scheduling, Dijkstra's algorithm."
+    },
+    {
+     "order": 7,
+     "title": "9.7 Applications",
+     "slug": "applications",
+     "description": "Applications",
+     "content": "- CPU scheduling (round robin), printer spooling, call-centre queues.\n\n- BFS on trees and graphs (Modules 10 and 11).\n\n- Buffering in streaming and keyboard input.\n\n- Josephus problem: people in a circle, eliminate every k-th (simulate with a queue)."
+    },
+    {
+     "order": 8,
+     "title": "9.8 Stack vs queue",
+     "slug": "stack-vs-queue",
+     "description": "Stack vs queue",
+     "content": "```\n                          Stack                                   Queue\n\n  Order                   LIFO                                    FIFO\n\n  Ends used               one (top)                               two (front, rear)\n\n  Typical use             recursion, undo, DFS                    scheduling, BFS\n```\n\n#### Common Mistakes\n\n- Not using modulo in a circular queue.\n\n- Confusing empty and full conditions.\n\n- Using list.pop(0) in Python as a queue (O(n)). Use collections.deque .\n\n#### Quick Revision\n\nQueue = FIFO. Circular implementation avoids wasted space. A priority queue serves by priority and is best built with a heap.\n\n#### Common Mistakes\n\n- Not using modulo in a circular queue.\n\n- Confusing empty and full conditions.\n\n- Using list.pop(0) in Python as a queue (O(n)). Use collections.deque .\n\n#### Quick Revision\n\nQueue = FIFO. Circular implementation avoids wasted space. A priority queue serves by priority and is best built with a heap."
+    }
+   ],
+   "quiz": {
+    "questions": [
+     {
+      "order": 1,
+      "prompt": "A queue follows?",
+      "options": [
+       "LIFO",
+       "FIFO",
+       "random order",
+       "sorted order"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 2,
+      "prompt": "In a circular queue of size N, the next rear index is?",
+      "options": [
+       "rear + 1",
+       "(rear + 1) % N",
+       "rear − 1",
+       "N − rear"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 3,
+      "prompt": "Why is list.pop(0) a poor queue operation in Python?",
+      "options": [
+       "It raises errors",
+       "It is O(n) because all elements shift",
+       "It is O(1)",
+       "It deletes the whole list"
+      ],
+      "correctIndex": 1,
+      "explanation": "Use collections.deque for O(1) popleft ."
+     },
+     {
+      "order": 4,
+      "prompt": "A deque allows insertion and deletion at?",
+      "options": [
+       "front only",
+       "rear only",
+       "both ends",
+       "middle only"
+      ],
+      "correctIndex": 2,
+      "explanation": ""
+     },
+     {
+      "order": 5,
+      "prompt": "Which algorithm uses a queue?",
+      "options": [
+       "DFS",
+       "BFS",
+       "Binary search",
+       "Quick sort"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 6,
+      "prompt": "A priority queue removes the element with?",
+      "options": [
+       "the earliest arrival",
+       "the latest arrival",
+       "the highest priority",
+       "the largest memory address"
+      ],
+      "correctIndex": 2,
+      "explanation": ""
+     },
+     {
+      "order": 7,
+      "prompt": "To distinguish a full circular queue from an empty one (when only front and rear are stored) you can?",
+      "options": [
+       "keep a size counter or leave one slot empty",
+       "ignore it",
+       "use recursion",
+       "sort the array"
+      ],
+      "correctIndex": 0,
+      "explanation": ""
+     },
+     {
+      "order": 8,
+      "prompt": "Operations: enqueue(1), enqueue(2), dequeue(), enqueue(3), dequeue(). What is at the front now?",
+      "options": [
+       "1",
+       "2",
+       "3",
+       "empty"
+      ],
+      "correctIndex": 2,
+      "explanation": "After the two dequeues, 1 and 2 are removed, so 3 is at the front."
+     }
+    ]
+   },
+   "practiceProblems": [
+    {
+     "number": 1,
+     "difficulty": "Medium",
+     "title": "Queue using two stacks",
+     "statement": "",
+     "example": "",
+     "solution": "class MyQueue:\n       def __init__(self): self.inp, self.out = [], []\n       def enqueue(self, x): self.inp.append(x)\n       def dequeue(self):\n            if not self.out:\n                while self.inp: self.out.append(self.inp.pop())\n            return self.out.pop()",
+     "complexity": "amortised O(1) per operation."
+    },
+    {
+     "number": 2,
+     "difficulty": "Medium",
+     "title": "Circular queue",
+     "statement": "",
+     "example": "",
+     "solution": "class CircularQueue:\n       def __init__(self, n):\n            self.a, self.n, self.front, self.size = [None] * n, n, 0, 0\n       def enqueue(self, x):\n            if self.size == self.n: return False\n            self.a[(self.front + self.size) % self.n] = x\n            self.size += 1; return True\n       def dequeue(self):\n            if self.size == 0: return None\n            x = self.a[self.front]\n            self.front = (self.front + 1) % self.n\n            self.size -= 1; return x",
+     "complexity": ""
+    },
+    {
+     "number": 3,
+     "difficulty": "Medium",
+     "title": "Josephus problem",
+     "statement": "n people stand in a circle; every k-th is eliminated. Return the survivor (1- based).",
+     "example": "n=7, k=3 → 4",
+     "solution": "from collections import deque\ndef josephus(n, k):\n    q = deque(range(1, n + 1))\n    while len(q) > 1:\n         q.rotate(-(k - 1))\n         q.popleft()\n    return q[0]",
+     "complexity": "O(n·k)."
+    },
+    {
+     "number": 4,
+     "difficulty": "Easy",
+     "title": "Binary numbers from 1 to n using a queue",
+     "statement": "",
+     "example": "n=5 → ['1','10','11','100','101']",
+     "solution": "from collections import deque\ndef gen_binary(n):\n    q, out = deque(['1']), []\n    for _ in range(n):\n         s = q.popleft(); out.append(s)\n         q.append(s + '0'); q.append(s + '1')\n    return out",
+     "complexity": "O(n)."
+    },
+    {
+     "number": 5,
+     "difficulty": "Medium",
+     "title": "First non-repeating character in a stream",
+     "statement": "",
+     "example": "stream \"aabc\" → after each character: a, -1, b, b",
+     "solution": "from collections import deque\ndef stream_first_unique(s):\n    cnt, q, out = {}, deque(), []\n    for ch in s:\n         cnt[ch] = cnt.get(ch, 0) + 1\n         q.append(ch)\n         while q and cnt[q[0]] > 1: q.popleft()\n         out.append(q[0] if q else '-1')\n    return out",
+     "complexity": "O(n)."
+    }
+   ],
+   "practiceProblemsMd": "### Code Problem 1 (Medium): Queue using two stacks\n\n```python\nclass MyQueue:\n       def __init__(self): self.inp, self.out = [], []\n       def enqueue(self, x): self.inp.append(x)\n       def dequeue(self):\n            if not self.out:\n                while self.inp: self.out.append(self.inp.pop())\n            return self.out.pop()\n```\n\n**Complexity:** amortised O(1) per operation.\n\n### Code Problem 2 (Medium): Circular queue\n\n```python\nclass CircularQueue:\n       def __init__(self, n):\n            self.a, self.n, self.front, self.size = [None] * n, n, 0, 0\n       def enqueue(self, x):\n            if self.size == self.n: return False\n            self.a[(self.front + self.size) % self.n] = x\n            self.size += 1; return True\n       def dequeue(self):\n            if self.size == 0: return None\n            x = self.a[self.front]\n            self.front = (self.front + 1) % self.n\n            self.size -= 1; return x\n```\n\n### Code Problem 3 (Medium): Josephus problem\n\n**Statement:** n people stand in a circle; every k-th is eliminated. Return the survivor (1- based).\n\n**Example:** n=7, k=3 → 4\n\n```python\nfrom collections import deque\ndef josephus(n, k):\n    q = deque(range(1, n + 1))\n    while len(q) > 1:\n         q.rotate(-(k - 1))\n         q.popleft()\n    return q[0]\n```\n\n**Complexity:** O(n·k).\n\n### Code Problem 4 (Easy): Binary numbers from 1 to n using a queue\n\n**Example:** n=5 → ['1','10','11','100','101']\n\n```python\nfrom collections import deque\ndef gen_binary(n):\n    q, out = deque(['1']), []\n    for _ in range(n):\n         s = q.popleft(); out.append(s)\n         q.append(s + '0'); q.append(s + '1')\n    return out\n```\n\n**Complexity:** O(n).\n\n### Code Problem 5 (Medium): First non-repeating character in a stream\n\n**Example:** stream \"aabc\" → after each character: a, -1, b, b\n\n```python\nfrom collections import deque\ndef stream_first_unique(s):\n    cnt, q, out = {}, deque(), []\n    for ch in s:\n         cnt[ch] = cnt.get(ch, 0) + 1\n         q.append(ch)\n         while q and cnt[q[0]] > 1: q.popleft()\n         out.append(q[0] if q else '-1')\n    return out\n```\n\n**Complexity:** O(n)."
+  },
+  {
+   "number": 10,
+   "title": "Trees & Binary Search Trees",
+   "slug": "trees-and-bst",
+   "coldOpen": "Cold open (Ep. 10): The bakery family tree grows on the wall. Zara: \"Grandfather at the top, then children, then grandchildren.\" Bit: \"A hierarchy. Computers love them.\" Cliffhanger: The tree's branches reach across the room and connect to each other. It is no longer a tree... it is a network.",
+   "outcomes": [
+    "Use tree terminology precisely.",
+    "Perform pre-order, in-order, post-order and level-order traversals.",
+    "Implement BST search, insert and delete and understand how the shape affects cost."
+   ],
+   "topics": [
+    {
+     "order": 1,
+     "title": "10.1 Tree terminology",
+     "slug": "tree-terminology",
+     "description": "Tree terminology",
+     "content": "```\n                             A                   ← root (level 0)\n                     /           \\\n                 B                   C           ← children of A (level 1)\n                / \\                      \\\n            D            E                   F   ← leaves: D, E, F (level 2)\n\n\n\n Term                                Meaning\n\n Root                                top node, no parent\n\n Parent / child                      directly connected up / down\n\n Siblings                            same parent (B and C)\n\n Leaf                                no children\n\n Degree                              number of children of a node\n\n Level                               root = 0, increases downward\n\n Height                              longest path from node to a leaf (tree height = root height)\n\n Depth                               distance from the root\n\n Subtree                             a node together with all its descendants\n```\n\nA tree with n nodes has exactly n − 1 edges."
+    },
+    {
+     "order": 2,
+     "title": "10.2 Binary trees",
+     "slug": "binary-trees",
+     "description": "Binary trees",
+     "content": "Each node has at most two children: left and right.\n\n```\n class TreeNode:\n      def __init__(self, v):\n                   self.val = v; self.left = None; self.right = None\n```\n\nTypes\n\n- Full: each node has 0 or 2 children.\n\n- Complete: all levels full except possibly the last, which fills left to right (heaps use this).\n\n- Perfect: all leaves at the same depth; has 2^(h+1) − 1 nodes.\n\n- Skewed: every node has one child (behaves like a linked list).\n\nUseful facts\n\n- Maximum nodes at level i: 2ⁱ.\n\n- Maximum nodes in a tree of height h: 2^(h+1) − 1.\n\n- Minimum height with n nodes: ⌊log₂ n⌋."
+    },
+    {
+     "order": 3,
+     "title": "10.3 Representations",
+     "slug": "representations",
+     "description": "Representations",
+     "content": "Array (for complete trees): node at index i has children at 2i+1 and 2i+2 and parent at ⌊(i−1)/2⌋.\n\n```\n Tree:                 10               Array: [10, 20, 30, 40, 50]\n                   /        \\           index:   0   1   2   3   4\n              20                30\n          /        \\\n      40               50\n```\n\nLinked (general): nodes with left/right pointers [L]."
+    },
+    {
+     "order": 4,
+     "title": "10.4 Traversals",
+     "slug": "traversals",
+     "description": "Traversals",
+     "content": "```\n                   1\n                  / \\\n              2         3\n          / \\\n      4            5\n\n\n\n  Traversal                          Order                                  Result\n\n  Pre-order                          Root, Left, Right                   12453\n\n  In-order                           Left, Root, Right                   42513\n\n  Post-order                         Left, Right, Root                   45231\n\n  Level-order                        level by level (queue)              12345\n\n\n\n def inorder(r):\n         if r:\n                   inorder(r.left); print(r.val); inorder(r.right)\n\n\n from collections import deque\n def level_order(root):\n         q = deque([root])\n         while q:\n                   node = q.popleft()\n                   print(node.val)\n                   if node.left: q.append(node.left)\n                   if node.right: q.append(node.right)\n```\n\nEach traversal is O(n).\n\nApplications: pre-order to copy a tree; in-order gives a BST in sorted order; post-order to delete a tree or evaluate an expression tree."
+    },
+    {
+     "order": 5,
+     "title": "10.5 Expression trees",
+     "slug": "expression-trees",
+     "description": "Expression trees",
+     "content": "(A + B) * C\n\n```\n              *\n             / \\\n         +         C\n        / \\\n    A         B\n```\n\nIn-order → infix; post-order → postfix (links to Module 8)."
+    },
+    {
+     "order": 6,
+     "title": "10.6 Binary Search Tree (BST)",
+     "slug": "binary-search-tree-bst",
+     "description": "Binary Search Tree (BST)",
+     "content": "For every node: all left-subtree values < node < all right-subtree values.\n\n```\n                       50\n\n                      /        \\\n              30                   70\n             / \\                   / \\\n     20           40           60        80\n```\n\nIn-order traversal: 20 30 40 50 60 70 80 (sorted!).\n\nSearch\n\n```\n def search(node, key):\n         while node and node.val != key:\n                      node = node.left if key < node.val else node.right\n         return node\n```\n\nInsert\n\n```\n def insert(node, key):\n         if node is None: return TreeNode(key)\n         if key < node.val: node.left = insert(node.left, key)\n         elif key > node.val: node.right = insert(node.right, key)\n         return node\n\n\n\n Insert 45 into the BST above:                                      50 → left 30 → right 40 → left of 40 = 45\n```\n\n#### Delete has three cases\n\n- 1. Leaf: just remove it.\n\n- 2. One child: replace the node with its child.\n\n- 3. Two children: replace its value with its in-order successor (smallest in the right\n\n```\n   subtree), then delete that successor.\n\n Delete 30 (two children: 20 and 40):                                             successor = 40\n                      50                                            50\n                  /        \\                                    /        \\\n             30                70             →            40                70\n         /        \\                                    /\n    20            40                              20\n```"
+    },
+    {
+     "order": 7,
+     "title": "10.7 Cost depends on shape",
+     "slug": "cost-depends-on-shape",
+     "description": "Cost depends on shape",
+     "content": "```\n Tree shape                                                                        Height      search / insert / delete\n\n  Balanced                                                     log n          O(log n)\n\n  Skewed (inserted sorted data)                                n              O(n)\n\n\n\n  Inserting 10, 20, 30, 40:             10\n                                             \\\n                                                 20\n                                                      \\\n                                                          30\n                                                               \\\n                                                                   40   ← linked list in disguise\n```\n\nThe remedy is self-balancing trees (AVL, Red-Black), covered in Mastery, Module 4.\n\n#### Common Mistakes\n\n- Confusing height and depth, or leaf level numbering.\n\n- Checking a BST only against the parent instead of the full allowed range.\n\n- Forgetting the two-children deletion case.\n\n#### Quick Revision\n\nA tree is a hierarchy with n−1 edges. The BST property makes search O(height). In-order on a BST is sorted. Balance matters.\n\n#### Common Mistakes\n\n- Confusing height and depth, or leaf level numbering.\n\n- Checking a BST only against the parent instead of the full allowed range.\n\n- Forgetting the two-children deletion case.\n\n#### Quick Revision\n\nA tree is a hierarchy with n−1 edges. The BST property makes search O(height). In-order on a BST is sorted. Balance matters."
+    }
+   ],
+   "quiz": {
+    "questions": [
+     {
+      "order": 1,
+      "prompt": "A tree with n nodes has exactly how many edges?",
+      "options": [
+       "n",
+       "n − 1",
+       "n + 1",
+       "2n"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 2,
+      "prompt": "In-order traversal of a BST gives?",
+      "options": [
+       "descending order",
+       "ascending sorted order",
+       "level order",
+       "random order"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 3,
+      "prompt": "Pre-order traversal of the tree with root 1, left child 2 (children 4, 5) and right child 3 is?",
+      "options": [
+       "4 2 5 1 3",
+       "1 2 4 5 3",
+       "4 5 2 3 1",
+       "1 2 3 4 5"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 4,
+      "prompt": "Maximum number of nodes at level i of a binary tree (root at level 0) is?",
+      "options": [
+       "i",
+       "2i",
+       "2ⁱ",
+       "i²"
+      ],
+      "correctIndex": 2,
+      "explanation": ""
+     },
+     {
+      "order": 5,
+      "prompt": "The worst-case time to search a BST with n nodes is?",
+      "options": [
+       "O(1)",
+       "O(log n)",
+       "O(n)",
+       "O(n log n)"
+      ],
+      "correctIndex": 2,
+      "explanation": "A skewed tree, for example one built by inserting sorted data."
+     },
+     {
+      "order": 6,
+      "prompt": "In an array-based complete binary tree (0-based), the left child of node i is at?",
+      "options": [
+       "2i",
+       "2i + 1",
+       "2i + 2",
+       "i + 1"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 7,
+      "prompt": "Deleting a BST node that has two children is done by replacing it with?",
+      "options": [
+       "its parent",
+       "its in-order successor (or predecessor)",
+       "the root",
+       "a random leaf"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 8,
+      "prompt": "Which traversal is used to evaluate an expression tree (to get postfix)?",
+      "options": [
+       "Pre-order",
+       "In-order",
+       "Post-order",
+       "Level-order"
+      ],
+      "correctIndex": 2,
+      "explanation": ""
+     }
+    ]
+   },
+   "practiceProblems": [
+    {
+     "number": 1,
+     "difficulty": "Easy",
+     "title": "All four traversals",
+     "statement": "",
+     "example": "",
+     "solution": "from collections import deque\ndef preorder(r):       return [r.val] + preorder(r.left) + preorder(r.right) if r else []\ndef inorder(r):        return inorder(r.left) + [r.val] + inorder(r.right) if r else []\ndef postorder(r): return postorder(r.left) + postorder(r.right) + [r.val] if r else []\ndef level(r):\n     out, q = [], deque([r] if r else [])\n     while q:\n          n = q.popleft(); out.append(n.val)\n          if n.left: q.append(n.left)\n          if n.right: q.append(n.right)\n     return out",
+     "complexity": "O(n) each."
+    },
+    {
+     "number": 2,
+     "difficulty": "Easy",
+     "title": "Height of a binary tree",
+     "statement": "",
+     "example": "",
+     "solution": " def height(r):\n\n     return -1 if r is None else 1 + max(height(r.left), height(r.right))\n# Height of a single node = 0; empty tree = -1",
+     "complexity": "O(n)."
+    },
+    {
+     "number": 3,
+     "difficulty": "Medium",
+     "title": "Validate a BST",
+     "statement": "",
+     "example": "",
+     "solution": "def is_bst(r, lo=float('-inf'), hi=float('inf')):\n     if r is None: return True\n     if not (lo < r.val < hi): return False\n     return is_bst(r.left, lo, r.val) and is_bst(r.right, r.val, hi)",
+     "complexity": "O(n). Checking only parent–child pairs is a classic mistake."
+    },
+    {
+     "number": 4,
+     "difficulty": "Easy",
+     "title": "Count leaf nodes",
+     "statement": "",
+     "example": "",
+     "solution": "def count_leaves(r):\n     if r is None: return 0\n     if not r.left and not r.right: return 1\n     return count_leaves(r.left) + count_leaves(r.right)",
+     "complexity": ""
+    },
+    {
+     "number": 5,
+     "difficulty": "Medium",
+     "title": "BST insert and delete",
+     "statement": "",
+     "example": "",
+     "solution": "def insert(r, k):\n     if r is None: return TreeNode(k)\n     if k < r.val: r.left = insert(r.left, k)\n     elif k > r.val: r.right = insert(r.right, k)\n     return r\n\n\ndef delete(r, k):\n     if r is None: return None\n     if k < r.val: r.left = delete(r.left, k)\n     elif k > r.val: r.right = delete(r.right, k)\n     else:\n         if not r.left: return r.right\n         if not r.right: return r.left\n         succ = r.right\n         while succ.left: succ = succ.left\n         r.val = succ.val\n         r.right = delete(r.right, succ.val)\n     return r",
+     "complexity": "O(h), where h is the height."
+    },
+    {
+     "number": 6,
+     "difficulty": "Medium",
+     "title": "k-th smallest in a BST",
+     "statement": "",
+     "example": "",
+     "solution": "def kth_smallest(r, k):\n        st, cur = [], r\n        while True:\n            while cur: st.append(cur); cur = cur.left\n            cur = st.pop(); k -= 1\n            if k == 0: return cur.val\n            cur = cur.right",
+     "complexity": "O(h + k)."
+    }
+   ],
+   "practiceProblemsMd": "### Code Problem 1 (Easy): All four traversals\n\n```python\nfrom collections import deque\ndef preorder(r):       return [r.val] + preorder(r.left) + preorder(r.right) if r else []\ndef inorder(r):        return inorder(r.left) + [r.val] + inorder(r.right) if r else []\ndef postorder(r): return postorder(r.left) + postorder(r.right) + [r.val] if r else []\ndef level(r):\n     out, q = [], deque([r] if r else [])\n     while q:\n          n = q.popleft(); out.append(n.val)\n          if n.left: q.append(n.left)\n          if n.right: q.append(n.right)\n     return out\n```\n\n**Complexity:** O(n) each.\n\n### Code Problem 2 (Easy): Height of a binary tree\n\n```python\n def height(r):\n\n     return -1 if r is None else 1 + max(height(r.left), height(r.right))\n# Height of a single node = 0; empty tree = -1\n```\n\n**Complexity:** O(n).\n\n### Code Problem 3 (Medium): Validate a BST\n\n```python\ndef is_bst(r, lo=float('-inf'), hi=float('inf')):\n     if r is None: return True\n     if not (lo < r.val < hi): return False\n     return is_bst(r.left, lo, r.val) and is_bst(r.right, r.val, hi)\n```\n\n**Complexity:** O(n). Checking only parent–child pairs is a classic mistake.\n\n### Code Problem 4 (Easy): Count leaf nodes\n\n```python\ndef count_leaves(r):\n     if r is None: return 0\n     if not r.left and not r.right: return 1\n     return count_leaves(r.left) + count_leaves(r.right)\n```\n\n### Code Problem 5 (Medium): BST insert and delete\n\n```python\ndef insert(r, k):\n     if r is None: return TreeNode(k)\n     if k < r.val: r.left = insert(r.left, k)\n     elif k > r.val: r.right = insert(r.right, k)\n     return r\n\n\ndef delete(r, k):\n     if r is None: return None\n     if k < r.val: r.left = delete(r.left, k)\n     elif k > r.val: r.right = delete(r.right, k)\n     else:\n         if not r.left: return r.right\n         if not r.right: return r.left\n         succ = r.right\n         while succ.left: succ = succ.left\n         r.val = succ.val\n         r.right = delete(r.right, succ.val)\n     return r\n```\n\n**Complexity:** O(h), where h is the height.\n\n### Code Problem 6 (Medium): k-th smallest in a BST\n\n```python\ndef kth_smallest(r, k):\n        st, cur = [], r\n        while True:\n            while cur: st.append(cur); cur = cur.left\n            cur = st.pop(); k -= 1\n            if k == 0: return cur.val\n            cur = cur.right\n```\n\n**Complexity:** O(h + k)."
+  },
+  {
+   "number": 11,
+   "title": "Graph Basics",
+   "slug": "graph-basics",
+   "coldOpen": "Cold open (Ep. 11): Zara's village map: houses connected by paths, some one-way. Bit: \"Trees can't hold this. Meet the graph.\" Cliffhanger: To find the shortest route to the bakery, Zara must try every path. Bit: \"Careful... there may be billions.\"",
+   "outcomes": [
+    "Use graph vocabulary (vertex, edge, directed, weighted, degree, path, cycle, connected).",
+    "Represent graphs by an adjacency matrix and an adjacency list.",
+    "Perform BFS and DFS and use them for simple problems."
+   ],
+   "topics": [
+    {
+     "order": 1,
+     "title": "11.1 Definitions [L, AHU]",
+     "slug": "definitions",
+     "description": "Definitions [L, AHU]",
+     "content": "A graph G = (V, E) has a set of vertices V and edges E.\n\n```\n Undirected:                    Directed (digraph):             Weighted:\n     A ─── B                        A ──► B                        A ─5─ B\n     │      ╱ │                     ▲      │                       │        │ 2\n     │ ╱      │                     │      ▼                       3        │\n     C ─── D                        C ◄── D                        C ─4─ D\n\n\n\n Term                   Meaning\n\n Degree                 number of edges at a vertex (in-degree, out-degree for digraphs)\n\n Path                  sequence of vertices joined by edges\n\n Cycle                 path that starts and ends at the same vertex\n\n Connected             a path exists between every pair (undirected)\n\n Tree                  connected graph with no cycles\n\n DAG                   directed acyclic graph\n\n Complete graph        every pair of vertices connected: n(n−1)/2 edges\n```\n\nSum of degrees = 2 × |E| (handshake lemma)."
+    },
+    {
+     "order": 2,
+     "title": "11.2 Representations",
+     "slug": "representations",
+     "description": "Representations",
+     "content": "Graph: 0—1, 0—2, 1—2, 2—3\n\n```\n Adjacency matrix                    Adjacency list\n        0 1 2 3                      0: [1, 2]\n   0    0 1 1 0                      1: [0, 2]\n   1    1 0 1 0                      2: [0, 1, 3]\n   2    1 1 0 1                      3: [2]\n   3    0 0 1 0\n\n\n\n                             Matrix                   List\n\n Space                       O(V²)                    O(V + E)\n\n Is edge (u,v)?              O(1)                     O(degree)\n\n List all neighbours         O(V)                     O(degree)\n\n Best for                    dense graphs             sparse graphs (most real ones)\n```"
+    },
+    {
+     "order": 3,
+     "title": "11.3 Breadth-First Search (BFS)",
+     "slug": "breadth-first-search-bfs",
+     "description": "Breadth-First Search (BFS)",
+     "content": "Explore level by level using a queue.\n\n```\n from collections import deque\n def bfs(adj, start):\n        seen = {start}; q = deque([start]); order = []\n        while q:\n\n            u = q.popleft(); order.append(u)\n            for v in adj[u]:\n                 if v not in seen:\n                       seen.add(v); q.append(v)\n      return order\n\n\n\n Graph:      0 ── 1 ── 3\n             │     │\n             2 ── 4\n BFS from 0:      level0: 0 | level1: 1, 2 | level2: 3, 4         → order 0 1 2 3 4\n```\n\nTime O(V + E). In an unweighted graph, BFS finds the shortest path (fewest edges)."
+    },
+    {
+     "order": 4,
+     "title": "11.4 Depth-First Search (DFS)",
+     "slug": "depth-first-search-dfs",
+     "description": "Depth-First Search (DFS)",
+     "content": "Go as deep as possible, then backtrack, using recursion or a stack.\n\n```\n def dfs(adj, u, seen):\n      seen.add(u)\n      for v in adj[u]:\n            if v not in seen:\n                 dfs(adj, v, seen)\n\n\n\n DFS from 0 on the graph above (neighbours in ascending order):\n  0 → 1 → 3 (dead end, back) → 4 → 2 → done              order: 0 1 3 4 2\n```\n\nTime O(V + E)."
+    },
+    {
+     "order": 5,
+     "title": "11.5 BFS vs DFS",
+     "slug": "bfs-vs-dfs",
+     "description": "BFS vs DFS",
+     "content": "```\n                             BFS              DFS\n\n Data structure              Queue            Stack / recursion\n\n Explores                    by distance      by depth\n\n Shortest path\n                             Yes              No\n (unweighted)\n\n                             shortest hops,   cycle detection, connected components,\n Typical uses\n                             levels           topological sort\n```"
+    },
+    {
+     "order": 6,
+     "title": "11.6 Basic applications",
+     "slug": "basic-applications",
+     "description": "Basic applications",
+     "content": "- Connected components: run BFS/DFS from every unvisited vertex; count the runs.\n\n- Cycle detection (undirected): DFS meets a visited vertex that is not its parent.\n\n- Flood fill / islands in a grid: a grid is an implicit graph (4 or 8 neighbours).\n\n- Maze solving, social-network \"degrees of separation\", web crawling.\n\n#### Common Mistakes\n\n- Forgetting the visited set (infinite loops on cycles).\n\n- Marking visited when popping instead of when pushing in BFS (duplicate queue entries).\n\n- Using a matrix for a huge sparse graph.\n\n#### Quick Revision\n\nGraph = vertices + edges. Use adjacency lists for sparse graphs. BFS (queue) gives shortest hops, DFS (stack) explores deep. Both are O(V+E).\n\n#### Common Mistakes\n\n- Forgetting the visited set (infinite loops on cycles).\n\n- Marking visited when popping instead of when pushing in BFS (duplicate queue entries).\n\n- Using a matrix for a huge sparse graph.\n\n#### Quick Revision\n\nGraph = vertices + edges. Use adjacency lists for sparse graphs. BFS (queue) gives shortest hops, DFS (stack) explores deep. Both are O(V+E)."
+    }
+   ],
+   "quiz": {
+    "questions": [
+     {
+      "order": 1,
+      "prompt": "BFS uses which data structure?",
+      "options": [
+       "Stack",
+       "Queue",
+       "Heap",
+       "Hash table"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 2,
+      "prompt": "The number of edges in a complete undirected graph with n vertices is?",
+      "options": [
+       "n",
+       "n(n − 1)/2",
+       "n²",
+       "2ⁿ"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 3,
+      "prompt": "The sum of the degrees of all vertices in an undirected graph with E edges is?",
+      "options": [
+       "E",
+       "2E",
+       "E²",
+       "E/2"
+      ],
+      "correctIndex": 1,
+      "explanation": "Each edge adds one to the degree of both its endpoints."
+     },
+     {
+      "order": 4,
+      "prompt": "Space needed by an adjacency matrix is?",
+      "options": [
+       "O(V)",
+       "O(V + E)",
+       "O(V²)",
+       "O(E)"
+      ],
+      "correctIndex": 2,
+      "explanation": ""
+     },
+     {
+      "order": 5,
+      "prompt": "In an unweighted graph, which algorithm finds the shortest path (fewest edges)?",
+      "options": [
+       "DFS",
+       "BFS",
+       "Binary search",
+       "Insertion sort"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 6,
+      "prompt": "The time complexity of BFS with an adjacency list is?",
+      "options": [
+       "O(V)",
+       "O(E)",
+       "O(V + E)",
+       "O(V·E)"
+      ],
+      "correctIndex": 2,
+      "explanation": ""
+     },
+     {
+      "order": 7,
+      "prompt": "A connected graph with no cycles is a?",
+      "options": [
+       "DAG",
+       "tree",
+       "complete graph",
+       "bipartite graph"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 8,
+      "prompt": "For BFS from vertex 0 on edges 0–1, 0–2, 1–3, 2–3 (neighbours in ascending order), the visit order is?",
+      "options": [
+       "0 1 3 2",
+       "0 1 2 3",
+       "0 2 1 3",
+       "3 2 1 0"
+      ],
+      "correctIndex": 1,
+      "explanation": "Level 0: 0; level 1: 1, 2; level 2: 3."
+     }
+    ]
+   },
+   "practiceProblems": [
+    {
+     "number": 1,
+     "difficulty": "Easy",
+     "title": "BFS and DFS",
+     "statement": "",
+     "example": "",
+     "solution": "from collections import deque\ndef bfs(adj, s):\n     seen, q, order = {s}, deque([s]), []\n     while q:\n          u = q.popleft(); order.append(u)\n          for v in adj[u]:\n                if v not in seen: seen.add(v); q.append(v)\n     return order\n\n\ndef dfs(adj, u, seen=None, order=None):\n     seen = seen if seen is not None else set()\n     order = order if order is not None else []\n     seen.add(u); order.append(u)\n     for v in adj[u]:\n          if v not in seen: dfs(adj, v, seen, order)\n     return order",
+     "complexity": "O(V + E) each."
+    },
+    {
+     "number": 2,
+     "difficulty": "Easy",
+     "title": "Count connected components",
+     "statement": "",
+     "example": "",
+     "solution": " def components(n, edges):\n      adj = [[] for _ in range(n)]\n      for u, v in edges: adj[u].append(v); adj[v].append(u)\n      seen, count = set(), 0\n      for s in range(n):\n           if s not in seen:\n                 count += 1\n                 stack = [s]; seen.add(s)\n\n                while stack:\n                    u = stack.pop()\n                    for v in adj[u]:\n                        if v not in seen: seen.add(v); stack.append(v)\n     return count\n# components(5, [(0,1),(1,2),(3,4)]) -> 2",
+     "complexity": ""
+    },
+    {
+     "number": 3,
+     "difficulty": "Medium",
+     "title": "Number of islands",
+     "statement": "In a grid of '1' (land) and '0' (water), count islands (4-direction connectivity).",
+     "example": "",
+     "solution": "def num_islands(g):\n     if not g: return 0\n     R, C, count = len(g), len(g[0]), 0\n     def sink(r, c):\n          if r < 0 or c < 0 or r >= R or c >= C or g[r][c] != '1': return\n          g[r][c] = '0'\n          sink(r+1, c); sink(r-1, c); sink(r, c+1); sink(r, c-1)\n     for r in range(R):\n          for c in range(C):\n                if g[r][c] == '1':\n                    count += 1; sink(r, c)\n     return count",
+     "complexity": "O(R·C)."
+    },
+    {
+     "number": 4,
+     "difficulty": "Medium",
+     "title": "Shortest path in a maze (BFS)",
+     "statement": "Grid with 0 (open) and 1 (wall); find the fewest steps from (0,0) to (R−1,C−1), or −1.",
+     "example": "",
+     "solution": "from collections import deque\ndef shortest(grid):\n     R, C = len(grid), len(grid[0])\n     if grid[0][0] or grid[R-1][C-1]: return -1\n     q, seen = deque([(0, 0, 0)]), {(0, 0)}\n     while q:\n          r, c, d = q.popleft()\n          if (r, c) == (R-1, C-1): return d\n          for dr, dc in ((1,0),(-1,0),(0,1),(0,-1)):\n                nr, nc = r + dr, c + dc\n                if 0 <= nr < R and 0 <= nc < C and not grid[nr][nc] and (nr, nc) not in seen:\n                    seen.add((nr, nc)); q.append((nr, nc, d + 1))\n     return -1",
+     "complexity": ""
+    },
+    {
+     "number": 5,
+     "difficulty": "Medium",
+     "title": "Detect a cycle in an undirected graph",
+     "statement": "",
+     "example": "",
+     "solution": "def has_cycle(n, adj):\n     seen = set()\n     def dfs(u, parent):\n          seen.add(u)\n          for v in adj[u]:\n              if v not in seen:\n                    if dfs(v, u): return True\n              elif v != parent:\n                    return True\n          return False\n     return any(dfs(s, -1) for s in range(n) if s not in seen)",
+     "complexity": ""
+    }
+   ],
+   "practiceProblemsMd": "### Code Problem 1 (Easy): BFS and DFS\n\n```python\nfrom collections import deque\ndef bfs(adj, s):\n     seen, q, order = {s}, deque([s]), []\n     while q:\n          u = q.popleft(); order.append(u)\n          for v in adj[u]:\n                if v not in seen: seen.add(v); q.append(v)\n     return order\n\n\ndef dfs(adj, u, seen=None, order=None):\n     seen = seen if seen is not None else set()\n     order = order if order is not None else []\n     seen.add(u); order.append(u)\n     for v in adj[u]:\n          if v not in seen: dfs(adj, v, seen, order)\n     return order\n```\n\n**Complexity:** O(V + E) each.\n\n### Code Problem 2 (Easy): Count connected components\n\n```python\n def components(n, edges):\n      adj = [[] for _ in range(n)]\n      for u, v in edges: adj[u].append(v); adj[v].append(u)\n      seen, count = set(), 0\n      for s in range(n):\n           if s not in seen:\n                 count += 1\n                 stack = [s]; seen.add(s)\n\n                while stack:\n                    u = stack.pop()\n                    for v in adj[u]:\n                        if v not in seen: seen.add(v); stack.append(v)\n     return count\n# components(5, [(0,1),(1,2),(3,4)]) -> 2\n```\n\n### Code Problem 3 (Medium): Number of islands\n\n**Statement:** In a grid of '1' (land) and '0' (water), count islands (4-direction connectivity).\n\n```python\ndef num_islands(g):\n     if not g: return 0\n     R, C, count = len(g), len(g[0]), 0\n     def sink(r, c):\n          if r < 0 or c < 0 or r >= R or c >= C or g[r][c] != '1': return\n          g[r][c] = '0'\n          sink(r+1, c); sink(r-1, c); sink(r, c+1); sink(r, c-1)\n     for r in range(R):\n          for c in range(C):\n                if g[r][c] == '1':\n                    count += 1; sink(r, c)\n     return count\n```\n\n**Complexity:** O(R·C).\n\n### Code Problem 4 (Medium): Shortest path in a maze (BFS)\n\n**Statement:** Grid with 0 (open) and 1 (wall); find the fewest steps from (0,0) to (R−1,C−1), or −1.\n\n```python\nfrom collections import deque\ndef shortest(grid):\n     R, C = len(grid), len(grid[0])\n     if grid[0][0] or grid[R-1][C-1]: return -1\n     q, seen = deque([(0, 0, 0)]), {(0, 0)}\n     while q:\n          r, c, d = q.popleft()\n          if (r, c) == (R-1, C-1): return d\n          for dr, dc in ((1,0),(-1,0),(0,1),(0,-1)):\n                nr, nc = r + dr, c + dc\n                if 0 <= nr < R and 0 <= nc < C and not grid[nr][nc] and (nr, nc) not in seen:\n                    seen.add((nr, nc)); q.append((nr, nc, d + 1))\n     return -1\n```\n\n### Code Problem 5 (Medium): Detect a cycle in an undirected graph\n\n```python\ndef has_cycle(n, adj):\n     seen = set()\n     def dfs(u, parent):\n          seen.add(u)\n          for v in adj[u]:\n              if v not in seen:\n                    if dfs(v, u): return True\n              elif v != parent:\n                    return True\n          return False\n     return any(dfs(s, -1) for s in range(n) if s not in seen)\n```"
+  },
+  {
+   "number": 12,
+   "title": "Hashing & Putting It All Together",
+   "slug": "hashing-and-review",
+   "coldOpen": "Cold open (Ep. 12): At the Bit-Land post office, every name is turned into a number that tells the clerk exactly which box to open. No searching. Cliffhanger: Two letters get the same box number. Bit: \"A collision... but that is a story for the Mastery series.\"",
+   "outcomes": [
+    "Explain hash functions, collisions, and the chaining and open-addressing ideas.",
+    "Use dictionaries and sets to get O(1) average lookups.",
+    "Choose the right data structure for a problem."
+   ],
+   "topics": [
+    {
+     "order": 1,
+     "title": "12.1 Hashing",
+     "slug": "hashing",
+     "description": "Hashing",
+     "content": "A hash function h(key) maps a key to an index of a table of size m.\n\n```\n  key \"Zara\" ──► h(\"Zara\") = 17 mod 10 = 7\n  table:    0 1 2 3 4 5 6 [7: Zara] 8 9\n```\n\nGoals: fast to compute, spreads keys uniformly. Common hash functions [L]\n\n- Division: h(k) = k mod m (choose m prime).\n\n- Mid-square: square the key, take the middle digits.\n\n- Folding: split the key into parts and add them.\n\n- Strings: h(s) = (s[0]·p⁰ + s[1]·p¹ + ...) mod m ."
+    },
+    {
+     "order": 2,
+     "title": "12.2 Collisions",
+     "slug": "collisions",
+     "description": "Collisions",
+     "content": "Two different keys give the same index (inevitable, since there are more keys than slots). Chaining: each slot holds a linked list.\n\n```\n   0: ∅\n   1: [11] → [21] → ∅\n   2: [12] → ∅\n   3: ∅\n```\n\nOpen addressing (linear probing): if slot taken, try the next one.\n\n```\n insert 11 (h=1) → slot 1\n insert 21 (h=1) → taken → slot 2\n insert 31 (h=1) → taken, taken → slot 3\n```\n\nLoad factor α = n / m. Keep α below about 0.7, otherwise resize and rehash."
+    },
+    {
+     "order": 3,
+     "title": "12.3 Cost",
+     "slug": "cost",
+     "description": "Cost",
+     "content": "```\n  Operation                                          Average         Worst (all collide)\n\n  insert                                             O(1)            O(n)\n\n  search                                             O(1)            O(n)\n\n  delete                                             O(1)            O(n)\n\n  Hash tables do not keep keys ordered.\n```"
+    },
+    {
+     "order": 4,
+     "title": "12.4 Using dictionaries and sets (Python)",
+     "slug": "using-dictionaries-and-sets-python",
+     "description": "Using dictionaries and sets (Python)",
+     "content": "```\n # Two-sum in O(n) with a hash map\n def two_sum(a, target):\n      seen = {}\n      for i, v in enumerate(a):\n           if target - v in seen:\n               return seen[target - v], i\n           seen[v] = i\n\n # Count frequencies\n from collections import Counter\n Counter(\"banana\")           # {'a': 3, 'n': 2, 'b': 1}\n```"
+    },
+    {
+     "order": 5,
+     "title": "12.5 Which data structure should I use?",
+     "slug": "which-data-structure-should-i-use",
+     "description": "Which data structure should I use?",
+     "content": "```\n Need                                                     Best choice\n\n Fast access by position                                  Array\n\n Frequent insert/delete at the front                      Linked list / deque\n\n Last-in-first-out, undo, matching                        Stack\n\n First-come-first-served, BFS                             Queue\n\n Fast lookup by key                                       Hash table\n\n Sorted data with insert/delete                           BST (balanced)\n\n Hierarchy                                                Tree\n\n Relationships / networks                                 Graph\n\n Always get the smallest or largest                       Priority queue (heap)\n```"
+    },
+    {
+     "order": 6,
+     "title": "12.6 Problem-solving checklist",
+     "slug": "problem-solving-checklist",
+     "description": "Problem-solving checklist",
+     "content": "- 1. Restate the problem and list input/output and constraints.\n\n- 2. Solve a small example by hand.\n\n- 3. Think brute force first; state its complexity.\n\n- 4. Ask: \"Which structure removes the repeated work?\"\n\n- 5. Code, test with edge cases (empty, one element, duplicates, negatives).\n\n- 6. State final time and space complexity."
+    },
+    {
+     "order": 7,
+     "title": "12.7 Cheat-sheet: complexity of everything in this course",
+     "slug": "cheat-sheet-complexity-of-everything-in-this-course",
+     "description": "Cheat-sheet: complexity of everything in this course",
+     "content": "```\n Structure                        Access    Search          Insert              Delete\n\n Array                            O(1)      O(n)            O(n)                O(n)\n\n  Linked list                      O(n)        O(n)            O(1)*              O(1)*\n\n  Stack / Queue                    O(n)        O(n)            O(1)               O(1)\n\n                                               O(log n) /      O(log n) /         O(log n) /\n  BST (balanced / skewed)          –\n                                               O(n)            O(n)               O(n)\n\n  Hash table (avg)                 –           O(1)            O(1)               O(1)\n\n  *once the position is\n  known.\n```\n\n#### Common Mistakes\n\n- Assuming O(1) hashing in the worst case.\n\n- Using a mutable object (list) as a dictionary key.\n\n- Forgetting that hash tables are unordered.\n\n#### Quick Revision\n\nHashing turns a key into an index. Collisions are resolved by chaining or probing. Average O(1) operations. Choose structures by the operations you need most.\n\n#### Common Mistakes\n\n- Assuming O(1) hashing in the worst case.\n\n- Using a mutable object (list) as a dictionary key.\n\n- Forgetting that hash tables are unordered.\n\n#### Quick Revision\n\nHashing turns a key into an index. Collisions are resolved by chaining or probing. Average O(1) operations. Choose structures by the operations you need most."
+    }
+   ],
+   "quiz": {
+    "questions": [
+     {
+      "order": 1,
+      "prompt": "The average-case time of a hash table lookup (good hash, low load factor) is?",
+      "options": [
+       "O(n)",
+       "O(log n)",
+       "O(1)",
+       "O(n²)"
+      ],
+      "correctIndex": 2,
+      "explanation": ""
+     },
+     {
+      "order": 2,
+      "prompt": "With h(k) = k mod 10 and linear probing, insert 12, 22, 32. Their slots are?",
+      "options": [
+       "2, 3, 4",
+       "2, 2, 2",
+       "2, 12, 22",
+       "12, 22, 32"
+      ],
+      "correctIndex": 0,
+      "explanation": "12 → slot 2; 22 collides → slot 3; 32 collides twice → slot 4."
+     },
+     {
+      "order": 3,
+      "prompt": "Load factor of a hash table is?",
+      "options": [
+       "m / n",
+       "n / m",
+       "n × m",
+       "n − m"
+      ],
+      "correctIndex": 1,
+      "explanation": "n items in m slots."
+     },
+     {
+      "order": 4,
+      "prompt": "Chaining resolves collisions by?",
+      "options": [
+       "probing the next slot",
+       "keeping a linked list in each slot",
+       "deleting old keys",
+       "using a bigger key"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 5,
+      "prompt": "Which operation is NOT efficient in a hash table?",
+      "options": [
+       "Insert",
+       "Lookup",
+       "Delete",
+       "Listing keys in sorted order"
+      ],
+      "correctIndex": 3,
+      "explanation": "Hash tables do not keep keys ordered."
+     },
+     {
+      "order": 6,
+      "prompt": "Which structure is best when you must always retrieve the smallest element quickly?",
+      "options": [
+       "Stack",
+       "Queue",
+       "Priority queue (min-heap)",
+       "Array"
+      ],
+      "correctIndex": 2,
+      "explanation": ""
+     },
+     {
+      "order": 7,
+      "prompt": "Which structure fits \"undo\" in an editor?",
+      "options": [
+       "Queue",
+       "Stack",
+       "Hash table",
+       "Graph"
+      ],
+      "correctIndex": 1,
+      "explanation": ""
+     },
+     {
+      "order": 8,
+      "prompt": "The worst-case time of a hash table lookup (all keys collide) is?",
+      "options": [
+       "O(1)",
+       "O(log n)",
+       "O(n)",
+       "O(n²)"
+      ],
+      "correctIndex": 2,
+      "explanation": ""
+     }
+    ]
+   },
+   "practiceProblems": [
+    {
+     "number": 1,
+     "difficulty": "Easy",
+     "title": "Two sum",
+     "statement": "",
+     "example": "[2, 7, 11, 15] , target 9 → (0, 1)",
+     "solution": "def two_sum(a, target):\n     seen = {}\n     for i, v in enumerate(a):\n          if target - v in seen: return seen[target - v], i\n          seen[v] = i\n     return None",
+     "complexity": "O(n), O(n)."
+    },
+    {
+     "number": 2,
+     "difficulty": "Easy",
+     "title": "First repeating element",
+     "statement": "Return the first element (in array order) that occurs more than once.",
+     "example": "[10, 5, 3, 4, 3, 5, 6] → 5",
+     "solution": "def first_repeating(a):\n     cnt = {}\n     for v in a:\n          cnt[v] = cnt.get(v, 0) + 1\n     for v in a:\n          if cnt[v] > 1:\n                return v\n     return None",
+     "complexity": "O(n) time, O(n) space."
+    },
+    {
+     "number": 3,
+     "difficulty": "Medium",
+     "title": "Group anagrams",
+     "statement": "",
+     "example": "[\"eat\",\"tea\",\"tan\",\"ate\",\"nat\",\"bat\"] → [[\"eat\",\"tea\",\"ate\"], [\"tan\",\"nat\"],[\"bat\"]]",
+     "solution": "from collections import defaultdict\ndef group_anagrams(words):\n     g = defaultdict(list)\n     for w in words: g[''.join(sorted(w))].append(w)\n     return list(g.values())",
+     "complexity": "O(n · k log k)."
+    },
+    {
+     "number": 4,
+     "difficulty": "Medium",
+     "title": "Longest substring without repeating characters",
+     "statement": "",
+     "example": "\"abcabcbb\" → 3",
+     "solution": "def longest_unique(s):\n     last, start, best = {}, 0, 0\n     for i, ch in enumerate(s):\n         if ch in last and last[ch] >= start:\n              start = last[ch] + 1\n         last[ch] = i\n         best = max(best, i - start + 1)\n     return best",
+     "complexity": "O(n)."
+    },
+    {
+     "number": 5,
+     "difficulty": "Medium",
+     "title": "Hash table with chaining",
+     "statement": "",
+     "example": "",
+     "solution": "class HashTable:\n     def __init__(self, m=8):\n         self.m, self.n = m, 0\n         self.t = [[] for _ in range(m)]\n     def _idx(self, k): return hash(k) % self.m\n     def put(self, k, v):\n         b = self.t[self._idx(k)]\n         for i, (kk, _) in enumerate(b):\n              if kk == k: b[i] = (k, v); return\n         b.append((k, v)); self.n += 1\n         if self.n / self.m > 0.75: self._grow()\n     def get(self, k):\n         for kk, v in self.t[self._idx(k)]:\n\n               if kk == k: return v\n           return None\n       def _grow(self):\n           old = [kv for b in self.t for kv in b]\n           self.m *= 2; self.n = 0\n           self.t = [[] for _ in range(self.m)]\n           for k, v in old: self.put(k, v)",
+     "complexity": "O(1) average for put/get; growing is amortised O(1)."
+    }
+   ],
+   "practiceProblemsMd": "### Code Problem 1 (Easy): Two sum\n\n**Example:** [2, 7, 11, 15] , target 9 → (0, 1)\n\n```python\ndef two_sum(a, target):\n     seen = {}\n     for i, v in enumerate(a):\n          if target - v in seen: return seen[target - v], i\n          seen[v] = i\n     return None\n```\n\n**Complexity:** O(n), O(n).\n\n### Code Problem 2 (Easy): First repeating element\n\n**Statement:** Return the first element (in array order) that occurs more than once.\n\n**Example:** [10, 5, 3, 4, 3, 5, 6] → 5\n\n```python\ndef first_repeating(a):\n     cnt = {}\n     for v in a:\n          cnt[v] = cnt.get(v, 0) + 1\n     for v in a:\n          if cnt[v] > 1:\n                return v\n     return None\n```\n\n**Complexity:** O(n) time, O(n) space.\n\n### Code Problem 3 (Medium): Group anagrams\n\n**Example:** [\"eat\",\"tea\",\"tan\",\"ate\",\"nat\",\"bat\"] → [[\"eat\",\"tea\",\"ate\"], [\"tan\",\"nat\"],[\"bat\"]]\n\n```python\nfrom collections import defaultdict\ndef group_anagrams(words):\n     g = defaultdict(list)\n     for w in words: g[''.join(sorted(w))].append(w)\n     return list(g.values())\n```\n\n**Complexity:** O(n · k log k).\n\n### Code Problem 4 (Medium): Longest substring without repeating characters\n\n**Example:** \"abcabcbb\" → 3\n\n```python\ndef longest_unique(s):\n     last, start, best = {}, 0, 0\n     for i, ch in enumerate(s):\n         if ch in last and last[ch] >= start:\n              start = last[ch] + 1\n         last[ch] = i\n         best = max(best, i - start + 1)\n     return best\n```\n\n**Complexity:** O(n).\n\n### Code Problem 5 (Medium): Hash table with chaining\n\n```python\nclass HashTable:\n     def __init__(self, m=8):\n         self.m, self.n = m, 0\n         self.t = [[] for _ in range(m)]\n     def _idx(self, k): return hash(k) % self.m\n     def put(self, k, v):\n         b = self.t[self._idx(k)]\n         for i, (kk, _) in enumerate(b):\n              if kk == k: b[i] = (k, v); return\n         b.append((k, v)); self.n += 1\n         if self.n / self.m > 0.75: self._grow()\n     def get(self, k):\n         for kk, v in self.t[self._idx(k)]:\n\n               if kk == k: return v\n           return None\n       def _grow(self):\n           old = [kv for b in self.t for kv in b]\n           self.m *= 2; self.n = 0\n           self.t = [[] for _ in range(self.m)]\n           for k, v in old: self.put(k, v)\n```\n\n**Complexity:** O(1) average for put/get; growing is amortised O(1)."
+  },
+  {
+   "number": 13,
+   "title": "ASSESSMENT",
+   "slug": "assessment",
+   "coldOpen": "Season finale (Ep. 13): Zara faces the \"Maze of Memory\", where every door needs a different data structure to open. Bit steps aside: \"This one is yours.\" Teaser: A figure appears behind the final door, with a new level of problems. DSA Mastery awaits.",
+   "outcomes": [],
+   "topics": [
+    {
+     "order": 1,
+     "title": "13.1 Structure of the assessment",
+     "slug": "structure-of-the-assessment",
+     "description": "Structure of the assessment",
+     "content": "```\n Part                            Content                                              Marks\n\n A. MCQ                          30 questions across Modules 1–12                     30\n\n                                 pointer diagrams, traversals, hashing tables,\n B. Trace & short answer                                                              20\n                                 complexity\n\n C. Coding                       3 problems (easy, medium, medium)                    30\n\n D. Mini project                 see 13.3                                             20\n\n Total                                                                                100\n\n Pass mark: 40. Distinction:\n 75+.\n```"
+    },
+    {
+     "order": 2,
+     "title": "13.2 Sample questions",
+     "slug": "sample-questions",
+     "description": "Sample questions",
+     "content": "A. MCQ\n\n- 1. Which operation is O(1) on an array? (a) insert at the start (b) access by index (c) delete\n\n- from the middle (d) linear search → b\n\n- 2. The postfix form of A*(B+C) is → **A B C + ***\n\n- 3. In-order traversal of a BST yields → sorted order\n\n- 4. Which structure is used by BFS? → queue\n\n- 5. Worst-case search time in a BST built from sorted input → O(n)\n\nB. Short answer\n\n- 1. Show the steps of inserting 33, 17, 8, 45 into an initially empty BST and give its in-order\n\n- traversal. (Answer: 8 17 33 45; the tree is a left-leaning chain.)\n\n- 2. Insert keys 12, 22, 32, 5 into a table of size 10 with linear probing and h(k) = k mod 10 .\n\n- (Answer: slots 2, 3, 4, 5.)\n\n- 3. Find the time complexity of: for i in range(n): for j in range(i, n): ... → O(n²).\n\nC. Coding\n\n- 1. Reverse a linked list.\n\n- 2. Check for balanced parentheses in a string with three bracket types.\n\n- 3. Number of islands in a binary grid (BFS or DFS)."
+    },
+    {
+     "order": 3,
+     "title": "13.3 Mini project (choose one)",
+     "slug": "mini-project-choose-one",
+     "description": "Mini project (choose one)",
+     "content": "```\n  Project                                                               Structures used\n\n  Contact book with fast search, add, delete and sorted listing         hash table + array/BST\n\n  Text editor undo/redo                                                 two stacks\n\n  Ticket counter simulation                                             queue + priority queue\n\n  Campus map route finder (fewest hops)                                 graph + BFS\n```\n\nProject deliverables: problem statement, choice of data structure with reasons (include the complexity table), code, test cases, and a short README. Lipschutz's chapters on applications (word processing, polynomial arithmetic, file organisation) offer further project ideas."
+    },
+    {
+     "order": 4,
+     "title": "13.4 Readiness checklist for DSA Mastery",
+     "slug": "readiness-checklist-for-dsa-mastery",
+     "description": "Readiness checklist for DSA Mastery",
+     "content": "- ☐︎ I can write a linked list and a BST from scratch.\n\n- ☐︎ I can trace BFS and DFS by hand.\n\n- ☐︎ I can state the complexity of any loop in this course.\n\n- ☐︎ I can pick between array, list, stack, queue, hash table and tree for a new problem.\n\nEnd of DSA Foundations notes."
+    }
+   ],
+   "quiz": null,
+   "practiceProblems": [],
+   "practiceProblemsMd": ""
+  }
+ ]
+}

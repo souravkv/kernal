@@ -1,0 +1,3456 @@
+DSA FOUNDATIONS — Beginner to Intermediate
+
+Complete Course Notes (13 Modules: 12 Teaching + 1 Assessment)
+Reference books
+
+      [L] Seymour Lipschutz, Data Structures (Schaum's Outline), McGraw Hill Education
+      [AHU] Aho, Hopcroft & Ullman, Data Structures and Algorithms, Pearson
+
+Chapter titles are given instead of chapter numbers, because numbering differs between
+editions. Check them against your copy.
+
+
+
+
+0. COURSE OVERVIEW
+Who it is for: first-year students and complete beginners who know basic programming
+(variables, loops, functions, if/else) in any one language.
+
+What you will be able to do at the end
+
+1. Choose the right data structure for a problem and justify the choice.
+2. Analyse the time and space cost of simple algorithms using Big-O.
+3. Implement arrays, strings, linked lists, stacks, queues, trees, graphs (basic) and hash
+      tables from scratch.
+4. Solve entry-level and medium coding-interview problems on these topics.
+
+Lesson flow of every module (fixed order)
+
+1. Animation Video Class ("The Code Chronicles": Zara + Bit)
+2. Theory Notes (this document)
+3. MCQ Set
+4. Code Problems
+
+Code language: examples are written in Python for readability. Algorithms are first given in
+Lipschutz-style numbered steps, so you can translate them to C, C++ or Java.
+
+Module map
+
+
+  #       Module              Main idea             Book reference
+       Thinking in Data &    What                   [L] Introduction, Preliminaries; [AHU]
+ 1                           DS/ADT/algorithm
+       Algorithms                                   Design and Analysis of Algorithms
+                             mean
+
+       Analysing             Big-O,                 [L] Preliminaries (complexity); [AHU]
+ 2
+       Algorithms            best/avg/worst         Design and Analysis of Algorithms
+
+                             Contiguous
+ 3     Arrays & Records                             [L] Arrays, Records, Pointers
+                             memory
+
+ 4     Strings               Text as arrays         [L] String Processing
+
+                             Function calls
+ 5     Recursion                                    [L] Stacks, Queues, Recursion
+                             itself
+
+       Searching & Basic     Find and order
+ 6                                                  [L] Sorting and Searching; [AHU] Sorting
+       Sorting               data
+
+                             Nodes and
+ 7     Linked Lists                                 [L] Linked Lists; [AHU] Basic Data Types
+                             pointers
+
+                                                    [L] Stacks, Queues, Recursion; [AHU]
+ 8     Stacks                LIFO
+                                                    Basic Data Types
+
+ 9     Queues                FIFO                   [L] same; [AHU] Basic Data Types
+
+                                                    [L] Trees; [AHU] Trees, Basic Operations
+ 10    Trees & BST           Hierarchy
+                                                    on Sets
+
+                             Networks, BFS,         [L] Graphs and Their Applications; [AHU]
+ 11    Graph Basics
+                             DFS                    Directed/Undirected Graphs
+
+                             O(1) lookup,
+       Hashing & Putting                            [L] Hashing; [AHU] Basic Operations on
+ 12                          choosing
+       It All Together                              Sets
+                             structures
+
+                             Exam + mini
+ 13    Assessment                                   all
+                             project
+
+
+Story thread: The Code Chronicles follows Zara (a first-year student) and Bit (a glowing
+guide who lives inside the computer). Each module opens with a short cold-open scene and
+ends on a cliffhanger leading to the next module.
+
+
+
+
+MODULE 1 — Thinking in Data & Algorithms
+   Cold open (Code Chronicles, Ep. 1): Zara's phone has 4,000 contacts and she can't
+   find "Dr. Menon" before the bus leaves. Bit appears: "The problem isn't your phone. It's
+   how the data is organised."
+   Cliffhanger: The contact list freezes. Bit whispers, "How slow is too slow? We need a
+   ruler for speed."
+
+
+Learning outcomes
+    Define data, data item, record, file, data structure, ADT and algorithm.
+    Describe the four stages of problem solving.
+    Write simple algorithms in pseudocode and draw flowcharts.
+
+
+1.1 Basic terms
+    Data: raw facts (e.g., 25, "Zara", 9.5).
+    Data item / field: the smallest named unit. Example: Name .
+    Record: a collection of related fields. Example: Student(RollNo, Name, Marks).
+    File: a collection of records.
+    Entity and attribute: an entity is something with properties; an attribute is one
+    property. Entity = Student, attributes = RollNo, Name, Marks.
+
+
+  FILE (Students)
+   ├── RECORD 1 : [ RollNo=101 | Name=Zara | Marks=88 ]
+   ├── RECORD 2 : [ RollNo=102 | Name=Arun | Marks=75 ]
+   └── RECORD 3 : [ RollNo=103 | Name=Mia          | Marks=92 ]
+            ▲                ▲            ▲
+         field          field           field
+
+
+
+
+1.2 What is a data structure?
+A data structure is a way of storing and organising data in memory so that it can be used
+efficiently. It has two parts:
+
+1. Organisation: how items are arranged in memory.
+2. Operations: what you can do (insert, delete, search, traverse, sort, merge).
+
+Classification
+
+                             DATA STRUCTURES
+                         /                     \
+               PRIMITIVE                      NON-PRIMITIVE
+          (int, float, char, bool)            /           \
+                                     LINEAR             NON-LINEAR
+                               (Array, Linked List,      (Tree, Graph)
+                                Stack, Queue)
+
+
+    Linear: elements form a sequence; each has one predecessor and one successor.
+    Non-linear: an element can connect to many others.
+    Static vs dynamic: size fixed at compile time (arrays) versus growing and shrinking at
+    run time (linked lists).
+
+
+1.3 Abstract Data Type (ADT)
+An ADT describes what a structure does (values and operations) without saying how it is
+implemented. [AHU] defines an ADT as a mathematical model with a collection of
+operations defined on it.
+
+
+  ADT                Operations (the interface)               Possible implementations
+
+  Stack              push, pop, peek, isEmpty                 array, linked list
+
+  Queue              enqueue, dequeue, front                  circular array, linked list
+
+  List               insert, delete, search                   array, linked list
+
+  Dictionary         insert, delete, lookup                   hash table, BST
+
+
+Analogy: a TV remote is an interface. You don't need to know the circuits inside.
+
+
+1.4 What is an algorithm?
+A finite sequence of well-defined steps that solves a problem. Five properties:
+
+1. Input: zero or more.
+2. Output: at least one.
+3. Definiteness: each step is unambiguous.
+4. Finiteness: it stops after finitely many steps.
+5. Effectiveness: each step is simple enough to be carried out.
+
+
+1.5 Writing algorithms the Lipschutz way
+Algorithm 1.1: Find the largest element of an array DATA with N elements
+
+
+ 1. [Initialise]     Set MAX := DATA[1], K := 2.
+ 2. Repeat Steps 3 and 4 while K <= N:
+ 3.      If MAX < DATA[K], then: Set MAX := DATA[K].
+ 4.      Set K := K + 1.
+ 5. Write: MAX.
+ 6. Exit.
+
+
+Python version:
+
+
+ def find_max(data):
+      mx = data[0]
+      for x in data[1:]:
+            if x > mx:
+                mx = x
+      return mx
+
+
+Flowchart symbols (text form)
+
+
+   ( Start/End )     [ Process ]    < Decision? >       /Input-Output/
+
+
+Flowchart of Algorithm 1.1:
+
+
+   (Start) → [MAX=DATA[1], K=2] → <K <= N?> ──No──→ /Print MAX/ → (End)
+                                         │Yes
+                                         ▼
+                              <MAX < DATA[K]?> ─Yes→ [MAX=DATA[K]]
+                                         │No                    │
+                                         └────────┬─────────┘
+                                                    ▼
+                                                [K = K+1] ──→ (back to K <= N?)
+
+
+
+
+1.6 Four stages of problem solving
+1. Understand the problem: input, output, constraints.
+2. Plan: pick a data structure and an algorithm.
+3. Implement: write the code.
+4. Review: test with normal, edge and large cases, and check the cost.
+
+
+1.7 Operations on data structures
+Traversing, searching, inserting, deleting, sorting, merging.
+
+
+Common mistakes
+    Confusing a data structure (the storage layout) with an algorithm (the procedure).
+    Starting to code before understanding the input and output.
+    Ignoring edge cases such as an empty array or a single element.
+
+
+Quick revision
+Data → record → file. A data structure is organisation plus operations. An ADT is a what-
+only interface. An algorithm is finite and definite, with input and output.
+
+
+Practice Set A — MCQs with Answers
+Q1. The smallest named unit of data in a record is called a
+(a) file (b) field (c) entity (d) database
+Answer: (b) — A field (data item) is the smallest named unit; fields make a record, records
+make a file.
+
+Q2. Which of these is NOT a required property of an algorithm?
+(a) Finiteness (b) Definiteness (c) A graphical user interface (d) At least one output
+Answer: (c) — Algorithms need input (zero or more), output (at least one), definiteness,
+finiteness and effectiveness. A GUI is not required.
+
+Q3. Which of the following is a non-linear data structure?
+(a) Array (b) Stack (c) Queue (d) Tree
+Answer: (d) — In a tree one node can connect to many children.
+
+Q4. An Abstract Data Type specifies
+(a) how data is stored in memory (b) the values and operations, not the implementation (c)
+the programming language to use (d) the hardware needed
+Answer: (b) — An ADT is a what-only interface.
+
+Q5. A collection of related records is called a
+(a) field (b) file (c) pointer (d) attribute
+Answer: (b)
+
+Q6. What is the first step in solving a problem with a program?
+(a) Write code (b) Choose a language (c) Understand the problem (input, output,
+constraints) (d) Test the code
+Answer: (c)
+Q7. Which pair shows a data structure and an ADT that it can implement?
+(a) Array → Stack (b) Stack → Array (c) Queue → Tree (d) Record → Graph
+Answer: (a) — A stack (ADT) can be implemented using an array (data structure).
+
+Q8. In a flowchart, a diamond symbol represents
+(a) start/end (b) a process (c) a decision (d) input/output
+Answer: (c)
+
+
+Practice Set B — Coding Problems with Solutions
+
+Code Problem 1 (Easy): Largest and smallest
+Statement: Given an array, return its minimum and maximum in one pass.
+Example: [4, 9, 1, 7] → (1, 9)
+Solution:
+
+
+ def min_max(a):
+      mn = mx = a[0]
+      for x in a[1:]:
+            if x < mn: mn = x
+            if x > mx: mx = x
+      return mn, mx
+
+
+Complexity: Time O(n), space O(1).
+
+
+Code Problem 2 (Easy): Swap without a temporary variable
+Statement: Swap two integers a and b without a third variable.
+Example: a=5, b=9 → a=9, b=5
+Solution:
+
+
+ def swap(a, b):
+      a = a + b         # a = 14
+      b = a - b         # b = 5
+      a = a - b         # a = 9
+      return a, b
+
+
+(In Python you can simply write a, b = b, a ; in C use the arithmetic or XOR trick.)
+Complexity: O(1).
+
+
+Code Problem 3 (Easy): Count vowels
+Statement: Count the vowels in a string (case-insensitive).
+Example: "Data Structures" → 5
+Solution:
+
+  def count_vowels(s):
+      return sum(1 for ch in s.lower() if ch in "aeiou")
+
+
+Complexity: O(n).
+
+
+Code Problem 4 (Easy): Sum of digits (algorithm-writing practice)
+Statement: Write a numbered-step algorithm (Lipschutz style) and code to find the sum of
+digits of N.
+Algorithm: 1. Set SUM := 0. 2. Repeat while N > 0: SUM := SUM + (N mod 10); N := N div 10.
+3. Write SUM. 4. Exit.
+Solution:
+
+
+  def digit_sum(n):
+      s = 0
+      while n > 0:
+            s += n % 10
+            n //= 10
+      return s
+
+
+Example: 4521 → 12. Complexity: O(log₁₀ n).
+
+
+
+
+MODULE 2 — Analysing Algorithms (Complexity)
+   Cold open (Ep. 2): Two bots race to find a name in a 1,000,000-name list. One takes 1
+   second; the other takes 4 hours. Same answer. Bit: "Correct isn't enough. We need fast
+   and lean."
+   Cliffhanger: A tiny bug doubles the data every second. Memory fills up. "We need to
+   store data in clean rows, or this is going to crash!"
+
+
+Learning outcomes
+    Explain time and space complexity.
+    Use Big-O, Big-Omega and Big-Theta correctly.
+    Compare growth rates and compute the cost of loops.
+2.1 Why analyse?
+Running time depends on the machine, language and input, so we count basic operations
+as a function of input size n. We ignore constants and keep the dominant term.
+
+
+2.2 Time and space complexity
+   Time complexity T(n): number of basic steps.
+   Space complexity S(n): extra memory used besides the input.
+
+
+2.3 Cases (Lipschutz: best, average, worst)
+Example: linear search for ITEM in an array of n elements.
+
+
+ Case                       Meaning                               Comparisons
+
+ Best                       Item at position 1                    1
+
+ Average                    Item uniformly anywhere               (n+1)/2
+
+ Worst                      Last position or absent               n
+
+
+We usually quote the worst case because it is a guarantee.
+
+
+2.4 Asymptotic notation
+   O(g(n)) is an upper bound: f(n) ≤ c·g(n) for n ≥ n₀.
+   Ω(g(n)) is a lower bound.
+   Θ(g(n)) is a tight bound (both O and Ω).
+
+  cost
+    │                                      c·g(n) ← upper bound
+    │                                 ╱╱
+    │                           ╱╱     ·    f(n)
+    │                     ╱╱    ·
+    │                ╱╱ ·
+    │          ╱╱·
+    │    ╱╱·     ← after n0, f(n) stays below c·g(n)
+    └───────────┬──────────────────── n
+                     n0
+
+
+Rules
+1. Drop constants: 5n → O(n).
+2. Drop lower-order terms: n² + n + 7 → O(n²).
+3. Sequential blocks add: O(n) + O(n²) → O(n²).
+4. Nested loops multiply: n × n → O(n²).
+
+
+2.5 Growth-rate ladder
+
+ Slowest growth (best)                                       Fastest growth (worst)
+ O(1) < O(log n) < O(n) < O(n log n) < O(n²) < O(n³) < O(2ⁿ) < O(n!)
+
+
+Operations needed (approximate):
+
+
+  n                log₂ n        n log₂ n        n²            2ⁿ
+
+  10               3             33              100           1,024
+
+  100              7             664             10,000        1.3×10³⁰
+
+  1,000            10            9,966           1,000,000     ∞ (practically)
+
+
+Text graph (cost against n):
+
+
+ cost
+   │ 2ⁿ │               n²
+   │      │        ╱
+   │      │    ╱       n log n
+   │      │╱   ╱─────
+   │      ╱╱──────── n
+   │ ──────────────── log n
+   │ ═════════════════ 1
+   └────────────────────── n
+
+
+
+
+2.6 Analysing code: worked examples
+
+ # A: O(1)
+ x = a[0]
+
+
+ # B: O(n)
+ for i in range(n):
+        total += a[i]
+ # C: O(n^2)     (nested)
+ for i in range(n):
+      for j in range(n):
+          count += 1
+
+
+ # D: O(n^2)     (inner depends on i: 0+1+...+(n-1) = n(n-1)/2)
+ for i in range(n):
+      for j in range(i):
+          count += 1
+
+
+ # E: O(log n)     (i doubles each time)
+ i = 1
+ while i < n:
+      i *= 2
+
+
+ # F: O(n log n)
+ for i in range(n):             # n times
+      j = 1
+      while j < n:              # log n times
+          j *= 2
+
+
+
+
+2.7 Space complexity
+   Sum of an array with one loop variable: O(1) extra space.
+   Building a copy of the array: O(n) extra space.
+   Recursion depth d uses O(d) stack space (more in Module 5).
+
+
+2.8 Time–space trade-off
+You can often be faster by using more memory. Example: precompute a lookup table to
+answer queries in O(1), costing O(n) space.
+
+
+Common mistakes
+   Saying O(2n) is different from O(n). It is not.
+   Treating best-case as the cost.
+   Forgetting that a + b on huge numbers or strings may not be O(1).
+
+
+Quick revision
+Big-O means "no worse than". Drop constants and small terms. A loop that halves or
+doubles gives log n. Nested loops multiply.
+
+
+Practice Set A — MCQs with Answers
+Q1. The time complexity of the loop for i in range(n): for j in range(n): x += 1 is
+(a) O(n) (b) O(n²) (c) O(log n) (d) O(2ⁿ)
+Answer: (b) — Nested loops multiply: n × n.
+
+Q2. Simplify O(3n² + 5n + 2).
+(a) O(n) (b) O(3n²) (c) O(n²) (d) O(n³)
+Answer: (c) — Drop constants and lower-order terms.
+
+Q3. The best case of linear search occurs when the item is
+(a) at the last position (b) absent (c) at the first position (d) in the middle
+Answer: (c) — Only 1 comparison.
+
+Q4. Which is the correct growth-rate order, slowest-growing first?
+(a) n, log n, n², 2ⁿ (b) log n, n, n², 2ⁿ (c) 2ⁿ, n², n, log n (d) log n, n², n, 2ⁿ
+Answer: (b)
+
+Q5. The loop i = 1; while i < n: i *= 2 runs
+(a) n times (b) log₂ n times (c) n/2 times (d) √n times
+Answer: (b) — i doubles each iteration.
+
+Q6. Which notation gives a tight bound?
+(a) O (b) Ω (c) Θ (d) o
+Answer: (c) — Θ is both an upper and a lower bound.
+
+Q7. Average number of comparisons in a successful linear search on n items (item equally
+likely anywhere) is
+(a) n (b) (n+1)/2 (c) n/2 + 2 (d) log n
+Answer: (b)
+
+Q8. Extra space used by an algorithm that only uses a few variables regardless of input size
+is
+(a) O(n) (b) O(log n) (c) O(1) (d) O(n²)
+Answer: (c)
+
+
+Practice Set B — Coding Problems with Solutions
+
+Code Problem 1 (Easy): Count loop operations
+Statement: Write a function that returns how many times the inner statement runs for for
+i in range(n): for j in range(i, n): ... . Compare with the formula n(n+1)/2.
+Solution:
+
+ def count_ops(n):
+      c = 0
+      for i in range(n):
+            for j in range(i, n):
+                 c += 1
+      return c
+
+
+ print(count_ops(5), 5 * 6 // 2)          # 15 15
+
+
+Complexity: O(n²) — matches n(n+1)/2.
+
+
+Code Problem 2 (Easy): Duplicates, two ways
+Statement: Check whether an array has a duplicate. Give an O(n²) and an O(n) (average)
+solution.
+Solution:
+
+
+ def has_dup_slow(a):                      # O(n^2) time, O(1) space
+      for i in range(len(a)):
+            for j in range(i + 1, len(a)):
+                 if a[i] == a[j]: return True
+      return False
+
+
+ def has_dup_fast(a):                      # O(n) time, O(n) space
+      seen = set()
+      for x in a:
+            if x in seen: return True
+            seen.add(x)
+      return False
+
+
+Note: this is the time–space trade-off.
+
+
+Code Problem 3 (Easy): Sum 1..n three ways
+Statement: Compute 1 + 2 + … + n by (a) a loop, (b) the formula, (c) recursion. State each
+complexity.
+Solution:
+
+
+ def loop_sum(n):
+      s = 0
+      for i in range(1, n + 1): s += i
+      return s                                      # O(n) time, O(1) space
+
+
+ def formula_sum(n):
+      return n * (n + 1) // 2                       # O(1)
+
+
+ def rec_sum(n):
+      return 0 if n == 0 else n + rec_sum(n - 1)                 # O(n) time, O(n) stack
+
+
+
+Code Problem 4 (Medium): Is it a power of two?
+Statement: Return True if n is a power of two, in O(1).
+Solution:
+
+
+ def is_pow2(n):
+      return n > 0 and (n & (n - 1)) == 0
+
+
+Explanation: a power of two has exactly one set bit; n & (n-1) clears the lowest set bit.
+
+
+
+
+MODULE 3 — Arrays & Records
+   Cold open (Ep. 3): Zara opens Bit's memory vault: a long street of numbered mailboxes.
+   "Arrays work because every box is next to the last one."
+   Cliffhanger: She tries to insert a new item in the middle and everything shifts. "Why
+   does it take so long?!"
+
+
+Learning outcomes
+   Explain contiguous memory and index-to-address calculation.
+   Perform traversal, insertion, deletion and searching on linear arrays and state their
+   costs.
+   Work with 2D arrays and records.
+
+
+3.1 Linear array
+A list of n items of the same type, stored in consecutive memory locations, accessed by
+an index (subscript).
+
+
+ Index :      0      1        2         3      4
+            ┌─────┬─────┬─────┬─────┬─────┐
+   DATA     │ 12   │ 45   │       7   │ 33   │ 90     │
+             └─────┴─────┴─────┴─────┴─────┘
+  Address: 1000         1004    1008   1012       1016     (4 bytes per int)
+
+
+Terms (Lipschutz): LB (lower bound), UB (upper bound), length = UB − LB + 1.
+
+
+3.2 Address calculation
+
+  LOC(DATA[K]) = Base(DATA) + w × (K − LB)
+
+
+where w = size of one element. Example: Base = 1000, w = 4, LB = 0, K = 3 → 1000 + 4×3 =
+1012.
+This formula is why access by index is O(1).
+
+
+3.3 Operations and costs
+Traversal. Visit every element: O(n).
+
+Insertion (Algorithm 3.1: insert ITEM at position K in LA with N elements)
+
+  1. Set J := N.
+  2. Repeat Steps 3 and 4 while J >= K:
+  3.        Set LA[J+1] := LA[J].                   (move element down)
+  4.        Set J := J - 1.
+  5. Set LA[K] := ITEM.
+  6. Set N := N + 1.
+  7. Exit.
+
+
+
+  Insert 20 at index 2 :
+  before: [12][45][ 7][33][90][               ]
+  shift :     12   45     ─►7    ─►33 ─►90                (move right, last to first)
+  after : [12][45][20][ 7][33][90]
+
+
+Deletion is the reverse: shift left, O(n).
+
+
+  def insert(a, k, item):                         # a is a Python list used as a fixed array
+        a.append(None)
+        for j in range(len(a) - 1, k, -1):
+             a[j] = a[j - 1]
+        a[k] = item
+
+
+  def delete(a, k):
+        for j in range(k, len(a) - 1):
+               a[j] = a[j + 1]
+        a.pop()
+
+
+
+  Operation                                     Best         Worst
+
+  Access by index                               O(1)         O(1)
+
+  Search (unsorted)                             O(1)         O(n)
+
+  Insert at end                                 O(1)         O(1) (if space)
+
+  Insert at middle or front                     O(1)         O(n)
+
+  Delete                                        O(1)         O(n)
+
+
+
+3.4 Two-dimensional arrays
+A table with rows and columns: A[i][j] .
+
+
+               col0       col1       col2
+ row0      [    1     |    2     |    3     ]
+ row1      [    4     |    5     |    6     ]
+ row2      [    7     |    8     |    9     ]
+
+
+Row-major order (C, Python, Java): row 0, then row 1, ...
+LOC(A[i][j]) = Base + w × (i × COLS + j)
+Column-major order (Fortran): column 0, then column 1, ...
+LOC(A[i][j]) = Base + w × (j × ROWS + i)
+
+Example: 3×3, Base = 2000, w = 2, row-major, A[2][1] → 2000 + 2×(2×3+1) = 2014.
+
+
+3.5 Records
+A record groups fields of different types.
+
+ class Student:
+        def __init__(self, roll, name, marks):
+               self.roll, self.name, self.marks = roll, name, marks
+
+
+ students = [Student(101, "Zara", 88), Student(102, "Arun", 75)]          # array of records
+3.6 Pointers (idea)
+A pointer stores the address of another variable. Pointers make linked structures possible
+(Module 7).
+
+
+   p ─────────►    [ 42 ]
+ (address 3000)     value at 3000
+
+
+
+
+3.7 Common array patterns (beginner toolkit)
+   Prefix sums: pre[i] = pre[i-1] + a[i] , so any range sum is pre[r] - pre[l-1] in
+   O(1).
+   Reverse in place: swap a[i] and a[n-1-i] .
+   Rotate: reverse the whole array, then reverse the two parts.
+   Kadane-style max subarray (preview for Course 2).
+
+
+Common mistakes
+   Off-by-one errors (index runs 0..n−1).
+   Shifting in the wrong direction when inserting (overwrites data).
+   Assuming a Python list is a fixed array. It is a dynamic array.
+
+
+Quick revision
+Arrays give O(1) index access thanks to the address formula. Insert and delete in the middle
+cost O(n) because of shifting. A 2D array is stored row by row (row-major).
+
+
+Practice Set A — MCQs with Answers
+Q1. An array has base address 1000, element size 4 bytes, lower bound 0. The address of
+A[5] is
+(a) 1005 (b) 1020 (c) 1024 (d) 1040
+Answer: (b) — 1000 + 4 × 5 = 1020.
+
+Q2. Worst-case time to insert an element at the beginning of an array of n elements is
+(a) O(1) (b) O(log n) (c) O(n) (d) O(n²)
+Answer: (c) — All n elements shift.
+
+Q3. Array elements are accessed in O(1) because
+(a) they are sorted (b) the address is computed directly from the index (c) they use pointers
+(d) they use hashing
+Answer: (b)
+
+Q4. In row-major order, the address of A[i][j] in an array with C columns is
+(a) Base + w(j×R + i) (b) Base + w(i×C + j) (c) Base + w(i + j) (d) Base + w(i×j)
+Answer: (b)
+
+Q5. A 3×4 integer array (w = 2 bytes), Base = 500, row-major. The address of A[2][1] is
+(a) 514 (b) 518 (c) 522 (d) 526
+Answer: (b) — 500 + 2 × (2×4 + 1) = 500 + 18 = 518.
+
+Q6. When inserting into the middle of an array, elements should be shifted
+(a) left to right, from the start (b) starting from the last element toward the insertion point
+(c) randomly (d) not at all
+Answer: (b) — Shifting from the end avoids overwriting.
+
+Q7. Which statement about records is true?
+(a) All fields must be of the same type (b) A record can hold fields of different types (c) A
+record is the same as an array (d) Records cannot be placed in arrays
+Answer: (b)
+
+Q8. Prefix sums allow the sum of any range to be found in
+(a) O(n) (b) O(log n) (c) O(1) after O(n) preprocessing (d) O(n²)
+Answer: (c)
+
+
+Practice Set B — Coding Problems with Solutions
+
+Code Problem 1 (Easy): Reverse an array in place
+Example: [1,2,3,4,5] → [5,4,3,2,1]
+
+
+ def reverse(a):
+      i, j = 0, len(a) - 1
+      while i < j:
+           a[i], a[j] = a[j], a[i]
+           i += 1; j -= 1
+      return a
+
+
+Complexity: O(n) time, O(1) space.
+
+
+Code Problem 2 (Easy): Second largest element
+Statement: Find the second largest distinct value in one pass.
+Example: [12, 35, 1, 10, 34, 1] → 34
+ def second_largest(a):
+      first = second = float('-inf')
+      for x in a:
+           if x > first:
+                 first, second = x, first
+           elif first > x > second:
+                 second = x
+      return second if second != float('-inf') else None
+
+
+Complexity: O(n), O(1).
+
+
+Code Problem 3 (Medium): Rotate an array by k
+Statement: Rotate right by k positions in place.
+Example: [1,2,3,4,5,6,7] , k=3 → [5,6,7,1,2,3,4]
+
+
+ def rotate(a, k):
+      n = len(a); k %= n
+      def rev(i, j):
+           while i < j:
+                 a[i], a[j] = a[j], a[i]; i += 1; j -= 1
+      rev(0, n - 1); rev(0, k - 1); rev(k, n - 1)
+      return a
+
+
+Idea: reverse all, then reverse the first k and the rest. Complexity: O(n), O(1).
+
+
+Code Problem 4 (Medium): Range sum queries (prefix sums)
+Statement: Answer many queries sum(l, r) quickly.
+
+
+ def build(a):
+      pre = [0]
+      for x in a: pre.append(pre[-1] + x)
+      return pre
+
+
+ def range_sum(pre, l, r):                # inclusive, 0-based
+      return pre[r + 1] - pre[l]
+
+
+ pre = build([2, 4, 5, 7, 1])
+ print(range_sum(pre, 1, 3))              # 16
+
+
+Complexity: build O(n), each query O(1).
+
+
+Code Problem 5 (Easy): Transpose a matrix
+ def transpose(m):
+      r, c = len(m), len(m[0])
+      return [[m[i][j] for i in range(r)] for j in range(c)]
+ # [[1,2,3],[4,5,6]] -> [[1,4],[2,5],[3,6]]
+
+
+Complexity: O(r·c).
+
+
+
+
+MODULE 4 — Strings
+   Cold open (Ep. 4): A secret message arrives for Zara: "ABBA CAB ABBA." Bit: "Strings
+   are arrays of characters. Let's learn to read and search them."
+   Cliffhanger: The message is scrambled by a function that calls itself. Bit gasps: "A
+   function that calls itself... Zara, we need recursion."
+
+
+Learning outcomes
+   Treat a string as a character array and apply basic string operations.
+   Implement brute-force pattern matching and know its cost.
+   Solve basic palindrome, anagram and frequency problems.
+
+
+4.1 Strings
+A string is a finite sequence of characters. Stored as an array of characters (C: terminated
+by '\0' ; Python/Java: immutable objects).
+
+
+   "HELLO"
+   index:     0   1   2    3    4
+            ┌───┬───┬───┬───┬───┐
+            │ H │ E │ L │ L │ O │       (+ '\0' in C)
+            └───┴───┴───┴───┴───┘
+
+
+Terminology [L]: length, substring, prefix, suffix, empty (null) string, concatenation.
+
+
+4.2 Basic operations and costs
+
+  Operation               Meaning                            Cost
+
+  Length                  count chars                        O(1) stored or O(n) in C
+  Concatenate            s+t                           O(n + m)
+
+  Substring              s[i:j]                        O(j − i)
+
+  Compare                s == t                        O(min(n, m))
+
+  Index/search           where does P occur in T       see below
+
+
+
+4.3 Pattern matching: brute force
+Find pattern P (length m) in text T (length n).
+Algorithm 4.1 (slide and compare)
+
+
+ 1. For each start position S = 0 .. n-m:
+ 2.        Compare P[0..m-1] with T[S..S+m-1] character by character.
+ 3.        If all match, report S.
+
+
+
+ T: A B A B C A B A B
+ P: A B C
+ S=0: A B A      ✗ (mismatch at 3rd char)
+ S=1:      B A B ✗
+ S=2:         A B C ✓   → found at index 2
+
+
+
+ def find(text, pat):
+        n, m = len(text), len(pat)
+        for s in range(n - m + 1):
+            if text[s:s+m] == pat:
+                 return s
+        return -1
+
+
+   Worst case O(n × m), for example T = "AAAAAAAB", P = "AAAB".
+   Faster methods (KMP, Rabin–Karp) come in DSA Mastery, Module 6.
+
+
+4.4 Useful patterns
+   Frequency array: count[ord(c) - ord('a')] += 1 , O(n) time, O(26) space.
+   Palindrome check: two pointers moving inward.
+   Anagram check: compare frequency arrays.
+   Reverse words: split, reverse the list, join.
+
+ def is_palindrome(s):
+      i, j = 0, len(s) - 1
+      while i < j:
+            if s[i] != s[j]:
+                return False
+            i += 1; j -= 1
+      return True
+
+
+
+
+4.5 Word-processing idea [L]
+Text editors treat a document as strings and apply insert, delete, replace on substrings.
+Insertion of a string into the middle costs O(n) because of shifting, just like array insertion.
+
+
+Common mistakes
+   Forgetting that strings are immutable in Python/Java. Repeated += in a loop is O(n²).
+   Case sensitivity ("A" ≠ "a") and ignoring spaces in palindromes.
+   Off-by-one in substring ranges.
+
+
+Quick revision
+A string is an array of characters. Brute-force matching is O(n·m). Frequency arrays solve
+many string problems in O(n).
+
+
+Practice Set A — MCQs with Answers
+Q1. Strings in C end with the character
+(a) '\n' (b) '\0' (c) ' ' (d) '$'
+Answer: (b) — The null terminator.
+
+Q2. Worst-case time of brute-force pattern matching (text n, pattern m) is
+(a) O(n + m) (b) O(n) (c) O(n × m) (d) O(log n)
+Answer: (c)
+
+Q3. Which technique gives O(n) anagram checking for lowercase strings?
+(a) Sorting both strings (b) Comparing frequency arrays of size 26 (c) Nested loops (d)
+Recursion
+Answer: (b) — Sorting would be O(n log n); frequency arrays are O(n).
+
+Q4. In Python, s += ch inside a loop of n iterations costs about
+(a) O(n) (b) O(n²) in the worst case (strings are immutable) (c) O(1) (d) O(log n)
+Answer: (b) — Each concatenation may copy the string. Use a list and ''.join .
+Q5. A string equal to its reverse is called a
+(a) anagram (b) palindrome (c) substring (d) subsequence
+Answer: (b)
+
+Q6. The number of non-empty substrings of a string of length n is
+(a) n (b) n² (c) n(n+1)/2 (d) 2ⁿ
+Answer: (c) — For each start, there are n − start end positions.
+
+Q7. Which of these is a prefix of "DATA"?
+(a) "ATA" (b) "DA" (c) "TA" (d) "AT"
+Answer: (b)
+
+Q8. Comparing two strings of lengths n and m takes at most
+(a) O(n + m) (b) O(n × m) (c) O(min(n, m)) (d) O(1)
+Answer: (c)
+
+
+Practice Set B — Coding Problems with Solutions
+
+Code Problem 1 (Easy): Reverse a string
+
+  def reverse_string(s):
+      return s[::-1]
+
+
+Complexity: O(n).
+
+
+Code Problem 2 (Easy): Valid palindrome (ignore case and punctuation)
+Example: "A man, a plan, a canal: Panama" → True
+
+
+  def is_palindrome(s):
+      t = [c.lower() for c in s if c.isalnum()]
+      i, j = 0, len(t) - 1
+      while i < j:
+           if t[i] != t[j]: return False
+           i += 1; j -= 1
+      return True
+
+
+Complexity: O(n).
+
+
+Code Problem 3 (Easy): First non-repeating character
+Example: "loveleetcode" → index 2 ( 'v' )
+ def first_unique(s):
+      freq = {}
+      for ch in s: freq[ch] = freq.get(ch, 0) + 1
+      for i, ch in enumerate(s):
+           if freq[ch] == 1: return i
+      return -1
+
+
+Complexity: O(n), O(k) space.
+
+
+Code Problem 4 (Easy): Valid anagram
+
+ def is_anagram(a, b):
+      if len(a) != len(b): return False
+      cnt = [0] * 26
+      for x, y in zip(a, b):
+           cnt[ord(x) - 97] += 1
+           cnt[ord(y) - 97] -= 1
+      return all(c == 0 for c in cnt)
+
+
+Complexity: O(n), O(1).
+
+
+Code Problem 5 (Medium): Count occurrences of a pattern (overlaps
+allowed)
+Example: text "ababababa" , pattern "aba" → 4
+
+
+ def count_pattern(t, p):
+      n, m, c = len(t), len(p), 0
+      for s in range(n - m + 1):
+           if t[s:s+m] == p: c += 1
+      return c
+
+
+Complexity: O(n·m) (brute force).
+
+
+
+
+MODULE 5 — Recursion
+  Cold open (Ep. 5): Zara stands between two mirrors and sees infinite copies of herself.
+  Bit: "That's recursion: a thing defined in terms of a smaller version of itself."
+  Cliffhanger: A recursive spell never stops. The stack of calls rises toward the sky.
+  "Always plan your exit, Zara."
+Learning outcomes
+    Identify the base case and recursive case.
+    Trace recursion using the call stack.
+    Write recursive solutions (factorial, Fibonacci, power, Tower of Hanoi) and spot their
+    costs.
+
+
+5.1 Definition
+A function is recursive if it calls itself with a smaller input. Every recursive solution needs:
+
+1. Base case: a stopping condition with a direct answer.
+2. Recursive case: moves toward the base case.
+
+
+5.2 Factorial
+n! = n × (n−1)!, with 0! = 1.
+
+
+  def fact(n):
+       if n == 0:               # base case
+             return 1
+       return n * fact(n - 1)        # recursive case
+
+
+Call stack trace of fact(4)
+
+
+  fact(4) → 4 * fact(3)
+                    fact(3) → 3 * fact(2)
+                                    fact(2) → 2 * fact(1)
+                                                    fact(1) → 1 * fact(0)
+                                                                    fact(0) → 1
+  unwinding:     fact(1)=1 · fact(2)=2 · fact(3)=6 · fact(4)=24
+
+
+
+  Call stack (top ↑)
+   ┌─────────┐
+   │ fact(0) │ ← top
+   │ fact(1) │
+   │ fact(2) │
+   │ fact(3) │
+   │ fact(4) │ ← bottom (first call)
+   └─────────┘
+
+
+Time O(n), space O(n) (stack depth).
+5.3 Fibonacci
+F(0)=0, F(1)=1, F(n)=F(n−1)+F(n−2).
+
+
+ def fib(n):
+        if n < 2: return n
+        return fib(n-1) + fib(n-2)
+
+
+Recursion tree for fib(5)
+
+
+                            fib(5)
+                        /            \
+                   fib(4)            fib(3)
+               /        \            /       \
+         fib(3)       fib(2)    fib(2) fib(1)
+         /     \
+   fib(2) fib(1) ...
+
+
+The same sub-problems are recomputed, giving O(2ⁿ). Fix: store results (memoization),
+covered fully in Mastery (DP). Quick fix:
+
+ memo = {}
+ def fib(n):
+        if n < 2: return n
+        if n not in memo:
+              memo[n] = fib(n-1) + fib(n-2)
+        return memo[n]                      # now O(n)
+
+
+
+
+5.4 Tower of Hanoi [L]
+Move n disks from peg A to peg C using peg B; never place a larger disk on a smaller one.
+
+
+ Procedure: Hanoi(n, A, C, B)
+ 1. If n = 1: move disk from A to C. Return.
+ 2. Hanoi(n-1, A, B, C)                          (move n-1 disks out of the way)
+ 3. Move disk n from A to C.
+ 4. Hanoi(n-1, B, C, A)                          (put them on top)
+
+
+Moves required: 2ⁿ − 1. Time O(2ⁿ).
+
+
+ n=2:        A: [1,2]        B: []        C: []
+   move 1: A→B              A:[2]        B:[1]
+   move 2: A→C       A:[]       B:[1]   C:[2]
+   move 3: B→C       A:[]       B:[]    C:[1,2]
+
+
+
+
+5.5 Other classic recursions
+   Power: pow(x, n) = x * pow(x, n-1) is O(n); the smarter pow(x, n) = pow(x, n/2)²
+   is O(log n).
+   GCD (Euclid): gcd(a, b) = gcd(b, a mod b) , with base gcd(a, 0) = a .
+   Sum of digits, reverse a string, binary search (recursive).
+
+
+5.6 Recursion vs iteration
+
+                    Recursion                                      Iteration
+
+  Code              short, elegant                                 longer
+
+  Space             O(depth) stack                                 O(1) usually
+
+  Risk              stack overflow                                 none
+
+  Best for          trees, divide and conquer                      simple repetition
+
+
+Any recursion can be converted to a loop with an explicit stack.
+
+
+Common mistakes
+   Missing or wrong base case (infinite recursion).
+   Recursive call not moving closer to the base case.
+   Using naïve Fibonacci for large n.
+
+
+Quick revision
+Base case plus recursive case. Calls pile up on the stack. Overlapping sub-problems mean
+you should memoize.
+
+
+Practice Set A — MCQs with Answers
+Q1. Every recursive function must have
+(a) a loop (b) a base case (c) a global variable (d) two parameters
+Answer: (b) — Without a base case the recursion never stops.
+Q2. What does this print?
+
+
+  def f(n):
+       if n == 0: return 0
+       return n + f(n - 1)
+  print(f(4))
+
+
+(a) 4 (b) 6 (c) 10 (d) 24
+Answer: (c) — 4 + 3 + 2 + 1 + 0 = 10.
+
+Q3. The number of moves needed to solve Tower of Hanoi with n disks is
+(a) n (b) 2n (c) 2ⁿ − 1 (d) n²
+Answer: (c)
+
+Q4. The naïve recursive Fibonacci has time complexity
+(a) O(n) (b) O(n²) (c) O(2ⁿ) (d) O(log n)
+Answer: (c) — It recomputes the same sub-problems. Memoisation reduces it to O(n).
+
+Q5. The space used by fact(n) (recursive factorial) is
+(a) O(1) (b) O(n) due to the call stack (c) O(n²) (d) O(log n)
+Answer: (b)
+
+Q6. Which data structure does the system use to manage function calls?
+(a) Queue (b) Stack (c) Heap tree (d) Hash table
+Answer: (b)
+
+Q7. What is gcd(48, 18) using Euclid's recursion gcd(a,b) = gcd(b, a mod b) ?
+(a) 3 (b) 6 (c) 9 (d) 12
+Answer: (b) — gcd(48,18) → gcd(18,12) → gcd(12,6) → gcd(6,0) = 6.
+
+Q8. A recursion that never reaches its base case causes
+(a) a compile error (b) stack overflow (c) an infinite output of 0 (d) nothing
+Answer: (b)
+
+
+Practice Set B — Coding Problems with Solutions
+
+Code Problem 1 (Easy): Sum of first n numbers (recursive)
+
+  def sum_n(n):
+       return 0 if n == 0 else n + sum_n(n - 1)
+
+
+Complexity: O(n) time and stack space.
+Code Problem 2 (Easy): Reverse a string recursively
+
+ def rev(s):
+      return s if len(s) <= 1 else rev(s[1:]) + s[0]
+ # rev("abc") -> "cba"
+
+
+Complexity: O(n²) with slicing (fine for learning).
+
+
+Code Problem 3 (Medium): Fast power
+Statement: Compute xⁿ in O(log n).
+
+
+ def power(x, n):
+      if n == 0: return 1
+      half = power(x, n // 2)
+      return half * half if n % 2 == 0 else half * half * x
+ # power(2, 10) -> 1024
+
+
+Complexity: O(log n).
+
+
+Code Problem 4 (Medium): All subsets of a list
+Example: [1,2] → [[], [2], [1], [1,2]] (any order)
+
+
+ def subsets(nums):
+      if not nums: return [[]]
+      rest = subsets(nums[1:])
+      return rest + [[nums[0]] + r for r in rest]
+
+
+Complexity: O(2ⁿ · n).
+
+
+Code Problem 5 (Medium): Tower of Hanoi moves
+
+ def hanoi(n, a, c, b, moves):
+      if n == 0: return
+      hanoi(n - 1, a, b, c, moves)
+      moves.append((a, c))
+      hanoi(n - 1, b, c, a, moves)
+
+
+ m = []; hanoi(3, 'A', 'C', 'B', m)
+ print(len(m))       # 7
+
+
+Complexity: O(2ⁿ).
+MODULE 6 — Searching & Basic Sorting
+  Cold open (Ep. 6): The Great Library of Bit-Land has a million scrolls. The librarian sorts
+  them by title and then finds any scroll in 20 steps. Zara: "Twenty?!"
+  Cliffhanger: Bubble sort finishes... but the shelves shift for hours. "There must be a
+  better way to organise memory than rows..."
+
+
+Learning outcomes
+   Implement linear and binary search and state their conditions.
+   Implement bubble, selection and insertion sort and compare them.
+   Define stability and in-place sorting.
+
+
+6.1 Linear search
+Check each element in turn. Works on any array. Worst case O(n).
+
+
+ def linear_search(a, x):
+      for i, v in enumerate(a):
+          if v == x: return i
+      return -1
+
+
+
+
+6.2 Binary search (sorted array only)
+Compare with the middle and discard half each step.
+
+
+ Find 23 in [2, 5, 8, 12, 16, 23, 38, 56, 72]
+  low=0 high=8 mid=4 → 16 < 23 → search right
+  low=5 high=8 mid=6 → 38 > 23 → search left
+  low=5 high=5 mid=5 → 23 ✓ found
+
+
+
+ Algorithm 6.1 (Binary search) [L]
+ 1. Set BEG := LB, END := UB, MID := INT((BEG+END)/2).
+ 2. Repeat Steps 3 and 4 while BEG <= END and DATA[MID] != ITEM:
+ 3.      If ITEM < DATA[MID], set END := MID - 1.
+         Else set BEG := MID + 1.
+ 4.      Set MID := INT((BEG+END)/2).
+ 5. If DATA[MID] = ITEM, set LOC := MID. Else set LOC := NULL.
+ def binary_search(a, x):
+      lo, hi = 0, len(a) - 1
+      while lo <= hi:
+          mid = (lo + hi) // 2
+          if a[mid] == x: return mid
+          if a[mid] < x: lo = mid + 1
+          else: hi = mid - 1
+      return -1
+
+
+Cost O(log n): 1,000,000 items need at most 20 comparisons.
+
+
+6.3 Sorting basics
+Sorting arranges items in order (ascending or descending). Terms:
+
+   In-place: uses O(1) extra space.
+   Stable: equal items keep their original relative order.
+   Internal vs external: data fits in memory or not.
+
+
+6.4 Bubble sort
+Repeatedly swap adjacent out-of-order pairs. After pass k, the k largest items are in place.
+
+
+ [5, 1, 4, 2]
+ pass1: 1 5 4 2 → 1 4 5 2 → 1 4 2 5
+ pass2: 1 4 2 5 → 1 2 4 5
+ pass3: no swaps → sorted
+
+
+
+ def bubble(a):
+      n = len(a)
+      for p in range(n - 1):
+          swapped = False
+          for i in range(n - 1 - p):
+                if a[i] > a[i+1]:
+                    a[i], a[i+1] = a[i+1], a[i]
+                    swapped = True
+          if not swapped: break          # best case O(n)
+
+
+
+
+6.5 Selection sort
+Find the minimum of the unsorted part and swap it to the front.
+  [29, 10, 14, 37, 13]
+   pick 10 → [10, 29, 14, 37, 13]
+   pick 13 → [10, 13, 14, 37, 29]
+   pick 14 → already placed
+   pick 29 → [10, 13, 14, 29, 37]
+
+
+Always O(n²) comparisons, but only n−1 swaps.
+
+
+6.6 Insertion sort
+Build a sorted prefix; insert each new item into its place (like sorting playing cards).
+
+
+  [7, 3, 5, 1]
+   take 3 : [3, 7, 5, 1]
+   take 5 : [3, 5, 7, 1]
+   take 1 : [1, 3, 5, 7]
+
+
+
+  def insertion(a):
+      for i in range(1, len(a)):
+              key, j = a[i], i - 1
+              while j >= 0 and a[j] > key:
+                  a[j+1] = a[j]; j -= 1
+              a[j+1] = key
+
+
+Best case O(n) (already sorted), good for small or nearly sorted data.
+
+
+6.7 Comparison
+
+  Algorithm       Best       Average   Worst    Space      Stable    Note
+
+  Bubble          O(n)*      O(n²)     O(n²)    O(1)       Yes       simple, slow
+
+  Selection       O(n²)      O(n²)     O(n²)    O(1)       No        few swaps
+
+                                                                     great for small/nearly
+  Insertion       O(n)       O(n²)     O(n²)    O(1)       Yes
+                                                                     sorted
+
+
+*with the early-exit flag.
+
+
+Common mistakes
+    Using binary search on unsorted data.
+    mid = (lo+hi)/2 overflow in fixed-width languages. Use lo + (hi-lo)/2 .
+
+    Infinite loops from lo = mid instead of mid + 1 .
+
+
+Quick revision
+Binary search needs sorted data and runs in O(log n). The three basic sorts are all O(n²);
+insertion sort is the best of them in practice.
+
+
+Practice Set A — MCQs with Answers
+Q1. Binary search requires the array to be
+(a) of even length (b) sorted (c) of distinct values (d) stored as a linked list
+Answer: (b)
+
+Q2. Maximum comparisons of binary search on 1,000,000 sorted items is about
+(a) 20 (b) 100 (c) 1,000 (d) 500,000
+Answer: (a) — ⌈log₂ 10⁶⌉ = 20.
+
+Q3. Which sort makes the fewest swaps (at most n − 1)?
+(a) Bubble (b) Selection (c) Insertion (d) All equal
+Answer: (b)
+
+Q4. Best-case time of insertion sort (already sorted input) is
+(a) O(1) (b) O(n) (c) O(n log n) (d) O(n²)
+Answer: (b)
+
+Q5. After the first pass of bubble sort on [5, 1, 4, 2] , the array is
+(a) [1, 4, 2, 5] (b) [1, 5, 4, 2] (c) [5, 1, 2, 4] (d) [1, 2, 4, 5]
+Answer: (a) — 5 bubbles to the end: (5,1)→swap, (5,4)→swap, (5,2)→swap.
+
+Q6. A sorting algorithm is stable if
+(a) it never crashes (b) equal elements keep their original relative order (c) it uses no extra
+memory (d) it runs in O(n)
+Answer: (b)
+
+Q7. Which of these is stable?
+(a) Selection sort (b) Insertion sort (c) Both (d) Neither
+Answer: (b) — Standard selection sort swaps distant elements and can break stability.
+
+Q8. In binary search, mid = (lo + hi) // 2 . If a[mid] < x , the next step is
+(a) hi = mid − 1 (b) lo = mid + 1 (c) lo = mid (d) return mid
+Answer: (b)
+Practice Set B — Coding Problems with Solutions
+
+Code Problem 1 (Easy): Binary search (iterative and recursive)
+
+ def bs_iter(a, x):
+      lo, hi = 0, len(a) - 1
+      while lo <= hi:
+          mid = lo + (hi - lo) // 2
+          if a[mid] == x: return mid
+          if a[mid] < x: lo = mid + 1
+          else: hi = mid - 1
+      return -1
+
+
+ def bs_rec(a, x, lo, hi):
+      if lo > hi: return -1
+      mid = lo + (hi - lo) // 2
+      if a[mid] == x: return mid
+      return bs_rec(a, x, mid + 1, hi) if a[mid] < x else bs_rec(a, x, lo, mid - 1)
+
+
+Complexity: O(log n); recursive version uses O(log n) stack.
+
+
+Code Problem 2 (Medium): First and last position of a value
+Example: [5,7,7,8,8,10] , target 8 → (3, 4)
+
+
+ def first_last(a, x):
+      def bound(find_first):
+          lo, hi, ans = 0, len(a) - 1, -1
+          while lo <= hi:
+               mid = (lo + hi) // 2
+               if a[mid] == x:
+                   ans = mid
+                   if find_first: hi = mid - 1
+                   else: lo = mid + 1
+               elif a[mid] < x: lo = mid + 1
+               else: hi = mid - 1
+          return ans
+      return bound(True), bound(False)
+
+
+Complexity: O(log n).
+
+
+Code Problem 3 (Medium): Sort 0s, 1s and 2s (Dutch national flag)
+Example: [2,0,2,1,1,0] → [0,0,1,1,2,2]
+ def sort_colors(a):
+      lo, mid, hi = 0, 0, len(a) - 1
+      while mid <= hi:
+          if a[mid] == 0:
+                 a[lo], a[mid] = a[mid], a[lo]; lo += 1; mid += 1
+          elif a[mid] == 1:
+                 mid += 1
+          else:
+                 a[mid], a[hi] = a[hi], a[mid]; hi -= 1
+      return a
+
+
+Complexity: O(n), O(1).
+
+
+Code Problem 4 (Easy): Bubble sort that counts swaps
+
+ def bubble_count(a):
+      swaps = 0
+      n = len(a)
+      for p in range(n - 1):
+          swapped = False
+          for i in range(n - 1 - p):
+                 if a[i] > a[i + 1]:
+                     a[i], a[i + 1] = a[i + 1], a[i]
+                     swaps += 1; swapped = True
+          if not swapped: break
+      return swaps
+ # bubble_count([3, 2, 1]) -> 3 (equals the number of inversions)
+
+
+
+Code Problem 5 (Easy): Insertion sort
+
+ def insertion_sort(a):
+      for i in range(1, len(a)):
+          key, j = a[i], i - 1
+          while j >= 0 and a[j] > key:
+                 a[j + 1] = a[j]; j -= 1
+          a[j + 1] = key
+      return a
+
+
+
+
+MODULE 7 — Linked Lists
+  Cold open (Ep. 7): Bit builds a treasure hunt: each clue says where the next clue is
+   hidden. No fixed street, no waiting for neighbours to shift.
+   Cliffhanger: Zara loses the head clue and the whole chain is gone. "Guard the head,
+   Zara. Always."
+
+
+Learning outcomes
+    Draw and explain nodes, head and next pointers.
+    Insert, delete, search and traverse singly linked lists.
+    Describe doubly and circular lists and compare with arrays.
+
+
+7.1 Why linked lists?
+Arrays need contiguous memory and O(n) shifting for insertion. A linked list stores each
+element in a separate node that holds data and a pointer to the next node.
+
+
+  head
+   │
+   ▼
+  ┌──────┬───┐      ┌──────┬───┐     ┌──────┬───┐
+  │ 12      │ ●─┼──►│ 45     │ ●─┼──►│ 7       │ ∅ │
+  └──────┴───┘      └──────┴───┘     └──────┴───┘
+   data     next      data    next      data   next(NULL)
+
+
+
+  class Node:
+         def __init__(self, data):
+             self.data = data
+             self.next = None
+
+
+[L] uses INFO and LINK for the two fields, START for the head, and AVAIL for the free-
+storage list.
+
+
+7.2 Traversal
+
+  1. Set PTR := START.
+  2. Repeat Steps 3 and 4 while PTR != NULL:
+  3.        Apply PROCESS to PTR->INFO.
+  4.        Set PTR := PTR->LINK.
+  5. Exit.
+
+
+O(n).
+7.3 Insertion
+At the front: O(1)
+
+
+ new.next = head
+ head = new
+
+
+ before: head → [A] → [B]
+ after : head → [N] → [A] → [B]
+
+
+After a given node: O(1) (once you have the node)
+
+
+ new.next = p.next
+ p.next     = new
+   p → [P] → [Q]          becomes        p → [P] → [N] → [Q]
+
+
+Order matters: set new.next first, then p.next , otherwise you lose the rest of the list.
+At the end: O(n) if only the head is stored, O(1) with a tail pointer.
+
+
+7.4 Deletion
+
+ Delete node after p:          p → [P] → [X] → [Q]
+     p.next = p.next.next      p → [P] ───────► [Q]           ([X] is freed)
+
+
+Deleting a given value needs a search (O(n)) to find the previous node.
+
+
+ def delete_value(head, val):
+      if head is None: return None
+      if head.data == val: return head.next
+      cur = head
+      while cur.next and cur.next.data != val:
+           cur = cur.next
+      if cur.next:
+           cur.next = cur.next.next
+      return head
+
+
+
+
+7.5 Reversing a linked list (classic)
+
+ prev=None, cur=head
+ loop: nxt=cur.next ; cur.next=prev ; prev=cur ; cur=nxt
+ Before: 1 → 2 → 3 → ∅
+ After : ∅ ← 1 ← 2 ← 3           (head = 3)
+
+
+
+ def reverse(head):
+        prev, cur = None, head
+        while cur:
+            nxt = cur.next
+            cur.next = prev
+            prev, cur = cur, nxt
+        return prev
+
+
+
+
+7.6 Variants
+Doubly linked list: prev and next pointers; easy to go backwards; O(1) deletion given the
+node.
+
+ ∅ ◄──[ 1 ]◄──►[ 2 ]◄──►[ 3 ]──► ∅
+
+
+Circular linked list: last node points back to the head; useful for round-robin scheduling.
+
+
+ ┌──►[ 1 ]──►[ 2 ]──►[ 3 ]──┐
+ └──────────────────────────┘
+
+
+Header node: a dummy node before the first element that simplifies edge cases [L].
+
+
+7.7 Array vs linked list
+
+                                           Array                     Linked list
+
+  Access by index                          O(1)                      O(n)
+
+  Insert/delete at front                   O(n)                      O(1)
+
+  Insert/delete in middle (node known)     O(n)                      O(1)
+
+  Memory                                   compact, contiguous       extra pointer per node
+
+  Cache friendliness                       high                      low
+
+
+
+7.8 Two-pointer tricks
+   Find the middle: slow moves 1, fast moves 2; when fast ends, slow is at the middle.
+   Detect a cycle (Floyd): if slow and fast ever meet, there is a cycle.
+   Merge two sorted lists: compare heads and splice.
+
+
+Common mistakes
+   Losing the rest of the list by reordering pointer updates wrongly.
+   Dereferencing None /NULL.
+   Forgetting to update head when the first node is changed.
+
+
+Quick revision
+Node = data + pointer. Insert or delete is O(1) once the position is known, but search is O(n).
+Always draw boxes and arrows before coding.
+
+
+Practice Set A — MCQs with Answers
+Q1. Inserting a node at the head of a singly linked list takes
+(a) O(1) (b) O(n) (c) O(log n) (d) O(n²)
+Answer: (a)
+
+Q2. Accessing the k-th element of a singly linked list takes
+(a) O(1) (b) O(k) (c) O(log n) (d) O(n²)
+Answer: (b) — You must walk k nodes from the head.
+
+Q3. In a singly linked list, what is the correct order to insert new after node p ?
+(a) p.next = new; new.next = p.next (b) new.next = p.next; p.next = new (c) either
+order works (d) new.next = p
+Answer: (b) — Setting p.next first loses the rest of the list.
+
+Q4. Which list allows traversal in both directions?
+(a) Singly (b) Circular singly (c) Doubly (d) None
+Answer: (c)
+
+Q5. To find the middle node in one pass, use
+(a) two pointers: slow (1 step) and fast (2 steps) (b) recursion only (c) sorting (d) hashing
+Answer: (a)
+
+Q6. Floyd's cycle-detection algorithm detects a cycle when
+(a) the fast pointer reaches NULL (b) the slow and fast pointers meet (c) the list is sorted
+(d) head equals tail
+Answer: (b)
+
+Q7. Compared with arrays, linked lists
+(a) have O(1) random access (b) use extra memory for pointers (c) are always faster (d)
+need contiguous memory
+Answer: (b)
+
+Q8. After reversing 1 → 2 → 3 → NULL , the head is
+(a) 1 (b) 2 (c) 3 (d) NULL
+Answer: (c)
+
+
+Practice Set B — Coding Problems with Solutions
+Common setup:
+
+
+ class Node:
+      def __init__(self, data, nxt=None):
+           self.data, self.next = data, nxt
+
+
+ def build(vals):
+      head = None
+      for v in reversed(vals): head = Node(v, head)
+      return head
+
+
+ def to_list(head):
+      out = []
+      while head: out.append(head.data); head = head.next
+      return out
+
+
+
+Code Problem 1 (Easy): Insert at front and at end
+
+ def insert_front(head, v):
+      return Node(v, head)
+
+
+ def insert_end(head, v):
+      n = Node(v)
+      if not head: return n
+      cur = head
+      while cur.next: cur = cur.next
+      cur.next = n
+      return head
+
+
+Complexity: front O(1); end O(n) (O(1) with a tail pointer).
+Code Problem 2 (Medium): Delete the n-th node from the end
+Example: [1,2,3,4,5] , n=2 → [1,2,3,5]
+
+
+ def remove_nth_from_end(head, n):
+      dummy = Node(0, head)
+      fast = slow = dummy
+      for _ in range(n): fast = fast.next
+      while fast.next:
+          fast = fast.next; slow = slow.next
+      slow.next = slow.next.next
+      return dummy.next
+
+
+Complexity: O(L), one pass; O(1) space.
+
+
+Code Problem 3 (Easy): Reverse a linked list
+
+ def reverse(head):
+      prev, cur = None, head
+      while cur:
+          cur.next, prev, cur = prev, cur, cur.next
+      return prev
+
+
+Complexity: O(n), O(1).
+
+
+Code Problem 4 (Easy): Middle of the list
+
+ def middle(head):
+      slow = fast = head
+      while fast and fast.next:
+          slow = slow.next; fast = fast.next.next
+      return slow          # for even length, returns the second middle
+
+
+
+Code Problem 5 (Medium): Detect a cycle (Floyd)
+
+ def has_cycle(head):
+      slow = fast = head
+      while fast and fast.next:
+          slow, fast = slow.next, fast.next.next
+          if slow is fast: return True
+      return False
+
+
+Complexity: O(n), O(1).
+Code Problem 6 (Medium): Merge two sorted lists
+
+ def merge(a, b):
+      dummy = tail = Node(0)
+      while a and b:
+           if a.data <= b.data: tail.next, a = a, a.next
+           else: tail.next, b = b, b.next
+           tail = tail.next
+      tail.next = a or b
+      return dummy.next
+
+
+Complexity: O(n + m), O(1).
+
+
+
+
+MODULE 8 — Stacks
+  Cold open (Ep. 8): At a cafeteria, Bit stacks plates. Zara takes the top one only. "Last in,
+  first out."
+  Cliffhanger: A line of villagers waits to be served, but the stack serves the last one first.
+  "That's unfair. We need the opposite structure..."
+
+
+Learning outcomes
+   Explain LIFO and implement a stack with an array and a linked list.
+   Solve parentheses matching, expression conversion and evaluation.
+   Relate stacks to recursion.
+
+
+8.1 The stack ADT
+A stack allows insertion and deletion only at one end, the top.
+
+           push(30)              pop()
+                │                  ▲
+                ▼                  │
+           ┌────┐
+   TOP →   │ 30 │
+           │ 20 │
+           │ 10 │
+           └────┘
+            (bottom)
+Operations: push , pop , peek/top , isEmpty , isFull . All O(1).
+Errors: overflow (push on a full stack) and underflow (pop on an empty stack).
+
+
+8.2 Array implementation [L]
+
+ PUSH(STACK, TOP, MAXSTK, ITEM)
+ 1. If TOP = MAXSTK, write OVERFLOW and return.
+ 2. Set TOP := TOP + 1.
+ 3. Set STACK[TOP] := ITEM.
+ 4. Return.
+
+
+
+ class Stack:
+      def __init__(self): self.a = []
+      def push(self, x): self.a.append(x)
+      def pop(self):
+          if not self.a: raise IndexError("underflow")
+          return self.a.pop()
+      def peek(self): return self.a[-1]
+      def is_empty(self): return not self.a
+
+
+Linked-list implementation: push and pop at the head, no size limit.
+
+
+8.3 Application 1: balanced parentheses
+Push opening brackets; on a closing bracket, pop and check that it matches.
+
+
+ "{ [ ( ) ] }"
+  { → push            stack: {
+  [ → push            stack: { [
+  ( → push            stack: { [ (
+  ) → pop (           stack: { [
+  ] → pop [           stack: {
+  } → pop {           stack: (empty) ✓ balanced
+
+
+
+ def balanced(s):
+      pairs = {')': '(', ']': '[', '}': '{'}
+      st = []
+      for ch in s:
+          if ch in '([{': st.append(ch)
+          elif ch in pairs:
+                if not st or st.pop() != pairs[ch]: return False
+      return not st
+8.4 Application 2: infix, postfix, prefix
+
+  Infix                             Postfix                     Prefix
+
+  A+B                               AB+                         +AB
+
+  (A + B) * C                       AB+C*                       *+ABC
+
+  A+B*C                             ABC*+                       +A*BC
+
+
+Postfix needs no parentheses and no precedence rules at evaluation time.
+
+Evaluating postfix with a stack: push operands; on an operator, pop two, apply, push the
+result.
+
+
+  Postfix: 5 6 2 + * 12 4 / -
+   5            stack: 5
+   6            stack: 5 6
+   2            stack: 5 6 2
+   +            pop 2,6 → 8      stack: 5 8
+   *            pop 8,5 → 40     stack: 40
+   12           stack: 40 12
+   4            stack: 40 12 4
+   /            pop 4,12 → 3     stack: 40 3
+   -            pop 3,40 → 37 stack: 37        ✓ answer 37
+
+
+Infix → postfix (shunting-yard): operands go to the output; operators wait on the stack and
+pop while the stack top has precedence ≥ the incoming operator; ( is pushed; ) pops
+until ( .
+Precedence: ^ (highest, right-assoc) > * / > + - .
+
+
+  Infix:    A + B * C
+   A → out: A
+   + → stack: +
+   B → out: A B
+   * → higher than + → stack: + *
+   C → out: A B C
+   end → pop all → out: A B C * +
+
+
+
+
+8.5 Application 3: recursion and undo
+    The program's call stack stores return addresses and local variables (Module 5).
+    Browser back button and editor undo are stacks.
+    Next greater element and similar problems use a monotonic stack (preview).
+
+
+8.6 Complexity
+All operations O(1). Space O(n).
+
+
+Common mistakes
+    Popping an empty stack.
+    Forgetting to check that the stack is empty at the end of bracket matching.
+    Getting operand order wrong in postfix (the first popped is the right operand).
+
+
+Quick revision
+A stack is last-in-first-out with all operations O(1). Use it for matching, backtracking,
+expression evaluation and recursion.
+
+
+Practice Set A — MCQs with Answers
+Q1. A stack follows
+(a) FIFO (b) LIFO (c) random order (d) priority order
+Answer: (b)
+
+Q2. Pushing 1, 2, 3 and then popping once returns
+(a) 1 (b) 2 (c) 3 (d) error
+Answer: (c)
+
+Q3. Popping from an empty stack is called
+(a) overflow (b) underflow (c) deadlock (d) segmentation
+Answer: (b)
+
+Q4. The postfix form of A + B * C is
+(a) A B + C * (b) A B C * + (c) + A * B C (d) A + B C *
+Answer: (b)
+
+Q5. Value of the postfix expression 5 6 2 + * 12 4 / - is
+(a) 37 (b) 40 (c) 43 (d) 35
+Answer: (a) — 6+2=8; 5×8=40; 12/4=3; 40−3=37.
+Q6. Which application uses a stack?
+(a) Breadth-first search (b) Matching parentheses (c) Print-queue scheduling (d) Round-
+robin scheduling
+Answer: (b)
+
+Q7. Is "{[(])}" balanced?
+(a) Yes (b) No (c) Only if sorted (d) Depends on language
+Answer: (b) — ] arrives while the top of the stack is ( .
+
+Q8. Time complexity of push and pop on an array-based stack is
+(a) O(n) (b) O(log n) (c) O(1) (d) O(n²)
+Answer: (c)
+
+
+Practice Set B — Coding Problems with Solutions
+
+Code Problem 1 (Easy): Balanced brackets
+Example: "{[()]}" → True; "([)]" → False
+
+
+ def balanced(s):
+      pairs = {')': '(', ']': '[', '}': '{'}
+      st = []
+      for ch in s:
+           if ch in '([{': st.append(ch)
+           elif ch in pairs:
+                if not st or st.pop() != pairs[ch]: return False
+      return not st
+
+
+Complexity: O(n).
+
+
+Code Problem 2 (Medium): Evaluate a postfix expression
+Example: "5 6 2 + * 12 4 / -" → 37
+
+
+ def eval_postfix(expr):
+      st = []
+      for tok in expr.split():
+           if tok in "+-*/":
+                b, a = st.pop(), st.pop()              # right operand popped first
+                if tok == '+': st.append(a + b)
+                elif tok == '-': st.append(a - b)
+                elif tok == '*': st.append(a * b)
+                else: st.append(int(a / b))            # truncate toward zero
+           else:
+               st.append(int(tok))
+     return st[0]
+
+
+Complexity: O(n).
+
+
+Code Problem 3 (Medium): Infix to postfix
+Example: "A+B*C" → "ABC*+"
+
+
+ def to_postfix(s):
+     prec = {'+': 1, '-': 1, '*': 2, '/': 2, '^': 3}
+     out, st = [], []
+     for ch in s:
+         if ch.isalnum(): out.append(ch)
+         elif ch == '(': st.append(ch)
+         elif ch == ')':
+               while st and st[-1] != '(': out.append(st.pop())
+               st.pop()
+         else:
+               while st and st[-1] != '(' and (prec[st[-1]] > prec[ch] or
+                      (prec[st[-1]] == prec[ch] and ch != '^')):
+                    out.append(st.pop())
+               st.append(ch)
+     while st: out.append(st.pop())
+     return ''.join(out)
+
+
+Complexity: O(n).
+
+
+Code Problem 4 (Easy): Reverse a string with a stack
+
+ def rev(s):
+     st = list(s)
+     return ''.join(st.pop() for _ in range(len(st)))
+
+
+
+Code Problem 5 (Medium): Next greater element
+Example: [4, 5, 2, 25] → [5, 25, 25, -1]
+
+
+ def next_greater(a):
+     res, st = [-1] * len(a), []            # st holds indices
+     for i, x in enumerate(a):
+         while st and a[st[-1]] < x:
+               res[st.pop()] = x
+         st.append(i)
+      return res
+
+
+Complexity: O(n) (each index pushed and popped once).
+
+
+Code Problem 6 (Medium): Min-stack with O(1) get_min
+
+ class MinStack:
+      def __init__(self): self.s, self.m = [], []
+      def push(self, x):
+           self.s.append(x)
+           self.m.append(x if not self.m else min(x, self.m[-1]))
+      def pop(self):
+           self.m.pop(); return self.s.pop()
+      def get_min(self): return self.m[-1]
+
+
+
+
+MODULE 9 — Queues
+   Cold open (Ep. 9): The Bit-Land bakery has a long line. First to arrive is first served. Bit:
+   "Fairness has a name: FIFO."
+   Cliffhanger: The bakery owner's family tree appears on the wall... and a single line can't
+   show who is whose child. "We need a shape that branches."
+
+
+Learning outcomes
+   Explain FIFO and implement simple, circular and linked queues.
+   Describe deque and priority queue.
+   Use queues in simple applications (scheduling, level-by-level processing).
+
+
+9.1 The queue ADT
+Insertion at the rear, deletion at the front.
+
+
+   dequeue ◄── FRONT [ 10 | 20 | 30 | 40 ] REAR ◄── enqueue
+
+
+Operations: enqueue , dequeue , front , isEmpty , isFull . All O(1) when implemented well.
+
+
+9.2 Simple array queue and its flaw
+ Array size 5:       [ _ | _ | 30 | 40 | 50 ]    front=2, rear=4
+
+
+After dequeues, the slots at the left are wasted, and the queue looks "full" when rear
+reaches the end.
+
+
+9.3 Circular queue
+Wrap the indices using modulo, so the array is treated as a ring.
+
+
+               index 0
+           ┌───┐
+     4 ───┤      ├─── 1
+           │     │
+     3 ───┤      ├─── 2
+           └───┘
+   rear = (rear + 1) % N
+   front = (front + 1) % N
+
+
+
+ class CircularQueue:
+      def __init__(self, n):
+           self.a = [None]*n; self.n = n
+           self.front = 0; self.size = 0
+      def enqueue(self, x):
+           if self.size == self.n: raise OverflowError
+           self.a[(self.front + self.size) % self.n] = x
+           self.size += 1
+      def dequeue(self):
+           if self.size == 0: raise IndexError
+           x = self.a[self.front]
+           self.front = (self.front + 1) % self.n
+           self.size -= 1
+           return x
+
+
+Tracking size separates "full" from "empty" (both can have front == rear otherwise).
+
+
+9.4 Linked queue
+Keep front and rear pointers: enqueue at the rear, dequeue at the front, both O(1).
+
+
+ front → [10]→[20]→[30]→∅
+                          ▲
+                         rear
+9.5 Deque (double-ended queue)
+Insert and delete at both ends.
+
+
+   push_front ► [ a | b | c | d ] ◄ push_back
+   pop_front     ◄                    ► pop_back
+
+
+Variants: input-restricted and output-restricted deques [L].
+
+
+9.6 Priority queue (introduction)
+Each element has a priority; the highest-priority element leaves first (not arrival order).
+
+
+  Implementation                                   insert                extract-min
+
+  Unsorted array                                   O(1)                  O(n)
+
+  Sorted array                                     O(n)                  O(1)
+
+  Heap (Mastery, Module 3)                         O(log n)              O(log n)
+
+
+Use cases: hospital triage, CPU task scheduling, Dijkstra's algorithm.
+
+
+9.7 Applications
+   CPU scheduling (round robin), printer spooling, call-centre queues.
+   BFS on trees and graphs (Modules 10 and 11).
+   Buffering in streaming and keyboard input.
+   Josephus problem: people in a circle, eliminate every k-th (simulate with a queue).
+
+
+9.8 Stack vs queue
+
+                          Stack                                   Queue
+
+  Order                   LIFO                                    FIFO
+
+  Ends used               one (top)                               two (front, rear)
+
+  Typical use             recursion, undo, DFS                    scheduling, BFS
+Common mistakes
+    Not using modulo in a circular queue.
+    Confusing empty and full conditions.
+    Using list.pop(0) in Python as a queue (O(n)). Use collections.deque .
+
+
+Quick revision
+Queue = FIFO. Circular implementation avoids wasted space. A priority queue serves by
+priority and is best built with a heap.
+
+
+Practice Set A — MCQs with Answers
+Q1. A queue follows
+(a) LIFO (b) FIFO (c) random order (d) sorted order
+Answer: (b)
+
+Q2. In a circular queue of size N, the next rear index is
+(a) rear + 1 (b) (rear + 1) % N (c) rear − 1 (d) N − rear
+Answer: (b)
+
+Q3. Why is list.pop(0) a poor queue operation in Python?
+(a) It raises errors (b) It is O(n) because all elements shift (c) It is O(1) (d) It deletes the
+whole list
+Answer: (b) — Use collections.deque for O(1) popleft .
+
+Q4. A deque allows insertion and deletion at
+(a) front only (b) rear only (c) both ends (d) middle only
+Answer: (c)
+
+Q5. Which algorithm uses a queue?
+(a) DFS (b) BFS (c) Binary search (d) Quick sort
+Answer: (b)
+
+Q6. A priority queue removes the element with
+(a) the earliest arrival (b) the latest arrival (c) the highest priority (d) the largest memory
+address
+Answer: (c)
+
+Q7. To distinguish a full circular queue from an empty one (when only front and rear are
+stored) you can
+(a) keep a size counter or leave one slot empty (b) ignore it (c) use recursion (d) sort the
+array
+Answer: (a)
+
+Q8. Operations: enqueue(1), enqueue(2), dequeue(), enqueue(3), dequeue(). What is at the
+front now?
+(a) 1 (b) 2 (c) 3 (d) empty
+Answer: (c) — After the two dequeues, 1 and 2 are removed, so 3 is at the front.
+
+
+Practice Set B — Coding Problems with Solutions
+
+Code Problem 1 (Medium): Queue using two stacks
+
+ class MyQueue:
+        def __init__(self): self.inp, self.out = [], []
+        def enqueue(self, x): self.inp.append(x)
+        def dequeue(self):
+             if not self.out:
+                 while self.inp: self.out.append(self.inp.pop())
+             return self.out.pop()
+
+
+Complexity: amortised O(1) per operation.
+
+
+Code Problem 2 (Medium): Circular queue
+
+ class CircularQueue:
+        def __init__(self, n):
+             self.a, self.n, self.front, self.size = [None] * n, n, 0, 0
+        def enqueue(self, x):
+             if self.size == self.n: return False
+             self.a[(self.front + self.size) % self.n] = x
+             self.size += 1; return True
+        def dequeue(self):
+             if self.size == 0: return None
+             x = self.a[self.front]
+             self.front = (self.front + 1) % self.n
+             self.size -= 1; return x
+
+
+
+Code Problem 3 (Medium): Josephus problem
+Statement: n people stand in a circle; every k-th is eliminated. Return the survivor (1-
+based).
+Example: n=7, k=3 → 4
+ from collections import deque
+ def josephus(n, k):
+     q = deque(range(1, n + 1))
+     while len(q) > 1:
+          q.rotate(-(k - 1))
+          q.popleft()
+     return q[0]
+
+
+Complexity: O(n·k).
+
+
+Code Problem 4 (Easy): Binary numbers from 1 to n using a queue
+Example: n=5 → ['1','10','11','100','101']
+
+
+ from collections import deque
+ def gen_binary(n):
+     q, out = deque(['1']), []
+     for _ in range(n):
+          s = q.popleft(); out.append(s)
+          q.append(s + '0'); q.append(s + '1')
+     return out
+
+
+Complexity: O(n).
+
+
+Code Problem 5 (Medium): First non-repeating character in a stream
+Example: stream "aabc" → after each character: a, -1, b, b
+
+
+ from collections import deque
+ def stream_first_unique(s):
+     cnt, q, out = {}, deque(), []
+     for ch in s:
+          cnt[ch] = cnt.get(ch, 0) + 1
+          q.append(ch)
+          while q and cnt[q[0]] > 1: q.popleft()
+          out.append(q[0] if q else '-1')
+     return out
+
+
+Complexity: O(n).
+
+
+
+
+MODULE 10 — Trees & Binary Search Trees
+  Cold open (Ep. 10): The bakery family tree grows on the wall. Zara: "Grandfather at the
+  top, then children, then grandchildren." Bit: "A hierarchy. Computers love them."
+  Cliffhanger: The tree's branches reach across the room and connect to each other. It is
+  no longer a tree... it is a network.
+
+
+Learning outcomes
+   Use tree terminology precisely.
+   Perform pre-order, in-order, post-order and level-order traversals.
+   Implement BST search, insert and delete and understand how the shape affects cost.
+
+
+10.1 Tree terminology
+
+                             A                   ← root (level 0)
+                     /           \
+                 B                   C           ← children of A (level 1)
+                / \                      \
+            D            E                   F   ← leaves: D, E, F (level 2)
+
+
+
+ Term                                Meaning
+
+ Root                                top node, no parent
+
+ Parent / child                      directly connected up / down
+
+ Siblings                            same parent (B and C)
+
+ Leaf                                no children
+
+ Degree                              number of children of a node
+
+ Level                               root = 0, increases downward
+
+ Height                              longest path from node to a leaf (tree height = root height)
+
+ Depth                               distance from the root
+
+ Subtree                             a node together with all its descendants
+
+
+A tree with n nodes has exactly n − 1 edges.
+
+
+10.2 Binary trees
+Each node has at most two children: left and right.
+
+
+ class TreeNode:
+      def __init__(self, v):
+                   self.val = v; self.left = None; self.right = None
+
+
+Types
+
+   Full: each node has 0 or 2 children.
+   Complete: all levels full except possibly the last, which fills left to right (heaps use this).
+   Perfect: all leaves at the same depth; has 2^(h+1) − 1 nodes.
+   Skewed: every node has one child (behaves like a linked list).
+
+Useful facts
+
+   Maximum nodes at level i: 2ⁱ.
+   Maximum nodes in a tree of height h: 2^(h+1) − 1.
+   Minimum height with n nodes: ⌊log₂ n⌋.
+
+
+10.3 Representations
+Array (for complete trees): node at index i has children at 2i+1 and 2i+2 and parent at
+⌊(i−1)/2⌋.
+
+ Tree:                 10               Array: [10, 20, 30, 40, 50]
+                   /        \           index:   0   1   2   3   4
+              20                30
+          /        \
+      40               50
+
+
+Linked (general): nodes with left/right pointers [L].
+
+
+10.4 Traversals
+
+                   1
+                  / \
+              2         3
+          / \
+      4            5
+
+
+
+  Traversal                          Order                                  Result
+  Pre-order                          Root, Left, Right                   12453
+
+  In-order                           Left, Root, Right                   42513
+
+  Post-order                         Left, Right, Root                   45231
+
+  Level-order                        level by level (queue)              12345
+
+
+
+ def inorder(r):
+         if r:
+                   inorder(r.left); print(r.val); inorder(r.right)
+
+
+ from collections import deque
+ def level_order(root):
+         q = deque([root])
+         while q:
+                   node = q.popleft()
+                   print(node.val)
+                   if node.left: q.append(node.left)
+                   if node.right: q.append(node.right)
+
+
+Each traversal is O(n).
+
+Applications: pre-order to copy a tree; in-order gives a BST in sorted order; post-order to
+delete a tree or evaluate an expression tree.
+
+
+10.5 Expression trees
+(A + B) * C
+
+
+              *
+             / \
+         +         C
+        / \
+    A         B
+
+
+In-order → infix; post-order → postfix (links to Module 8).
+
+
+10.6 Binary Search Tree (BST)
+For every node: all left-subtree values < node < all right-subtree values.
+
+
+                       50
+                      /        \
+              30                   70
+             / \                   / \
+     20           40           60        80
+
+
+In-order traversal: 20 30 40 50 60 70 80 (sorted!).
+
+Search
+
+
+ def search(node, key):
+         while node and node.val != key:
+                      node = node.left if key < node.val else node.right
+         return node
+
+
+Insert
+
+
+ def insert(node, key):
+         if node is None: return TreeNode(key)
+         if key < node.val: node.left = insert(node.left, key)
+         elif key > node.val: node.right = insert(node.right, key)
+         return node
+
+
+
+ Insert 45 into the BST above:                                      50 → left 30 → right 40 → left of 40 = 45
+
+
+Delete has three cases:
+
+1. Leaf: just remove it.
+2. One child: replace the node with its child.
+3. Two children: replace its value with its in-order successor (smallest in the right
+   subtree), then delete that successor.
+
+ Delete 30 (two children: 20 and 40):                                             successor = 40
+                      50                                            50
+                  /        \                                    /        \
+             30                70             →            40                70
+         /        \                                    /
+    20            40                              20
+
+
+
+
+10.7 Cost depends on shape
+
+ Tree shape                                                                        Height      search / insert / delete
+  Balanced                                                     log n          O(log n)
+
+  Skewed (inserted sorted data)                                n              O(n)
+
+
+
+  Inserting 10, 20, 30, 40:             10
+                                             \
+                                                 20
+                                                      \
+                                                          30
+                                                               \
+                                                                   40   ← linked list in disguise
+
+
+The remedy is self-balancing trees (AVL, Red-Black), covered in Mastery, Module 4.
+
+
+Common mistakes
+    Confusing height and depth, or leaf level numbering.
+    Checking a BST only against the parent instead of the full allowed range.
+    Forgetting the two-children deletion case.
+
+
+Quick revision
+A tree is a hierarchy with n−1 edges. The BST property makes search O(height). In-order on
+a BST is sorted. Balance matters.
+
+
+Practice Set A — MCQs with Answers
+Q1. A tree with n nodes has exactly how many edges?
+(a) n (b) n − 1 (c) n + 1 (d) 2n
+Answer: (b)
+
+Q2. In-order traversal of a BST gives
+(a) descending order (b) ascending sorted order (c) level order (d) random order
+Answer: (b)
+
+Q3. Pre-order traversal of the tree with root 1, left child 2 (children 4, 5) and right child 3 is
+(a) 4 2 5 1 3 (b) 1 2 4 5 3 (c) 4 5 2 3 1 (d) 1 2 3 4 5
+Answer: (b)
+
+Q4. Maximum number of nodes at level i of a binary tree (root at level 0) is
+(a) i (b) 2i (c) 2ⁱ (d) i²
+Answer: (c)
+Q5. The worst-case time to search a BST with n nodes is
+(a) O(1) (b) O(log n) (c) O(n) (d) O(n log n)
+Answer: (c) — A skewed tree, for example one built by inserting sorted data.
+
+Q6. In an array-based complete binary tree (0-based), the left child of node i is at
+(a) 2i (b) 2i + 1 (c) 2i + 2 (d) i + 1
+Answer: (b)
+
+Q7. Deleting a BST node that has two children is done by replacing it with
+(a) its parent (b) its in-order successor (or predecessor) (c) the root (d) a random leaf
+Answer: (b)
+
+Q8. Which traversal is used to evaluate an expression tree (to get postfix)?
+(a) Pre-order (b) In-order (c) Post-order (d) Level-order
+Answer: (c)
+
+
+Practice Set B — Coding Problems with Solutions
+Common setup:
+
+
+  class TreeNode:
+       def __init__(self, v, l=None, r=None):
+            self.val, self.left, self.right = v, l, r
+
+
+
+Code Problem 1 (Easy): All four traversals
+
+  from collections import deque
+  def preorder(r):       return [r.val] + preorder(r.left) + preorder(r.right) if r else []
+  def inorder(r):        return inorder(r.left) + [r.val] + inorder(r.right) if r else []
+  def postorder(r): return postorder(r.left) + postorder(r.right) + [r.val] if r else []
+  def level(r):
+       out, q = [], deque([r] if r else [])
+       while q:
+            n = q.popleft(); out.append(n.val)
+            if n.left: q.append(n.left)
+            if n.right: q.append(n.right)
+       return out
+
+
+Complexity: O(n) each.
+
+
+Code Problem 2 (Easy): Height of a binary tree
+
+  def height(r):
+      return -1 if r is None else 1 + max(height(r.left), height(r.right))
+ # Height of a single node = 0; empty tree = -1
+
+
+Complexity: O(n).
+
+
+Code Problem 3 (Medium): Validate a BST
+
+ def is_bst(r, lo=float('-inf'), hi=float('inf')):
+      if r is None: return True
+      if not (lo < r.val < hi): return False
+      return is_bst(r.left, lo, r.val) and is_bst(r.right, r.val, hi)
+
+
+Complexity: O(n). Checking only parent–child pairs is a classic mistake.
+
+
+Code Problem 4 (Easy): Count leaf nodes
+
+ def count_leaves(r):
+      if r is None: return 0
+      if not r.left and not r.right: return 1
+      return count_leaves(r.left) + count_leaves(r.right)
+
+
+
+Code Problem 5 (Medium): BST insert and delete
+
+ def insert(r, k):
+      if r is None: return TreeNode(k)
+      if k < r.val: r.left = insert(r.left, k)
+      elif k > r.val: r.right = insert(r.right, k)
+      return r
+
+
+ def delete(r, k):
+      if r is None: return None
+      if k < r.val: r.left = delete(r.left, k)
+      elif k > r.val: r.right = delete(r.right, k)
+      else:
+          if not r.left: return r.right
+          if not r.right: return r.left
+          succ = r.right
+          while succ.left: succ = succ.left
+          r.val = succ.val
+          r.right = delete(r.right, succ.val)
+      return r
+
+
+Complexity: O(h), where h is the height.
+Code Problem 6 (Medium): k-th smallest in a BST
+
+ def kth_smallest(r, k):
+         st, cur = [], r
+         while True:
+             while cur: st.append(cur); cur = cur.left
+             cur = st.pop(); k -= 1
+             if k == 0: return cur.val
+             cur = cur.right
+
+
+Complexity: O(h + k).
+
+
+
+
+MODULE 11 — Graph Basics
+  Cold open (Ep. 11): Zara's village map: houses connected by paths, some one-way. Bit:
+  "Trees can't hold this. Meet the graph."
+  Cliffhanger: To find the shortest route to the bakery, Zara must try every path. Bit:
+  "Careful... there may be billions."
+
+
+Learning outcomes
+   Use graph vocabulary (vertex, edge, directed, weighted, degree, path, cycle,
+   connected).
+   Represent graphs by an adjacency matrix and an adjacency list.
+   Perform BFS and DFS and use them for simple problems.
+
+
+11.1 Definitions [L, AHU]
+A graph G = (V, E) has a set of vertices V and edges E.
+
+
+ Undirected:                    Directed (digraph):             Weighted:
+     A ─── B                        A ──► B                        A ─5─ B
+     │      ╱ │                     ▲      │                       │        │ 2
+     │ ╱      │                     │      ▼                       3        │
+     C ─── D                        C ◄── D                        C ─4─ D
+
+
+
+ Term                   Meaning
+
+ Degree                 number of edges at a vertex (in-degree, out-degree for digraphs)
+ Path                  sequence of vertices joined by edges
+
+ Cycle                 path that starts and ends at the same vertex
+
+ Connected             a path exists between every pair (undirected)
+
+ Tree                  connected graph with no cycles
+
+ DAG                   directed acyclic graph
+
+ Complete graph        every pair of vertices connected: n(n−1)/2 edges
+
+
+Sum of degrees = 2 × |E| (handshake lemma).
+
+
+11.2 Representations
+Graph: 0—1, 0—2, 1—2, 2—3
+
+ Adjacency matrix                    Adjacency list
+        0 1 2 3                      0: [1, 2]
+   0    0 1 1 0                      1: [0, 2]
+   1    1 0 1 0                      2: [0, 1, 3]
+   2    1 1 0 1                      3: [2]
+   3    0 0 1 0
+
+
+
+                             Matrix                   List
+
+ Space                       O(V²)                    O(V + E)
+
+ Is edge (u,v)?              O(1)                     O(degree)
+
+ List all neighbours         O(V)                     O(degree)
+
+ Best for                    dense graphs             sparse graphs (most real ones)
+
+
+
+11.3 Breadth-First Search (BFS)
+Explore level by level using a queue.
+
+
+ from collections import deque
+ def bfs(adj, start):
+        seen = {start}; q = deque([start]); order = []
+        while q:
+            u = q.popleft(); order.append(u)
+            for v in adj[u]:
+                 if v not in seen:
+                       seen.add(v); q.append(v)
+      return order
+
+
+
+ Graph:      0 ── 1 ── 3
+             │     │
+             2 ── 4
+ BFS from 0:      level0: 0 | level1: 1, 2 | level2: 3, 4         → order 0 1 2 3 4
+
+
+Time O(V + E). In an unweighted graph, BFS finds the shortest path (fewest edges).
+
+
+11.4 Depth-First Search (DFS)
+Go as deep as possible, then backtrack, using recursion or a stack.
+
+ def dfs(adj, u, seen):
+      seen.add(u)
+      for v in adj[u]:
+            if v not in seen:
+                 dfs(adj, v, seen)
+
+
+
+ DFS from 0 on the graph above (neighbours in ascending order):
+  0 → 1 → 3 (dead end, back) → 4 → 2 → done              order: 0 1 3 4 2
+
+
+Time O(V + E).
+
+
+11.5 BFS vs DFS
+
+                             BFS              DFS
+
+ Data structure              Queue            Stack / recursion
+
+ Explores                    by distance      by depth
+
+ Shortest path
+                             Yes              No
+ (unweighted)
+
+                             shortest hops,   cycle detection, connected components,
+ Typical uses
+                             levels           topological sort
+11.6 Basic applications
+    Connected components: run BFS/DFS from every unvisited vertex; count the runs.
+    Cycle detection (undirected): DFS meets a visited vertex that is not its parent.
+    Flood fill / islands in a grid: a grid is an implicit graph (4 or 8 neighbours).
+    Maze solving, social-network "degrees of separation", web crawling.
+
+
+Common mistakes
+    Forgetting the visited set (infinite loops on cycles).
+    Marking visited when popping instead of when pushing in BFS (duplicate queue entries).
+    Using a matrix for a huge sparse graph.
+
+
+Quick revision
+Graph = vertices + edges. Use adjacency lists for sparse graphs. BFS (queue) gives shortest
+hops, DFS (stack) explores deep. Both are O(V+E).
+
+
+Practice Set A — MCQs with Answers
+Q1. BFS uses which data structure?
+(a) Stack (b) Queue (c) Heap (d) Hash table
+Answer: (b)
+
+Q2. The number of edges in a complete undirected graph with n vertices is
+(a) n (b) n(n − 1)/2 (c) n² (d) 2ⁿ
+Answer: (b)
+
+Q3. The sum of the degrees of all vertices in an undirected graph with E edges is
+(a) E (b) 2E (c) E² (d) E/2
+Answer: (b) — Each edge adds one to the degree of both its endpoints.
+
+Q4. Space needed by an adjacency matrix is
+(a) O(V) (b) O(V + E) (c) O(V²) (d) O(E)
+Answer: (c)
+
+Q5. In an unweighted graph, which algorithm finds the shortest path (fewest edges)?
+(a) DFS (b) BFS (c) Binary search (d) Insertion sort
+Answer: (b)
+
+Q6. The time complexity of BFS with an adjacency list is
+(a) O(V) (b) O(E) (c) O(V + E) (d) O(V·E)
+Answer: (c)
+
+Q7. A connected graph with no cycles is a
+(a) DAG (b) tree (c) complete graph (d) bipartite graph
+Answer: (b)
+
+Q8. For BFS from vertex 0 on edges 0–1, 0–2, 1–3, 2–3 (neighbours in ascending order), the
+visit order is
+(a) 0 1 3 2 (b) 0 1 2 3 (c) 0 2 1 3 (d) 3 2 1 0
+Answer: (b) — Level 0: 0; level 1: 1, 2; level 2: 3.
+
+
+Practice Set B — Coding Problems with Solutions
+
+Code Problem 1 (Easy): BFS and DFS
+
+  from collections import deque
+  def bfs(adj, s):
+       seen, q, order = {s}, deque([s]), []
+       while q:
+            u = q.popleft(); order.append(u)
+            for v in adj[u]:
+                  if v not in seen: seen.add(v); q.append(v)
+       return order
+
+
+  def dfs(adj, u, seen=None, order=None):
+       seen = seen if seen is not None else set()
+       order = order if order is not None else []
+       seen.add(u); order.append(u)
+       for v in adj[u]:
+            if v not in seen: dfs(adj, v, seen, order)
+       return order
+
+
+Complexity: O(V + E) each.
+
+
+Code Problem 2 (Easy): Count connected components
+
+  def components(n, edges):
+       adj = [[] for _ in range(n)]
+       for u, v in edges: adj[u].append(v); adj[v].append(u)
+       seen, count = set(), 0
+       for s in range(n):
+            if s not in seen:
+                  count += 1
+                  stack = [s]; seen.add(s)
+                 while stack:
+                     u = stack.pop()
+                     for v in adj[u]:
+                         if v not in seen: seen.add(v); stack.append(v)
+      return count
+ # components(5, [(0,1),(1,2),(3,4)]) -> 2
+
+
+
+Code Problem 3 (Medium): Number of islands
+Statement: In a grid of '1' (land) and '0' (water), count islands (4-direction connectivity).
+
+
+ def num_islands(g):
+      if not g: return 0
+      R, C, count = len(g), len(g[0]), 0
+      def sink(r, c):
+           if r < 0 or c < 0 or r >= R or c >= C or g[r][c] != '1': return
+           g[r][c] = '0'
+           sink(r+1, c); sink(r-1, c); sink(r, c+1); sink(r, c-1)
+      for r in range(R):
+           for c in range(C):
+                 if g[r][c] == '1':
+                     count += 1; sink(r, c)
+      return count
+
+
+Complexity: O(R·C).
+
+
+Code Problem 4 (Medium): Shortest path in a maze (BFS)
+Statement: Grid with 0 (open) and 1 (wall); find the fewest steps from (0,0) to (R−1,C−1), or
+−1.
+
+
+ from collections import deque
+ def shortest(grid):
+      R, C = len(grid), len(grid[0])
+      if grid[0][0] or grid[R-1][C-1]: return -1
+      q, seen = deque([(0, 0, 0)]), {(0, 0)}
+      while q:
+           r, c, d = q.popleft()
+           if (r, c) == (R-1, C-1): return d
+           for dr, dc in ((1,0),(-1,0),(0,1),(0,-1)):
+                 nr, nc = r + dr, c + dc
+                 if 0 <= nr < R and 0 <= nc < C and not grid[nr][nc] and (nr, nc) not in seen:
+                     seen.add((nr, nc)); q.append((nr, nc, d + 1))
+      return -1
+Code Problem 5 (Medium): Detect a cycle in an undirected graph
+
+ def has_cycle(n, adj):
+      seen = set()
+      def dfs(u, parent):
+           seen.add(u)
+           for v in adj[u]:
+               if v not in seen:
+                     if dfs(v, u): return True
+               elif v != parent:
+                     return True
+           return False
+      return any(dfs(s, -1) for s in range(n) if s not in seen)
+
+
+
+
+MODULE 12 — Hashing & Putting It All Together
+  Cold open (Ep. 12): At the Bit-Land post office, every name is turned into a number that
+  tells the clerk exactly which box to open. No searching.
+  Cliffhanger: Two letters get the same box number. Bit: "A collision... but that is a story
+  for the Mastery series."
+
+
+Learning outcomes
+   Explain hash functions, collisions, and the chaining and open-addressing ideas.
+   Use dictionaries and sets to get O(1) average lookups.
+   Choose the right data structure for a problem.
+
+
+12.1 Hashing
+A hash function h(key) maps a key to an index of a table of size m.
+
+
+  key "Zara" ──► h("Zara") = 17 mod 10 = 7
+  table:    0 1 2 3 4 5 6 [7: Zara] 8 9
+
+
+Goals: fast to compute, spreads keys uniformly.
+Common hash functions [L]
+
+   Division: h(k) = k mod m (choose m prime).
+   Mid-square: square the key, take the middle digits.
+   Folding: split the key into parts and add them.
+   Strings: h(s) = (s[0]·p⁰ + s[1]·p¹ + ...) mod m .
+
+
+12.2 Collisions
+Two different keys give the same index (inevitable, since there are more keys than slots).
+Chaining: each slot holds a linked list.
+
+
+   0: ∅
+   1: [11] → [21] → ∅
+   2: [12] → ∅
+   3: ∅
+
+
+Open addressing (linear probing): if slot taken, try the next one.
+
+ insert 11 (h=1) → slot 1
+ insert 21 (h=1) → taken → slot 2
+ insert 31 (h=1) → taken, taken → slot 3
+
+
+Load factor α = n / m. Keep α below about 0.7, otherwise resize and rehash.
+
+
+12.3 Cost
+
+  Operation                                          Average         Worst (all collide)
+
+  insert                                             O(1)            O(n)
+
+  search                                             O(1)            O(n)
+
+  delete                                             O(1)            O(n)
+
+  Hash tables do not keep keys ordered.
+
+
+
+12.4 Using dictionaries and sets (Python)
+
+ # Two-sum in O(n) with a hash map
+ def two_sum(a, target):
+      seen = {}
+      for i, v in enumerate(a):
+           if target - v in seen:
+               return seen[target - v], i
+           seen[v] = i
+ # Count frequencies
+ from collections import Counter
+ Counter("banana")           # {'a': 3, 'n': 2, 'b': 1}
+
+
+
+
+12.5 Which data structure should I use?
+
+ Need                                                     Best choice
+
+ Fast access by position                                  Array
+
+ Frequent insert/delete at the front                      Linked list / deque
+
+ Last-in-first-out, undo, matching                        Stack
+
+ First-come-first-served, BFS                             Queue
+
+ Fast lookup by key                                       Hash table
+
+ Sorted data with insert/delete                           BST (balanced)
+
+ Hierarchy                                                Tree
+
+ Relationships / networks                                 Graph
+
+ Always get the smallest or largest                       Priority queue (heap)
+
+
+
+12.6 Problem-solving checklist
+1. Restate the problem and list input/output and constraints.
+2. Solve a small example by hand.
+3. Think brute force first; state its complexity.
+4. Ask: "Which structure removes the repeated work?"
+5. Code, test with edge cases (empty, one element, duplicates, negatives).
+6. State final time and space complexity.
+
+
+12.7 Cheat-sheet: complexity of everything in this course
+
+ Structure                        Access    Search          Insert              Delete
+
+ Array                            O(1)      O(n)            O(n)                O(n)
+  Linked list                      O(n)        O(n)            O(1)*              O(1)*
+
+  Stack / Queue                    O(n)        O(n)            O(1)               O(1)
+
+                                               O(log n) /      O(log n) /         O(log n) /
+  BST (balanced / skewed)          –
+                                               O(n)            O(n)               O(n)
+
+  Hash table (avg)                 –           O(1)            O(1)               O(1)
+
+  *once the position is
+  known.
+
+
+
+Common mistakes
+    Assuming O(1) hashing in the worst case.
+    Using a mutable object (list) as a dictionary key.
+    Forgetting that hash tables are unordered.
+
+
+Quick revision
+Hashing turns a key into an index. Collisions are resolved by chaining or probing. Average
+O(1) operations. Choose structures by the operations you need most.
+
+
+Practice Set A — MCQs with Answers
+Q1. The average-case time of a hash table lookup (good hash, low load factor) is
+(a) O(n) (b) O(log n) (c) O(1) (d) O(n²)
+Answer: (c)
+
+Q2. With h(k) = k mod 10 and linear probing, insert 12, 22, 32. Their slots are
+(a) 2, 3, 4 (b) 2, 2, 2 (c) 2, 12, 22 (d) 12, 22, 32
+Answer: (a) — 12 → slot 2; 22 collides → slot 3; 32 collides twice → slot 4.
+
+Q3. Load factor of a hash table is
+(a) m / n (b) n / m (c) n × m (d) n − m
+Answer: (b) — n items in m slots.
+
+Q4. Chaining resolves collisions by
+(a) probing the next slot (b) keeping a linked list in each slot (c) deleting old keys (d) using a
+bigger key
+Answer: (b)
+
+Q5. Which operation is NOT efficient in a hash table?
+(a) Insert (b) Lookup (c) Delete (d) Listing keys in sorted order
+Answer: (d) — Hash tables do not keep keys ordered.
+
+Q6. Which structure is best when you must always retrieve the smallest element quickly?
+(a) Stack (b) Queue (c) Priority queue (min-heap) (d) Array
+Answer: (c)
+
+Q7. Which structure fits "undo" in an editor?
+(a) Queue (b) Stack (c) Hash table (d) Graph
+Answer: (b)
+
+Q8. The worst-case time of a hash table lookup (all keys collide) is
+(a) O(1) (b) O(log n) (c) O(n) (d) O(n²)
+Answer: (c)
+
+
+Practice Set B — Coding Problems with Solutions
+
+Code Problem 1 (Easy): Two sum
+Example: [2, 7, 11, 15] , target 9 → (0, 1)
+
+
+ def two_sum(a, target):
+      seen = {}
+      for i, v in enumerate(a):
+           if target - v in seen: return seen[target - v], i
+           seen[v] = i
+      return None
+
+
+Complexity: O(n), O(n).
+
+
+Code Problem 2 (Easy): First repeating element
+Statement: Return the first element (in array order) that occurs more than once.
+Example: [10, 5, 3, 4, 3, 5, 6] → 5
+
+
+ def first_repeating(a):
+      cnt = {}
+      for v in a:
+           cnt[v] = cnt.get(v, 0) + 1
+      for v in a:
+           if cnt[v] > 1:
+                 return v
+      return None
+Complexity: O(n) time, O(n) space.
+
+
+Code Problem 3 (Medium): Group anagrams
+Example: ["eat","tea","tan","ate","nat","bat"] → [["eat","tea","ate"],
+["tan","nat"],["bat"]]
+
+
+ from collections import defaultdict
+ def group_anagrams(words):
+      g = defaultdict(list)
+      for w in words: g[''.join(sorted(w))].append(w)
+      return list(g.values())
+
+
+Complexity: O(n · k log k).
+
+
+Code Problem 4 (Medium): Longest substring without repeating characters
+Example: "abcabcbb" → 3
+
+
+ def longest_unique(s):
+      last, start, best = {}, 0, 0
+      for i, ch in enumerate(s):
+          if ch in last and last[ch] >= start:
+               start = last[ch] + 1
+          last[ch] = i
+          best = max(best, i - start + 1)
+      return best
+
+
+Complexity: O(n).
+
+
+Code Problem 5 (Medium): Hash table with chaining
+
+ class HashTable:
+      def __init__(self, m=8):
+          self.m, self.n = m, 0
+          self.t = [[] for _ in range(m)]
+      def _idx(self, k): return hash(k) % self.m
+      def put(self, k, v):
+          b = self.t[self._idx(k)]
+          for i, (kk, _) in enumerate(b):
+               if kk == k: b[i] = (k, v); return
+          b.append((k, v)); self.n += 1
+          if self.n / self.m > 0.75: self._grow()
+      def get(self, k):
+          for kk, v in self.t[self._idx(k)]:
+                if kk == k: return v
+            return None
+        def _grow(self):
+            old = [kv for b in self.t for kv in b]
+            self.m *= 2; self.n = 0
+            self.t = [[] for _ in range(self.m)]
+            for k, v in old: self.put(k, v)
+
+
+Complexity: O(1) average for put/get; growing is amortised O(1).
+
+
+
+
+MODULE 13 — ASSESSMENT
+  Season finale (Ep. 13): Zara faces the "Maze of Memory", where every door needs a
+  different data structure to open. Bit steps aside: "This one is yours."
+  Teaser: A figure appears behind the final door, with a new level of problems. DSA
+  Mastery awaits.
+
+
+13.1 Structure of the assessment
+
+ Part                            Content                                              Marks
+
+ A. MCQ                          30 questions across Modules 1–12                     30
+
+                                 pointer diagrams, traversals, hashing tables,
+ B. Trace & short answer                                                              20
+                                 complexity
+
+ C. Coding                       3 problems (easy, medium, medium)                    30
+
+ D. Mini project                 see 13.3                                             20
+
+ Total                                                                                100
+
+ Pass mark: 40. Distinction:
+ 75+.
+
+
+
+13.2 Sample questions
+A. MCQ
+
+1. Which operation is O(1) on an array? (a) insert at the start (b) access by index (c) delete
+   from the middle (d) linear search → b
+2. The postfix form of A*(B+C) is → **A B C + ***
+3. In-order traversal of a BST yields → sorted order
+4. Which structure is used by BFS? → queue
+5. Worst-case search time in a BST built from sorted input → O(n)
+
+B. Short answer
+
+1. Show the steps of inserting 33, 17, 8, 45 into an initially empty BST and give its in-order
+   traversal. (Answer: 8 17 33 45; the tree is a left-leaning chain.)
+2. Insert keys 12, 22, 32, 5 into a table of size 10 with linear probing and h(k) = k mod 10 .
+   (Answer: slots 2, 3, 4, 5.)
+3. Find the time complexity of: for i in range(n): for j in range(i, n): ... → O(n²).
+
+C. Coding
+
+1. Reverse a linked list.
+2. Check for balanced parentheses in a string with three bracket types.
+3. Number of islands in a binary grid (BFS or DFS).
+
+
+13.3 Mini project (choose one)
+
+  Project                                                               Structures used
+
+  Contact book with fast search, add, delete and sorted listing         hash table + array/BST
+
+  Text editor undo/redo                                                 two stacks
+
+  Ticket counter simulation                                             queue + priority queue
+
+  Campus map route finder (fewest hops)                                 graph + BFS
+
+
+Project deliverables: problem statement, choice of data structure with reasons (include
+the complexity table), code, test cases, and a short README. Lipschutz's chapters on
+applications (word processing, polynomial arithmetic, file organisation) offer further project
+ideas.
+
+
+13.4 Readiness checklist for DSA Mastery
+   ☐︎ I can write a linked list and a BST from scratch.
+   ☐︎ I can trace BFS and DFS by hand.
+   ☐︎ I can state the complexity of any loop in this course.
+   ☐︎ I can pick between array, list, stack, queue, hash table and tree for a new problem.
+
+
+
+
+End of DSA Foundations notes.
+

@@ -1,5 +1,5 @@
-import { execSync, spawn } from "child_process";
-import { writeFileSync, unlinkSync, mkdirSync, existsSync } from "fs";
+import { spawn } from "child_process";
+import { writeFileSync, unlinkSync, mkdirSync, existsSync, rmSync } from "fs";
 import { join } from "path";
 import { tmpdir } from "os";
 
@@ -19,26 +19,23 @@ interface RunResult {
   compileOutput?: string;
 }
 
-function getExt(lang: string): string {
-  const map: Record<string, string> = {
-    python: "py", python3: "py", javascript: "js", nodejs: "js",
-    cpp: "cpp", "c++": "cpp", c: "c", java: "java", typescript: "ts",
-  };
-  return map[lang.toLowerCase()] || "txt";
-}
+const MAX_OUTPUT = 50_000; // chars kept per stream
 
 function runCommand(cmd: string, args: string[], input: string, timeout: number): Promise<{ stdout: string; stderr: string; exitCode: number }> {
   return new Promise((resolve) => {
     const proc = spawn(cmd, args, {
       timeout,
-      maxBuffer: 1024 * 1024,
       stdio: ["pipe", "pipe", "pipe"],
     });
 
     let stdout = "";
     let stderr = "";
-    proc.stdout.on("data", (d: Buffer) => { stdout += d.toString(); });
-    proc.stderr.on("data", (d: Buffer) => { stderr += d.toString(); });
+    proc.stdout.on("data", (d: Buffer) => {
+      if (stdout.length < MAX_OUTPUT) stdout += d.toString();
+    });
+    proc.stderr.on("data", (d: Buffer) => {
+      if (stderr.length < MAX_OUTPUT) stderr += d.toString();
+    });
 
     if (input) {
       proc.stdin.write(input);
@@ -50,9 +47,9 @@ function runCommand(cmd: string, args: string[], input: string, timeout: number)
       stderr += "\nTime Limit Exceeded";
     }, timeout);
 
-    proc.on("close", (code) => {
+    proc.on("close", (code: number | null) => {
       clearTimeout(timer);
-      resolve({ stdout: stdout.slice(0, 50000), stderr: stderr.slice(0, 50000), exitCode: code ?? 1 });
+      resolve({ stdout: stdout.slice(0, MAX_OUTPUT), stderr: stderr.slice(0, MAX_OUTPUT), exitCode: code ?? 1 });
     });
 
     proc.on("error", () => {
@@ -144,7 +141,7 @@ async function runJava(code: string, stdin: string): Promise<RunResult> {
     const result = await runCommand("java", ["-cp", dir, className], stdin, TIMEOUT_MS);
     return { stdout: result.stdout, stderr: result.stderr, exitCode: result.exitCode, time: Date.now() - start, memory: 0 };
   } finally {
-    try { require("fs").rmSync(dir, { recursive: true, force: true }); } catch {}
+    try { rmSync(dir, { recursive: true, force: true }); } catch {}
   }
 }
 

@@ -112,7 +112,7 @@ export default function Navbar() {
                 Sign in
               </Link>
               <Link
-                href="/courses/dsa-masterclass"
+                href="/courses"
                 className="rounded-full border border-[var(--fg)] bg-[var(--fg)] px-5 py-2 text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--bg)] transition-all duration-300 hover:bg-transparent hover:text-[var(--fg)]"
               >
                 Start

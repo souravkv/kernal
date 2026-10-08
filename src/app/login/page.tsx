@@ -62,7 +62,7 @@ export default function LoginPage() {
 
             <div className="space-y-3">
               <button
-                onClick={() => router.push("/courses/dsa-masterclass")}
+                onClick={() => router.push("/courses")}
                 className="group flex w-full items-center justify-center gap-3 border border-[var(--fg)] bg-[var(--fg)] py-3 text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--bg)] transition-all duration-300 hover:bg-transparent hover:text-[var(--fg)]"
               >
                 Continue Learning

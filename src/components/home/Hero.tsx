@@ -20,7 +20,7 @@ export default function Hero() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
           <span className="body-xs text-[var(--muted)] mb-8 block tracking-[0.3em]">
-            Learning Platform — 2024
+            Kernal — Learning Platform
           </span>
         </motion.div>
 
@@ -31,7 +31,7 @@ export default function Hero() {
             animate={{ y: 0 }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
           >
-            Data
+            Master
           </motion.h1>
         </div>
         <div className="overflow-hidden">
@@ -41,7 +41,7 @@ export default function Hero() {
             animate={{ y: 0 }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           >
-            Structures
+            the craft
           </motion.h1>
         </div>
         <div className="overflow-hidden">
@@ -51,7 +51,7 @@ export default function Hero() {
             animate={{ y: 0 }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
           >
-            <span className="text-[var(--muted)]">&</span> Algorithms
+            <span className="text-[var(--muted)]">of</span> code
           </motion.h1>
         </div>
 
@@ -62,23 +62,23 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.6 }}
         >
           <p className="body-lg max-w-md text-[var(--muted)]">
-            Go from zero to solving medium/hard problems independently.
-            University-aligned, hands-on, mastery-based.
+            Structured courses, quizzes and a built-in code playground.
+            Theory to implementation, in one place.
           </p>
 
           <div className="flex items-center gap-4">
             <Link
-              href="/courses/dsa-masterclass"
+              href="/courses"
               className="group flex items-center gap-3 rounded-full border border-[var(--fg)] bg-[var(--fg)] px-7 py-3 text-[11px] font-medium uppercase tracking-[0.15em] text-[var(--bg)] transition-all duration-300 hover:bg-transparent hover:text-[var(--fg)]"
             >
-              Start Learning
+              Explore Courses
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
-              href="/questions"
+              href="/practice"
               className="text-[13px] font-light text-[var(--muted)] transition-colors hover:text-[var(--fg)] hover-line"
             >
-              View Questions →
+              Open Playground →
             </Link>
           </div>
         </motion.div>
@@ -90,9 +90,9 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.8 }}
         >
           {[
-            { value: "16", label: "Topics" },
+            { value: "13", label: "Modules" },
             { value: "100+", label: "Problems" },
-            { value: "6", label: "Units" },
+            { value: "5", label: "Languages" },
             { value: "∞", label: "Practice" },
           ].map((stat) => (
             <div key={stat.label}>

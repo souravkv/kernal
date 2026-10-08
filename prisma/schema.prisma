@@ -1,0 +1,172 @@
+// KERNAL LMS — Prisma schema
+//
+// Development: SQLite (DATABASE_URL="file:./dev.db")
+// Production (Vercel): change `provider` below to "postgresql" and set
+// DATABASE_URL to a Neon/Vercel Postgres connection string. No other changes needed.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ---------- NextAuth ----------
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  quizAttempts  QuizAttempt[]
+  topicProgress TopicProgress[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ---------- Course content ----------
+
+model Course {
+  id              String   @id @default(cuid())
+  code            String // e.g. "DSA 101"
+  slug            String   @unique // e.g. "dsa-101"
+  title           String // e.g. "Data Structures & Algorithms Foundations"
+  level           String // Beginner | Intermediate | Advanced
+  order           Int      @default(0)
+  description     String
+  longDescription String
+  instructor      String   @default("KERNAL Platform")
+  duration        String
+  price           Int      @default(0)
+  rating          Float    @default(0)
+  students        Int      @default(0)
+  tags            String   @default("[]") // JSON array of strings
+  modules         Module[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Module {
+  id          String   @id @default(cuid())
+  courseId    String
+  order       Int
+  number      String // "01"
+  title       String
+  slug        String
+  description String   @default("")
+  icon        String   @default("")
+  coldOpen    String   @default("") // Code Chronicles story blurb
+  outcomes    String   @default("[]") // JSON array of strings
+  // JSON array: { number, title, difficulty, statement, example, solution, complexity }
+  practiceProblems String @default("[]")
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  topics      Topic[]
+  quiz        Quiz?
+
+  @@unique([courseId, slug])
+}
+
+model Topic {
+  id               String   @id @default(cuid())
+  moduleId         String
+  order            Int
+  title            String
+  slug             String
+  description      String   @default("")
+  difficulty       String   @default("Beginner")
+  content          String // markdown theory
+  codeExample      String?
+  codeLanguage     String?  @default("python")
+  practiceProblems String   @default("[]") // JSON array of strings
+  module           Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  progress         TopicProgress[]
+
+  @@unique([moduleId, slug])
+}
+
+// ---------- Quizzes ----------
+
+model Quiz {
+  id         String         @id @default(cuid())
+  moduleId   String         @unique
+  title      String         @default("Module Quiz")
+  passScore  Int            @default(60) // percent
+  module     Module         @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  questions  QuizQuestion[]
+  attempts   QuizAttempt[]
+}
+
+model QuizQuestion {
+  id           String @id @default(cuid())
+  quizId       String
+  order        Int
+  prompt       String
+  options      String // JSON array of 4 option strings
+  correctIndex Int
+  explanation  String @default("")
+  quiz         Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
+}
+
+// ---------- Progress ----------
+
+model QuizAttempt {
+  id        String   @id @default(cuid())
+  userId    String?
+  quizId    String
+  score     Int // percent 0-100
+  answers   String // JSON array of chosen indexes
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@index([userId, quizId])
+}
+
+model TopicProgress {
+  id          String   @id @default(cuid())
+  userId      String?
+  topicId     String
+  completedAt DateTime @default(now())
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  topic       Topic    @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, topicId])
+  @@index([userId])
+}
