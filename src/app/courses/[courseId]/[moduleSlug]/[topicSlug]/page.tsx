@@ -10,7 +10,7 @@ import { auth } from "@/auth";
 import CourseShell from "@/components/course/CourseShell";
 import CodeBlock from "@/components/editor/CodeBlock";
 import CodeTabs from "@/components/editor/CodeTabs";
-import MarkComplete from "@/components/course/MarkComplete";
+import TopicNav from "@/components/course/TopicNav";
 import Paywall from "@/components/course/Paywall";
 
 export async function generateMetadata({
@@ -124,19 +124,29 @@ export default async function TopicPage({
           </div>
         )}
 
-        <div className="mt-10 flex items-center justify-between border-t border-[var(--border)] pt-8">
-          <span className="body-sm text-[var(--muted)]">
-            Finished reading?
-          </span>
+        <div className="mt-10 border-t border-[var(--border)] pt-8">
           {session?.user ? (
-            <MarkComplete topicId={topic.id} initialDone={completed} />
+            <TopicNav
+              topicId={topic.id}
+              initialDone={completed}
+              nextHref={
+                next
+                  ? `/courses/${course.slug}/${next.moduleSlug}/${next.topic.slug}`
+                  : null
+              }
+            />
           ) : (
-            <Link
-              href="/login"
-              className="flex items-center gap-2 border border-[var(--border)] px-5 py-2.5 text-[10px] font-medium uppercase tracking-[0.15em] text-[var(--muted)] transition-all duration-300 hover:border-[var(--fg)] hover:text-[var(--fg)]"
-            >
-              Sign in to track progress
-            </Link>
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <span className="body-sm text-[var(--muted)]">
+                Finished reading?
+              </span>
+              <Link
+                href="/login"
+                className="flex items-center gap-2 border border-[var(--border)] px-5 py-2.5 text-[10px] font-medium uppercase tracking-[0.15em] text-[var(--muted)] transition-all duration-300 hover:border-[var(--fg)] hover:text-[var(--fg)]"
+              >
+                Sign in to track progress
+              </Link>
+            </div>
           )}
         </div>
 
