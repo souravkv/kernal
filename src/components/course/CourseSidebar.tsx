@@ -49,7 +49,11 @@ export default function CourseSidebar({
           <div key={mod.id} className="border-b border-[var(--border)]">
             <button
               onClick={() => toggle(mod.slug)}
-              className="flex w-full items-center gap-4 py-4 text-left transition-colors hover:bg-[var(--surface)] -mx-6 px-6 sm:mx-0 sm:px-0"
+              className={`flex w-full items-center gap-4 border-l-2 py-4 text-left transition-colors hover:bg-[var(--surface)] -mx-6 px-6 sm:mx-0 sm:px-0 ${
+                isCurrentModule
+                  ? "border-l-[var(--fg)] bg-[var(--surface)]"
+                  : "border-l-transparent"
+              }`}
             >
               <span className="text-[10px] font-medium text-[var(--muted)]">
                 {mod.icon}

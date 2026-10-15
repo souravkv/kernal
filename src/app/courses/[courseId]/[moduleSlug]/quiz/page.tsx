@@ -6,6 +6,7 @@ import { getUserProgress } from "@/lib/progress";
 import { hasCourseAccess } from "@/lib/access";
 import { auth } from "@/auth";
 import QuizRunner from "@/components/course/QuizRunner";
+import CourseShell from "@/components/course/CourseShell";
 import Paywall from "@/components/course/Paywall";
 
 export const dynamic = "force-dynamic";
@@ -53,6 +54,11 @@ export default async function QuizPage({
   const stat = progress?.moduleStats[mod.id];
 
   return (
+    <CourseShell
+      course={course}
+      currentModuleSlug={mod.slug}
+      progress={progress}
+    >
     <div className="mx-auto max-w-[900px] px-6 py-20 sm:px-10 sm:py-24">
       <div className="mb-10 flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-[var(--muted)]">
         <Link href="/courses" className="transition-colors hover:text-[var(--fg)]">
@@ -86,5 +92,6 @@ export default async function QuizPage({
         bestScore={stat?.quizBest ?? null}
       />
     </div>
+    </CourseShell>
   );
 }

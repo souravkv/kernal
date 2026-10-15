@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { readFileSync } from "fs";
 import { join } from "path";
+import { modules } from "./seed-data/syllabus";
+import type { SeedModule } from "./seed-data/types";
 
 const db = new PrismaClient();
 
@@ -11,11 +13,11 @@ const COURSE = {
   level: "Beginner",
   order: 1,
   description:
-    "Master data structures and algorithms from first principles. 13 modules, theory, MCQ quizzes, and coding problems — built on Lipschutz & Aho, Hopcroft & Ullman.",
+    "Master data structures and algorithms from first principles. 10 beginner modules, story-driven theory, MCQ quizzes, and coding problems — Python & C++ throughout.",
   longDescription:
-    "A beginner-to-intermediate foundations course covering data, algorithms, complexity, arrays, strings, recursion, searching, sorting, linked lists, stacks, queues, trees, graphs and hashing. Every module follows the same flow: story-driven intro, theory notes, an MCQ quiz, and coding problems with worked solutions.",
+    "A complete beginner-friendly foundations course: what DSA is, arrays (with sorting & searching), linked lists, stacks, queues, hashing, trees, graphs, how to choose the right structure, and a wrap-up with project ideas. Every module follows the same flow: a story-driven intro, plain-English theory with diagrams, an MCQ quiz (60% passes), and practice problems with worked solutions. Code examples switch between Python and C++.",
   instructor: "KERNAL Platform",
-  duration: "12 weeks",
+  duration: "8 weeks",
   price: 2699,
   rating: 4.9,
   students: 2847,
@@ -29,45 +31,13 @@ const COURSE = {
   ]),
 };
 
-const MODULE_DIFFICULTY: Record<number, string> = {
-  ...Object.fromEntries([1, 2, 3, 4, 5, 6].map((i) => [i, "Beginner"])),
-  ...Object.fromEntries([7, 8, 9].map((i) => [i, "Intermediate"])),
-  ...Object.fromEntries([10, 11, 12].map((i) => [i, "Advanced"])),
-  13: "Intermediate",
-};
-
-interface SeedModule {
-  number: number;
-  title: string;
-  slug: string;
-  coldOpen: string;
-  outcomes: string[];
-  topics: {
-    order: number;
-    title: string;
-    slug: string;
-    description: string;
-    content: string;
-  }[];
-  quiz: {
-    questions: {
-      order: number;
-      prompt: string;
-      options: string[];
-      correctIndex: number;
-      explanation: string;
-    }[];
-  } | null;
-  practiceProblems: unknown[];
-}
+// All modules in the restructured beginner syllabus are pitched at Beginner level.
+const MODULE_DIFFICULTY: Record<number, string> = Object.fromEntries(
+  modules.map((m) => [m.number, "Beginner"])
+);
 
 async function main() {
   const selection = process.argv[2] ?? "all";
-  const raw = readFileSync(
-    join(__dirname, "seed-data", "full.json"),
-    "utf-8"
-  );
-  const { modules } = JSON.parse(raw) as { modules: SeedModule[] };
 
   const wanted =
     selection === "all"
@@ -81,23 +51,33 @@ async function main() {
     process.exit(1);
   }
 
+  // practice problems live in a sibling JSON (slug -> problems), merged by module slug
+  const practiceRaw = readFileSync(
+    join(__dirname, "seed-data", "practice.json"),
+    "utf-8"
+  );
+  const practiceMap = JSON.parse(practiceRaw) as Record<string, unknown[]>;
+
   const course = await db.course.upsert({
     where: { slug: COURSE.slug },
-    update: COURSE,
+    // create-only for price: manual price edits in the DB survive re-seeds.
+    // Everything else is refreshed from the source of truth on every deploy.
+    update: { ...COURSE, price: undefined },
     create: COURSE,
   });
 
-  // promo codes — idempotent upserts, re-seeding never clobbers redemptions
-  const COUPONS = [
-    { code: "KERNAL999", type: "SET_PRICE", value: 999 },
-    { code: "KERNALFREE", type: "SET_PRICE", value: 0 },
-  ];
-  for (const c of COUPONS) {
-    await db.coupon.upsert({
-      where: { code: c.code },
-      update: { type: c.type, value: c.value, active: true },
-      create: { ...c, active: true },
-    });
+  // promo codes — only seeded when the table is empty, so manual edits survive.
+  // (Redemptions are also never touched; upserts here are intentionally skipped.)
+  const couponCount = await db.coupon.count();
+  if (couponCount === 0) {
+    const COUPONS = [
+      { code: "KERNAL999", type: "SET_PRICE", value: 999 },
+      { code: "KERNALFREE", type: "SET_PRICE", value: 0 },
+    ];
+    for (const c of COUPONS) {
+      await db.coupon.create({ data: { ...c, active: true } });
+    }
+    console.log("Seeded default coupons (KERNAL999, KERNALFREE)");
   }
 
   for (const m of wanted) {
@@ -112,7 +92,7 @@ async function main() {
       icon: String(m.number).padStart(2, "0"),
       coldOpen: m.coldOpen,
       outcomes: JSON.stringify(m.outcomes),
-      practiceProblems: JSON.stringify(m.practiceProblems),
+      practiceProblems: JSON.stringify(m.practiceProblems ?? practiceMap[m.slug] ?? []),
     };
 
     const existingModule = await db.module.findFirst({
@@ -131,6 +111,20 @@ async function main() {
     const existingTopics = await db.topic.findMany({ where: { moduleId } });
     const keepSlugs = new Set(m.topics.map((t) => t.slug));
     for (const t of m.topics) {
+      // codeExample is either a plain string (single language) or a
+      // { language: code } map serialized to JSON (rendered as switchable tabs).
+      const codeExample =
+        typeof t.codeExample === "string"
+          ? t.codeExample
+          : t.codeExample
+            ? JSON.stringify(t.codeExample)
+            : null;
+      const codeLanguage =
+        typeof t.codeExample === "string" && t.codeLanguage
+          ? t.codeLanguage
+          : t.codeExample && typeof t.codeExample !== "string"
+            ? "python" // default tab for multi-language examples
+            : t.codeLanguage ?? "python";
       const topicData = {
         order: t.order,
         title: t.title,
@@ -138,7 +132,8 @@ async function main() {
         description: t.description,
         difficulty: MODULE_DIFFICULTY[m.number] ?? "Beginner",
         content: t.content,
-        codeLanguage: "python",
+        codeExample,
+        codeLanguage,
         practiceProblems: "[]",
       };
       const existing = existingTopics.find((x) => x.slug === t.slug);
@@ -155,20 +150,21 @@ async function main() {
     }
 
     // quiz: upsert by moduleId (stable id keeps attempts), then refresh questions
+    const quizTitle = m.quiz?.title ?? `Module ${m.number} Quiz`;
     if (m.quiz) {
       const existingQuiz = await db.quiz.findUnique({ where: { moduleId } });
       const quizId = existingQuiz
         ? (
             await db.quiz.update({
               where: { id: existingQuiz.id },
-              data: { title: `Module ${m.number} Quiz`, passScore: 60 },
+              data: { title: quizTitle, passScore: 60 },
             })
           ).id
         : (
             await db.quiz.create({
               data: {
                 moduleId,
-                title: `Module ${m.number} Quiz`,
+                title: quizTitle,
                 passScore: 60,
               },
             })
@@ -199,7 +195,28 @@ async function main() {
     );
   }
 
+  // stale-module cleanup: when seeding the full syllabus, delete modules that
+  // were removed from the source (e.g. the old 13-module structure).
+  if (selection === "all") {
+    const keepModuleSlugs = new Set(modules.map((m) => m.slug));
+    const existingModules = await db.module.findMany({
+      where: { courseId: course.id },
+      select: { id: true, slug: true },
+    });
+    for (const stale of existingModules) {
+      if (!keepModuleSlugs.has(stale.slug)) {
+        await db.module.delete({ where: { id: stale.id } });
+        console.log(`Removed stale module: ${stale.slug}`);
+      }
+    }
+  }
+
+  const totalModules = await db.module.count({ where: { courseId: course.id } });
+  const totalTopics = await db.topic.count({
+    where: { module: { courseId: course.id } },
+  });
   console.log(`\nCourse: ${course.code} — ${course.title} (${course.slug})`);
+  console.log(`Totals: ${totalModules} modules, ${totalTopics} topics`);
 }
 
 main()

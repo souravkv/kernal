@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight, ClipboardCheck, ArrowLeft, ArrowRight, Check } from "lucide-react";
-import { getCourseBySlug, getModuleDetail } from "@/lib/courses";
+import { getModuleDetail } from "@/lib/courses";
 import { getUserProgress } from "@/lib/progress";
 import { hasCourseAccess } from "@/lib/access";
 import { auth } from "@/auth";
 import CodeBlock from "@/components/editor/CodeBlock";
+import CourseShell from "@/components/course/CourseShell";
 import Paywall from "@/components/course/Paywall";
 
 export async function generateMetadata({
@@ -58,6 +59,11 @@ export default async function ModulePage({
     idx >= 0 && idx < course.modules.length - 1 ? course.modules[idx + 1] : null;
 
   return (
+    <CourseShell
+      course={course}
+      currentModuleSlug={mod.slug}
+      progress={progress}
+    >
     <div className="mx-auto max-w-[900px] px-6 py-20 sm:px-10 sm:py-24">
       {/* breadcrumb */}
       <nav className="mb-10 flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-[var(--muted)]">
@@ -293,5 +299,6 @@ export default async function ModulePage({
         )}
       </div>
     </div>
+    </CourseShell>
   );
 }

@@ -5,9 +5,11 @@ import { getTopicDetail } from "@/lib/courses";
 import { getUserProgress } from "@/lib/progress";
 import { hasCourseAccess } from "@/lib/access";
 import { renderMarkdown } from "@/lib/markdown";
+import { parseCodeExample } from "@/lib/code-examples";
 import { auth } from "@/auth";
-import CourseSidebar from "@/components/course/CourseSidebar";
+import CourseShell from "@/components/course/CourseShell";
 import CodeBlock from "@/components/editor/CodeBlock";
+import CodeTabs from "@/components/editor/CodeTabs";
 import MarkComplete from "@/components/course/MarkComplete";
 import Paywall from "@/components/course/Paywall";
 
@@ -51,17 +53,16 @@ export default async function TopicPage({
   }
   const progress = session?.user?.id ? await getUserProgress(session.user.id) : null;
   const completed = progress?.topicDone[topic.id] ?? false;
+  const codeExample = parseCodeExample(topic.codeExample, topic.codeLanguage || "python");
 
   return (
-    <div className="mx-auto flex max-w-[1400px] gap-0 px-6 py-20 sm:px-10 sm:py-24 lg:gap-16">
-      <CourseSidebar
-        course={course}
-        currentModuleSlug={mod.slug}
-        currentTopicSlug={topic.slug}
-        progress={progress}
-      />
-
-      <article className="min-w-0 flex-1">
+    <CourseShell
+      course={course}
+      currentModuleSlug={mod.slug}
+      currentTopicSlug={topic.slug}
+      progress={progress}
+    >
+      <article>
         <div className="mb-8">
           <div className="flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-[var(--muted)]">
             <Link href="/courses" className="transition-colors hover:text-[var(--fg)]">
@@ -107,10 +108,19 @@ export default async function TopicPage({
           />
         </div>
 
-        {topic.codeExample && (
+        {codeExample && (
           <div className="mt-12">
-            <h2 className="heading-sm mb-6">Code Example</h2>
-            <CodeBlock code={topic.codeExample} language={topic.codeLanguage || "python"} />
+            <h2 className="heading-sm mb-6">
+              Code Example{codeExample.kind === "multi" ? " — pick a language" : ""}
+            </h2>
+            {codeExample.kind === "multi" ? (
+              <CodeTabs codes={codeExample.codes} />
+            ) : (
+              <CodeBlock
+                code={codeExample.code}
+                language={codeExample.language}
+              />
+            )}
           </div>
         )}
 
@@ -157,6 +167,6 @@ export default async function TopicPage({
           )}
         </div>
       </article>
-    </div>
+    </CourseShell>
   );
 }

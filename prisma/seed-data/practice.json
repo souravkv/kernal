@@ -1,0 +1,358 @@
+{
+  "arrays": [
+    {
+      "number": 1,
+      "difficulty": "Easy",
+      "title": "Reverse an array in place",
+      "statement": "",
+      "example": "[1,2,3,4,5] → [5,4,3,2,1]",
+      "solution": "def reverse(a):\n     i, j = 0, len(a) - 1\n     while i < j:\n          a[i], a[j] = a[j], a[i]\n          i += 1; j -= 1\n     return a",
+      "complexity": "O(n) time, O(1) space."
+    },
+    {
+      "number": 2,
+      "difficulty": "Easy",
+      "title": "Second largest element",
+      "statement": "Find the second largest distinct value in one pass.",
+      "example": "[12, 35, 1, 10, 34, 1] → 34",
+      "solution": "def second_largest(a):\n     first = second = float('-inf')\n     for x in a:\n          if x > first:\n                first, second = x, first\n          elif first > x > second:\n                second = x\n     return second if second != float('-inf') else None",
+      "complexity": "O(n), O(1)."
+    },
+    {
+      "number": 3,
+      "difficulty": "Medium",
+      "title": "Rotate an array by k",
+      "statement": "Rotate right by k positions in place. Idea: reverse all, then reverse the first k and the rest. Complexity: O(n), O(1).",
+      "example": "[1,2,3,4,5,6,7] , k=3 → [5,6,7,1,2,3,4]",
+      "solution": "def rotate(a, k):\n     n = len(a); k %= n\n     def rev(i, j):\n          while i < j:\n                a[i], a[j] = a[j], a[i]; i += 1; j -= 1\n     rev(0, n - 1); rev(0, k - 1); rev(k, n - 1)\n     return a",
+      "complexity": ""
+    },
+    {
+      "number": 4,
+      "difficulty": "Medium",
+      "title": "Range sum queries (prefix sums)",
+      "statement": "Answer many queries sum(l, r) quickly.",
+      "example": "",
+      "solution": "def build(a):\n     pre = [0]\n     for x in a: pre.append(pre[-1] + x)\n     return pre\n\n\ndef range_sum(pre, l, r):                # inclusive, 0-based\n     return pre[r + 1] - pre[l]\n\n\npre = build([2, 4, 5, 7, 1])\nprint(range_sum(pre, 1, 3))              # 16",
+      "complexity": "build O(n), each query O(1)."
+    },
+    {
+      "number": 5,
+      "difficulty": "Easy",
+      "title": "Transpose a matrix",
+      "statement": "",
+      "example": "",
+      "solution": "def transpose(m):\n     r, c = len(m), len(m[0])\n     return [[m[i][j] for i in range(r)] for j in range(c)]\n# [[1,2,3],[4,5,6]] -> [[1,4],[2,5],[3,6]]",
+      "complexity": "O(r·c)."
+    }
+  ],
+  "linked-lists": [
+    {
+      "number": 1,
+      "difficulty": "Easy",
+      "title": "Insert at front and at end",
+      "statement": "",
+      "example": "",
+      "solution": "def insert_front(head, v):\n     return Node(v, head)\n\n\ndef insert_end(head, v):\n     n = Node(v)\n     if not head: return n\n     cur = head\n     while cur.next: cur = cur.next\n     cur.next = n\n     return head",
+      "complexity": "front O(1); end O(n) (O(1) with a tail pointer)."
+    },
+    {
+      "number": 2,
+      "difficulty": "Medium",
+      "title": "Delete the n-th node from the end",
+      "statement": "",
+      "example": "[1,2,3,4,5] , n=2 → [1,2,3,5]",
+      "solution": "def remove_nth_from_end(head, n):\n     dummy = Node(0, head)\n     fast = slow = dummy\n     for _ in range(n): fast = fast.next\n     while fast.next:\n         fast = fast.next; slow = slow.next\n     slow.next = slow.next.next\n     return dummy.next",
+      "complexity": "O(L), one pass; O(1) space."
+    },
+    {
+      "number": 3,
+      "difficulty": "Easy",
+      "title": "Reverse a linked list",
+      "statement": "",
+      "example": "",
+      "solution": "def reverse(head):\n     prev, cur = None, head\n     while cur:\n         cur.next, prev, cur = prev, cur, cur.next\n     return prev",
+      "complexity": "O(n), O(1)."
+    },
+    {
+      "number": 4,
+      "difficulty": "Easy",
+      "title": "Middle of the list",
+      "statement": "",
+      "example": "",
+      "solution": "def middle(head):\n     slow = fast = head\n     while fast and fast.next:\n         slow = slow.next; fast = fast.next.next\n     return slow          # for even length, returns the second middle",
+      "complexity": ""
+    },
+    {
+      "number": 5,
+      "difficulty": "Medium",
+      "title": "Detect a cycle (Floyd)",
+      "statement": "",
+      "example": "",
+      "solution": "def has_cycle(head):\n     slow = fast = head\n     while fast and fast.next:\n         slow, fast = slow.next, fast.next.next\n         if slow is fast: return True\n     return False",
+      "complexity": "O(n), O(1)."
+    },
+    {
+      "number": 6,
+      "difficulty": "Medium",
+      "title": "Merge two sorted lists",
+      "statement": "",
+      "example": "",
+      "solution": "def merge(a, b):\n     dummy = tail = Node(0)\n     while a and b:\n          if a.data <= b.data: tail.next, a = a, a.next\n          else: tail.next, b = b, b.next\n          tail = tail.next\n     tail.next = a or b\n     return dummy.next",
+      "complexity": "O(n + m), O(1)."
+    }
+  ],
+  "stacks": [
+    {
+      "number": 1,
+      "difficulty": "Easy",
+      "title": "Balanced brackets",
+      "statement": "",
+      "example": "\"{[()]}\" → True; \"([)]\" → False",
+      "solution": "def balanced(s):\n     pairs = {')': '(', ']': '[', '}': '{'}\n     st = []\n     for ch in s:\n          if ch in '([{': st.append(ch)\n          elif ch in pairs:\n               if not st or st.pop() != pairs[ch]: return False\n     return not st",
+      "complexity": "O(n)."
+    },
+    {
+      "number": 2,
+      "difficulty": "Medium",
+      "title": "Evaluate a postfix expression",
+      "statement": "",
+      "example": "\"5 6 2 + * 12 4 / -\" → 37",
+      "solution": "def eval_postfix(expr):\n     st = []\n     for tok in expr.split():\n          if tok in \"+-*/\":\n               b, a = st.pop(), st.pop()              # right operand popped first\n               if tok == '+': st.append(a + b)\n               elif tok == '-': st.append(a - b)\n               elif tok == '*': st.append(a * b)\n               else: st.append(int(a / b))            # truncate toward zero\n          else:\n\n              st.append(int(tok))\n    return st[0]",
+      "complexity": "O(n)."
+    },
+    {
+      "number": 3,
+      "difficulty": "Medium",
+      "title": "Infix to postfix",
+      "statement": "",
+      "example": "\"A+B*C\" → \"ABC*+\"",
+      "solution": "def to_postfix(s):\n    prec = {'+': 1, '-': 1, '*': 2, '/': 2, '^': 3}\n    out, st = [], []\n    for ch in s:\n        if ch.isalnum(): out.append(ch)\n        elif ch == '(': st.append(ch)\n        elif ch == ')':\n              while st and st[-1] != '(': out.append(st.pop())\n              st.pop()\n        else:\n              while st and st[-1] != '(' and (prec[st[-1]] > prec[ch] or\n                     (prec[st[-1]] == prec[ch] and ch != '^')):\n                   out.append(st.pop())\n              st.append(ch)\n    while st: out.append(st.pop())\n    return ''.join(out)",
+      "complexity": "O(n)."
+    },
+    {
+      "number": 4,
+      "difficulty": "Easy",
+      "title": "Reverse a string with a stack",
+      "statement": "",
+      "example": "",
+      "solution": "def rev(s):\n    st = list(s)\n    return ''.join(st.pop() for _ in range(len(st)))",
+      "complexity": ""
+    },
+    {
+      "number": 5,
+      "difficulty": "Medium",
+      "title": "Next greater element",
+      "statement": "",
+      "example": "[4, 5, 2, 25] → [5, 25, 25, -1]",
+      "solution": "def next_greater(a):\n    res, st = [-1] * len(a), []            # st holds indices\n    for i, x in enumerate(a):\n        while st and a[st[-1]] < x:\n              res[st.pop()] = x\n        st.append(i)\n\n     return res",
+      "complexity": "O(n) (each index pushed and popped once)."
+    },
+    {
+      "number": 6,
+      "difficulty": "Medium",
+      "title": "Min-stack with O(1) get_min",
+      "statement": "",
+      "example": "",
+      "solution": "class MinStack:\n     def __init__(self): self.s, self.m = [], []\n     def push(self, x):\n          self.s.append(x)\n          self.m.append(x if not self.m else min(x, self.m[-1]))\n     def pop(self):\n          self.m.pop(); return self.s.pop()\n     def get_min(self): return self.m[-1]",
+      "complexity": ""
+    }
+  ],
+  "queues": [
+    {
+      "number": 1,
+      "difficulty": "Medium",
+      "title": "Queue using two stacks",
+      "statement": "",
+      "example": "",
+      "solution": "class MyQueue:\n       def __init__(self): self.inp, self.out = [], []\n       def enqueue(self, x): self.inp.append(x)\n       def dequeue(self):\n            if not self.out:\n                while self.inp: self.out.append(self.inp.pop())\n            return self.out.pop()",
+      "complexity": "amortised O(1) per operation."
+    },
+    {
+      "number": 2,
+      "difficulty": "Medium",
+      "title": "Circular queue",
+      "statement": "",
+      "example": "",
+      "solution": "class CircularQueue:\n       def __init__(self, n):\n            self.a, self.n, self.front, self.size = [None] * n, n, 0, 0\n       def enqueue(self, x):\n            if self.size == self.n: return False\n            self.a[(self.front + self.size) % self.n] = x\n            self.size += 1; return True\n       def dequeue(self):\n            if self.size == 0: return None\n            x = self.a[self.front]\n            self.front = (self.front + 1) % self.n\n            self.size -= 1; return x",
+      "complexity": ""
+    },
+    {
+      "number": 3,
+      "difficulty": "Medium",
+      "title": "Josephus problem",
+      "statement": "n people stand in a circle; every k-th is eliminated. Return the survivor (1- based).",
+      "example": "n=7, k=3 → 4",
+      "solution": "from collections import deque\ndef josephus(n, k):\n    q = deque(range(1, n + 1))\n    while len(q) > 1:\n         q.rotate(-(k - 1))\n         q.popleft()\n    return q[0]",
+      "complexity": "O(n·k)."
+    },
+    {
+      "number": 4,
+      "difficulty": "Easy",
+      "title": "Binary numbers from 1 to n using a queue",
+      "statement": "",
+      "example": "n=5 → ['1','10','11','100','101']",
+      "solution": "from collections import deque\ndef gen_binary(n):\n    q, out = deque(['1']), []\n    for _ in range(n):\n         s = q.popleft(); out.append(s)\n         q.append(s + '0'); q.append(s + '1')\n    return out",
+      "complexity": "O(n)."
+    },
+    {
+      "number": 5,
+      "difficulty": "Medium",
+      "title": "First non-repeating character in a stream",
+      "statement": "",
+      "example": "stream \"aabc\" → after each character: a, -1, b, b",
+      "solution": "from collections import deque\ndef stream_first_unique(s):\n    cnt, q, out = {}, deque(), []\n    for ch in s:\n         cnt[ch] = cnt.get(ch, 0) + 1\n         q.append(ch)\n         while q and cnt[q[0]] > 1: q.popleft()\n         out.append(q[0] if q else '-1')\n    return out",
+      "complexity": "O(n)."
+    }
+  ],
+  "hashing": [
+    {
+      "number": 1,
+      "difficulty": "Easy",
+      "title": "Two sum",
+      "statement": "",
+      "example": "[2, 7, 11, 15] , target 9 → (0, 1)",
+      "solution": "def two_sum(a, target):\n     seen = {}\n     for i, v in enumerate(a):\n          if target - v in seen: return seen[target - v], i\n          seen[v] = i\n     return None",
+      "complexity": "O(n), O(n)."
+    },
+    {
+      "number": 2,
+      "difficulty": "Easy",
+      "title": "First repeating element",
+      "statement": "Return the first element (in array order) that occurs more than once.",
+      "example": "[10, 5, 3, 4, 3, 5, 6] → 5",
+      "solution": "def first_repeating(a):\n     cnt = {}\n     for v in a:\n          cnt[v] = cnt.get(v, 0) + 1\n     for v in a:\n          if cnt[v] > 1:\n                return v\n     return None",
+      "complexity": "O(n) time, O(n) space."
+    },
+    {
+      "number": 3,
+      "difficulty": "Medium",
+      "title": "Group anagrams",
+      "statement": "",
+      "example": "[\"eat\",\"tea\",\"tan\",\"ate\",\"nat\",\"bat\"] → [[\"eat\",\"tea\",\"ate\"], [\"tan\",\"nat\"],[\"bat\"]]",
+      "solution": "from collections import defaultdict\ndef group_anagrams(words):\n     g = defaultdict(list)\n     for w in words: g[''.join(sorted(w))].append(w)\n     return list(g.values())",
+      "complexity": "O(n · k log k)."
+    },
+    {
+      "number": 4,
+      "difficulty": "Medium",
+      "title": "Longest substring without repeating characters",
+      "statement": "",
+      "example": "\"abcabcbb\" → 3",
+      "solution": "def longest_unique(s):\n     last, start, best = {}, 0, 0\n     for i, ch in enumerate(s):\n         if ch in last and last[ch] >= start:\n              start = last[ch] + 1\n         last[ch] = i\n         best = max(best, i - start + 1)\n     return best",
+      "complexity": "O(n)."
+    },
+    {
+      "number": 5,
+      "difficulty": "Medium",
+      "title": "Hash table with chaining",
+      "statement": "",
+      "example": "",
+      "solution": "class HashTable:\n     def __init__(self, m=8):\n         self.m, self.n = m, 0\n         self.t = [[] for _ in range(m)]\n     def _idx(self, k): return hash(k) % self.m\n     def put(self, k, v):\n         b = self.t[self._idx(k)]\n         for i, (kk, _) in enumerate(b):\n              if kk == k: b[i] = (k, v); return\n         b.append((k, v)); self.n += 1\n         if self.n / self.m > 0.75: self._grow()\n     def get(self, k):\n         for kk, v in self.t[self._idx(k)]:\n\n               if kk == k: return v\n           return None\n       def _grow(self):\n           old = [kv for b in self.t for kv in b]\n           self.m *= 2; self.n = 0\n           self.t = [[] for _ in range(self.m)]\n           for k, v in old: self.put(k, v)",
+      "complexity": "O(1) average for put/get; growing is amortised O(1)."
+    }
+  ],
+  "trees": [
+    {
+      "number": 1,
+      "difficulty": "Easy",
+      "title": "All four traversals",
+      "statement": "",
+      "example": "",
+      "solution": "from collections import deque\ndef preorder(r):       return [r.val] + preorder(r.left) + preorder(r.right) if r else []\ndef inorder(r):        return inorder(r.left) + [r.val] + inorder(r.right) if r else []\ndef postorder(r): return postorder(r.left) + postorder(r.right) + [r.val] if r else []\ndef level(r):\n     out, q = [], deque([r] if r else [])\n     while q:\n          n = q.popleft(); out.append(n.val)\n          if n.left: q.append(n.left)\n          if n.right: q.append(n.right)\n     return out",
+      "complexity": "O(n) each."
+    },
+    {
+      "number": 2,
+      "difficulty": "Easy",
+      "title": "Height of a binary tree",
+      "statement": "",
+      "example": "",
+      "solution": " def height(r):\n\n     return -1 if r is None else 1 + max(height(r.left), height(r.right))\n# Height of a single node = 0; empty tree = -1",
+      "complexity": "O(n)."
+    },
+    {
+      "number": 3,
+      "difficulty": "Medium",
+      "title": "Validate a BST",
+      "statement": "",
+      "example": "",
+      "solution": "def is_bst(r, lo=float('-inf'), hi=float('inf')):\n     if r is None: return True\n     if not (lo < r.val < hi): return False\n     return is_bst(r.left, lo, r.val) and is_bst(r.right, r.val, hi)",
+      "complexity": "O(n). Checking only parent–child pairs is a classic mistake."
+    },
+    {
+      "number": 4,
+      "difficulty": "Easy",
+      "title": "Count leaf nodes",
+      "statement": "",
+      "example": "",
+      "solution": "def count_leaves(r):\n     if r is None: return 0\n     if not r.left and not r.right: return 1\n     return count_leaves(r.left) + count_leaves(r.right)",
+      "complexity": ""
+    },
+    {
+      "number": 5,
+      "difficulty": "Medium",
+      "title": "BST insert and delete",
+      "statement": "",
+      "example": "",
+      "solution": "def insert(r, k):\n     if r is None: return TreeNode(k)\n     if k < r.val: r.left = insert(r.left, k)\n     elif k > r.val: r.right = insert(r.right, k)\n     return r\n\n\ndef delete(r, k):\n     if r is None: return None\n     if k < r.val: r.left = delete(r.left, k)\n     elif k > r.val: r.right = delete(r.right, k)\n     else:\n         if not r.left: return r.right\n         if not r.right: return r.left\n         succ = r.right\n         while succ.left: succ = succ.left\n         r.val = succ.val\n         r.right = delete(r.right, succ.val)\n     return r",
+      "complexity": "O(h), where h is the height."
+    },
+    {
+      "number": 6,
+      "difficulty": "Medium",
+      "title": "k-th smallest in a BST",
+      "statement": "",
+      "example": "",
+      "solution": "def kth_smallest(r, k):\n        st, cur = [], r\n        while True:\n            while cur: st.append(cur); cur = cur.left\n            cur = st.pop(); k -= 1\n            if k == 0: return cur.val\n            cur = cur.right",
+      "complexity": "O(h + k)."
+    }
+  ],
+  "graphs": [
+    {
+      "number": 1,
+      "difficulty": "Easy",
+      "title": "BFS and DFS",
+      "statement": "",
+      "example": "",
+      "solution": "from collections import deque\ndef bfs(adj, s):\n     seen, q, order = {s}, deque([s]), []\n     while q:\n          u = q.popleft(); order.append(u)\n          for v in adj[u]:\n                if v not in seen: seen.add(v); q.append(v)\n     return order\n\n\ndef dfs(adj, u, seen=None, order=None):\n     seen = seen if seen is not None else set()\n     order = order if order is not None else []\n     seen.add(u); order.append(u)\n     for v in adj[u]:\n          if v not in seen: dfs(adj, v, seen, order)\n     return order",
+      "complexity": "O(V + E) each."
+    },
+    {
+      "number": 2,
+      "difficulty": "Easy",
+      "title": "Count connected components",
+      "statement": "",
+      "example": "",
+      "solution": " def components(n, edges):\n      adj = [[] for _ in range(n)]\n      for u, v in edges: adj[u].append(v); adj[v].append(u)\n      seen, count = set(), 0\n      for s in range(n):\n           if s not in seen:\n                 count += 1\n                 stack = [s]; seen.add(s)\n\n                while stack:\n                    u = stack.pop()\n                    for v in adj[u]:\n                        if v not in seen: seen.add(v); stack.append(v)\n     return count\n# components(5, [(0,1),(1,2),(3,4)]) -> 2",
+      "complexity": ""
+    },
+    {
+      "number": 3,
+      "difficulty": "Medium",
+      "title": "Number of islands",
+      "statement": "In a grid of '1' (land) and '0' (water), count islands (4-direction connectivity).",
+      "example": "",
+      "solution": "def num_islands(g):\n     if not g: return 0\n     R, C, count = len(g), len(g[0]), 0\n     def sink(r, c):\n          if r < 0 or c < 0 or r >= R or c >= C or g[r][c] != '1': return\n          g[r][c] = '0'\n          sink(r+1, c); sink(r-1, c); sink(r, c+1); sink(r, c-1)\n     for r in range(R):\n          for c in range(C):\n                if g[r][c] == '1':\n                    count += 1; sink(r, c)\n     return count",
+      "complexity": "O(R·C)."
+    },
+    {
+      "number": 4,
+      "difficulty": "Medium",
+      "title": "Shortest path in a maze (BFS)",
+      "statement": "Grid with 0 (open) and 1 (wall); find the fewest steps from (0,0) to (R−1,C−1), or −1.",
+      "example": "",
+      "solution": "from collections import deque\ndef shortest(grid):\n     R, C = len(grid), len(grid[0])\n     if grid[0][0] or grid[R-1][C-1]: return -1\n     q, seen = deque([(0, 0, 0)]), {(0, 0)}\n     while q:\n          r, c, d = q.popleft()\n          if (r, c) == (R-1, C-1): return d\n          for dr, dc in ((1,0),(-1,0),(0,1),(0,-1)):\n                nr, nc = r + dr, c + dc\n                if 0 <= nr < R and 0 <= nc < C and not grid[nr][nc] and (nr, nc) not in seen:\n                    seen.add((nr, nc)); q.append((nr, nc, d + 1))\n     return -1",
+      "complexity": ""
+    },
+    {
+      "number": 5,
+      "difficulty": "Medium",
+      "title": "Detect a cycle in an undirected graph",
+      "statement": "",
+      "example": "",
+      "solution": "def has_cycle(n, adj):\n     seen = set()\n     def dfs(u, parent):\n          seen.add(u)\n          for v in adj[u]:\n              if v not in seen:\n                    if dfs(v, u): return True\n              elif v != parent:\n                    return True\n          return False\n     return any(dfs(s, -1) for s in range(n) if s not in seen)",
+      "complexity": ""
+    }
+  ]
+}
