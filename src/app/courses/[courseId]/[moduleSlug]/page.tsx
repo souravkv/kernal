@@ -99,34 +99,15 @@ export default async function ModulePage({
         </p>
       )}
 
-      {/* story cold-open */}
+      {/* kern's note */}
       {mod.coldOpen && (
         <div className="mb-10 border-l-2 border-[var(--fg)] bg-[var(--surface)] px-6 py-5">
           <div className="body-xs mb-2 uppercase tracking-[0.25em] text-[var(--muted)]">
-            The Code Chronicles
+            A note from Kern
           </div>
           <p className="body-md font-light italic text-[var(--muted)]">
             {mod.coldOpen}
           </p>
-        </div>
-      )}
-
-      {/* learning outcomes */}
-      {mod.outcomes.length > 0 && (
-        <div className="mb-12">
-          <h2 className="heading-sm mb-4 uppercase tracking-[0.2em] text-[var(--muted)]">
-            Learning Outcomes
-          </h2>
-          <ul className="space-y-3">
-            {mod.outcomes.map((o, i) => (
-              <li key={i} className="flex items-start gap-4">
-                <span className="mt-1 text-[10px] font-medium text-[var(--muted)]">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="body-md text-[var(--muted)]">{o}</span>
-              </li>
-            ))}
-          </ul>
         </div>
       )}
 
@@ -161,9 +142,6 @@ export default async function ModulePage({
                 <span className="min-w-0 flex-1">
                   <span className="body-md block transition-colors group-hover:text-[var(--fg)]">
                     {t.title}
-                  </span>
-                  <span className="body-sm mt-0.5 block text-[var(--muted)]">
-                    {t.description}
                   </span>
                 </span>
                 {done && (

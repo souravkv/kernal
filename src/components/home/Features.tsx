@@ -8,7 +8,7 @@ const features = [
     number: "01",
     title: "Structured Curriculum",
     description:
-      "University-aligned courses built from classic references — theory notes, learning outcomes and worked examples in every module.",
+      "University-aligned courses built from classic references — taught notes, worked examples and callout tips in every module.",
   },
   {
     number: "02",

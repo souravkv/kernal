@@ -13,9 +13,9 @@ const COURSE = {
   level: "Beginner",
   order: 1,
   description:
-    "Master data structures and algorithms from first principles. 10 beginner modules, story-driven theory, MCQ quizzes, and coding problems — Python & C++ throughout.",
+    "Master data structures and algorithms from first principles. 10 beginner modules taught by Kern, MCQ quizzes, and coding problems — Python & C++ throughout.",
   longDescription:
-    "A complete beginner-friendly foundations course: what DSA is, arrays (with sorting & searching), linked lists, stacks, queues, hashing, trees, graphs, how to choose the right structure, and a wrap-up with project ideas. Every module follows the same flow: a story-driven intro, plain-English theory with diagrams, an MCQ quiz (60% passes), and practice problems with worked solutions. Code examples switch between Python and C++.",
+    "A complete beginner-friendly foundations course: what DSA is, arrays (with sorting & searching), linked lists, stacks, queues, hashing, trees, graphs, how to choose the right structure, and a wrap-up with project ideas. Every module follows the same flow: Kern's intro note, plain-English theory with diagrams, an MCQ quiz (60% passes), and practice problems with worked solutions. Code examples switch between Python and C++.",
   instructor: "KERNAL Platform",
   duration: "8 weeks",
   price: 2699,
@@ -88,10 +88,10 @@ async function main() {
       number: String(m.number).padStart(2, "0"),
       title: m.title,
       slug: m.slug,
-      description: m.outcomes[0] ?? "",
+      description: m.summary,
       icon: String(m.number).padStart(2, "0"),
-      coldOpen: m.coldOpen,
-      outcomes: JSON.stringify(m.outcomes),
+      coldOpen: m.intro,
+      outcomes: "[]",
       practiceProblems: JSON.stringify(m.practiceProblems ?? practiceMap[m.slug] ?? []),
     };
 
@@ -129,7 +129,7 @@ async function main() {
         order: t.order,
         title: t.title,
         slug: t.slug,
-        description: t.description,
+        description: "",
         difficulty: MODULE_DIFFICULTY[m.number] ?? "Beginner",
         content: t.content,
         codeExample,

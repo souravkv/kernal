@@ -97,8 +97,7 @@ export default async function TopicPage({
               {Math.max(1, Math.ceil(topic.content.split(" ").length / 200))} min read
             </span>
           </div>
-          <h1 className="heading-lg mb-4">{topic.title}</h1>
-          <p className="body-lg max-w-2xl text-[var(--muted)]">{topic.description}</p>
+          <h1 className="heading-lg">{topic.title}</h1>
         </div>
 
         <div className="prose max-w-none">

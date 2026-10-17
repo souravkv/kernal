@@ -61,7 +61,6 @@ export interface TopicDetail {
   order: number;
   title: string;
   slug: string;
-  description: string;
   difficulty: string;
   content: string;
   codeExample: string | null;
@@ -70,7 +69,6 @@ export interface TopicDetail {
 
 export interface ModuleDetail extends ModuleSummary {
   coldOpen: string;
-  outcomes: string[];
   practiceProblems: CodeProblem[];
   topics: TopicDetail[];
   quiz: { id: string; title: string; passScore: number; questionCount: number } | null;
@@ -222,7 +220,6 @@ export const getModuleDetail = cache(
       description: mod.description,
       icon: mod.icon,
       coldOpen: mod.coldOpen,
-      outcomes: parseJson<string[]>(mod.outcomes, []),
       practiceProblems: parseJson<CodeProblem[]>(mod.practiceProblems, []),
       topicCount: mod.topics.length,
       topics: mod.topics.map((t) => ({
@@ -230,7 +227,6 @@ export const getModuleDetail = cache(
         order: t.order,
         title: t.title,
         slug: t.slug,
-        description: t.description,
         difficulty: t.difficulty,
         content: t.content,
         codeExample: t.codeExample,
